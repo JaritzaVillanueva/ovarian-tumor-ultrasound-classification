@@ -1,0 +1,34 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Jupyter
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+
+# Datasets and generated data
+data/raw/*
+data/interim/*
+data/processed/*
+
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+
+# Trained models and checkpoints
+*.pt
+*.pth
+*.ckpt
+*.h5
+
+# Temporary files and logs
+*.log
+*.tmp
+
+# Operating system files
+Thumbs.db
+.DS_Store
