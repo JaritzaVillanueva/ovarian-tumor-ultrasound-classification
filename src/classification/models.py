@@ -37,3 +37,31 @@ def create_resnet50_classifier(
     model.fc = nn.Linear(in_features, num_classes)
 
     return model
+
+def create_densenet121_classifier(
+    pretrained=True,
+    num_classes=2,
+    freeze_backbone=False
+):
+    """
+    Crea un clasificador DenseNet121
+    adaptado para clasificación binaria.
+    """
+
+    model = models.densenet121(
+        weights="DEFAULT" if pretrained else None
+    )
+
+
+    if freeze_backbone:
+        for param in model.parameters():
+            param.requires_grad = False
+
+
+    model.classifier = nn.Linear(
+        model.classifier.in_features,
+        num_classes
+    )
+
+
+    return model
