@@ -1,0 +1,7 @@
+﻿verificacion,resultado,estado
+Estructura de entrada,Completa,Cumplido
+Correspondencia imagen-máscara,100 %,Cumplido
+"Máscaras binarias {0,1}",Sí,Cumplido
+Máscaras vacías,0,Cumplido
+Dataset PyTorch,Correcto,Cumplido
+DataLoaders,Operativos,Cumplido
