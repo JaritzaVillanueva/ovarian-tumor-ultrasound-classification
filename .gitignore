@@ -32,3 +32,6 @@ data/processed/*
 # Operating system files
 Thumbs.db
 .DS_Store
+
+# Documentos
+docs/

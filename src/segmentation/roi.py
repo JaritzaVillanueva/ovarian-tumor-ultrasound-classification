@@ -11,31 +11,24 @@ from PIL import Image
 
 BBox = Tuple[int, int, int, int]
 
+MIN_COMPONENT_AREA_FRACTION: float = 0.001
+"""
+Fracción mínima del área de la imagen original que debe ocupar la mayor componente conexa 
+predicha para considerarla válida. Si el valor es inferior, se aplica fallback a imagen completa.
+"""
+
 
 @dataclass(frozen=True)
 class ROIResult:
     """
     Resultado de la extracción de una región de interés (ROI).
-
-    Attributes
-    ----------
-    roi:
-        Recorte RGB de la imagen original.
-    binary_mask:
-        Máscara binaria utilizada para calcular la ROI, expresada
-        en la resolución original de la imagen.
-    bbox:
-        Bounding box final en formato (left, top, right, bottom),
-        con right y bottom exclusivos.
-    used_fallback:
-        True cuando la máscara estaba vacía y se utilizó la imagen
-        completa como fallback.
     """
 
-    roi: Image.Image
-    binary_mask: np.ndarray
-    bbox: BBox
-    used_fallback: bool
+    roi: Image.Image        # Recorte RGB de la imagen original
+    binary_mask: np.ndarray # Máscara binaria para calcular el ROI
+    bbox: BBox              # Bounding box final en formato (left, top, right, bottom), 
+                            # con right y bottom exclusivos.
+    used_fallback: bool     # True: máscara vacía, se utilizó imagen completa como fallback.
 
 
 def _to_binary_mask(mask: np.ndarray, threshold: float = 0.5) -> np.ndarray:
@@ -46,11 +39,8 @@ def _to_binary_mask(mask: np.ndarray, threshold: float = 0.5) -> np.ndarray:
 
     if array.ndim == 3:
         array = np.squeeze(array)
-
     if array.ndim != 2:
-        raise ValueError(
-            f"Se esperaba una máscara 2D, pero se recibió shape={array.shape}."
-        )
+        raise ValueError( f"Se esperaba una máscara 2D, pero se recibió shape={array.shape}." )
 
     return (array >= threshold).astype(np.uint8)
 
@@ -58,7 +48,6 @@ def _to_binary_mask(mask: np.ndarray, threshold: float = 0.5) -> np.ndarray:
 def keep_largest_component(binary_mask: np.ndarray) -> np.ndarray:
     """
     Conserva únicamente la componente conexa de mayor área.
-
     Si la máscara está vacía, devuelve una máscara vacía del mismo tamaño.
     """
     mask = _to_binary_mask(binary_mask, threshold=0.5)
@@ -66,10 +55,7 @@ def keep_largest_component(binary_mask: np.ndarray) -> np.ndarray:
     if mask.sum() == 0:
         return mask
 
-    n_labels, labels, stats, _ = cv2.connectedComponentsWithStats(
-        mask,
-        connectivity=8,
-    )
+    n_labels, labels, stats, _ = cv2.connectedComponentsWithStats( mask, connectivity=8, )
 
     # La etiqueta 0 corresponde al fondo.
     if n_labels <= 1:
@@ -86,7 +72,6 @@ def mask_to_bbox(binary_mask: np.ndarray) -> Optional[BBox]:
     Obtiene el bounding box mínimo que contiene todos los píxeles positivos.
     """
     mask = _to_binary_mask(binary_mask, threshold=0.5)
-
     ys, xs = np.where(mask > 0)
 
     if len(xs) == 0:
@@ -100,11 +85,7 @@ def mask_to_bbox(binary_mask: np.ndarray) -> Optional[BBox]:
     return left, top, right, bottom
 
 
-def expand_bbox(
-    bbox: BBox,
-    image_size: Tuple[int, int],
-    margin_ratio: float = 0.10,
-) -> BBox:
+def expand_bbox( bbox: BBox, image_size: Tuple[int, int], margin_ratio: float = 0.10, ) -> BBox:
     """
     Expande un bounding box con un margen proporcional al tamaño de la ROI.
     """
@@ -125,33 +106,35 @@ def expand_bbox(
     expanded_right = min(image_width, right + margin_x)
     expanded_bottom = min(image_height, bottom + margin_y)
 
-    return (
-        expanded_left,
-        expanded_top,
-        expanded_right,
-        expanded_bottom,
-    )
+    return ( expanded_left, expanded_top, expanded_right, expanded_bottom, )
 
 
-def resize_mask_to_image(
-    binary_mask: np.ndarray,
-    image_size: Tuple[int, int],
-) -> np.ndarray:
+def resize_mask_to_image( binary_mask: np.ndarray, image_size: Tuple[int, int], ) -> np.ndarray:
     """
-    Redimensiona una máscara binaria a la resolución de la imagen original
-    utilizando interpolación nearest-neighbor.
+    Redimensiona una máscara binaria a la resolución de la imagen original utilizando 
+    interpolación nearest-neighbor.
     """
     mask = _to_binary_mask(binary_mask, threshold=0.5)
-
     width, height = image_size
-
-    resized = cv2.resize(
-        mask,
-        dsize=(width, height),
-        interpolation=cv2.INTER_NEAREST,
-    )
+    resized = cv2.resize( mask, dsize=(width, height), interpolation=cv2.INTER_NEAREST, )
 
     return (resized > 0).astype(np.uint8)
+
+
+def _is_degenerate_mask( mask: np.ndarray, image_size: Tuple[int, int], min_area_fraction: float, ) -> bool:
+    """
+    Determina si la mayor componente conexa de una máscara es demasiado pequeña para 
+    producir una ROI útil.
+    """
+    if mask.sum() == 0:
+        return True
+
+    image_area = image_size[0] * image_size[1]
+    if image_area == 0:
+        return True
+
+    component_area = int(mask.sum())
+    return (component_area / image_area) < min_area_fraction
 
 
 def extract_roi_from_mask(
@@ -160,58 +143,38 @@ def extract_roi_from_mask(
     margin_ratio: float = 0.10,
     keep_largest: bool = True,
     fallback_to_full_image: bool = True,
+    min_component_area_fraction: Optional[float] = None,
 ) -> ROIResult:
     """
     Extrae una ROI de la imagen original a partir de una máscara binaria.
 
-    El mismo procedimiento puede utilizarse tanto con máscaras predichas
-    por U-Net como con máscaras ground truth, garantizando una comparación
-    consistente entre ambas variantes.
-
-    Cuando la máscara está vacía y fallback_to_full_image=True, devuelve
-    la imagen completa.
+    Fallback a imagen completa cuando:
+    - la máscara está vacía, o
+    - la mayor componente conexa ocupa menos de min_component_area_fraction de la imagen original.
     """
-    image = image.convert("RGB")
+    if min_component_area_fraction is None:
+        min_component_area_fraction = MIN_COMPONENT_AREA_FRACTION
 
-    mask = resize_mask_to_image(
-        binary_mask,
-        image_size=image.size,
-    )
+    image = image.convert("RGB")
+    mask = resize_mask_to_image( binary_mask, image_size=image.size, )
 
     if keep_largest:
         mask = keep_largest_component(mask)
 
-    bbox = mask_to_bbox(mask)
+    degenerate = _is_degenerate_mask( mask, image_size=image.size, min_area_fraction=min_component_area_fraction, )
 
-    if bbox is None:
+    if degenerate:
         if not fallback_to_full_image:
-            raise ValueError(
-                "La máscara está vacía y fallback_to_full_image=False."
-            )
-
+            raise ValueError( "La máscara es vacía o degenerada y " "fallback_to_full_image=False." )
         full_bbox = (0, 0, image.width, image.height)
 
-        return ROIResult(
-            roi=image.copy(),
-            binary_mask=mask,
-            bbox=full_bbox,
-            used_fallback=True,
-        )
+        return ROIResult( roi=image.copy(), binary_mask=mask, bbox=full_bbox, used_fallback=True, )
 
-    expanded = expand_bbox(
-        bbox=bbox,
-        image_size=image.size,
-        margin_ratio=margin_ratio,
-    )
-
+    bbox = mask_to_bbox(mask)
+    expanded = expand_bbox( bbox=bbox, image_size=image.size, margin_ratio=margin_ratio, )
     roi = image.crop(expanded)
 
-    return ROIResult(
-        roi=roi,
-        binary_mask=mask,
-        bbox=expanded,
-        used_fallback=False,
-    )
+    return ROIResult( roi=roi, binary_mask=mask, bbox=expanded, used_fallback=False, )
 
 
 def predict_binary_mask(
@@ -228,26 +191,13 @@ def predict_binary_mask(
         raise ValueError("threshold debe estar en [0,1].")
 
     image_rgb = image.convert("RGB")
+    resized = image_rgb.resize( image_size, resample=Image.Resampling.BILINEAR, )
 
-    resized = image_rgb.resize(
-        image_size,
-        resample=Image.Resampling.BILINEAR,
-    )
-
-    array = np.asarray(
-        resized,
-        dtype=np.float32,
-    ) / 255.0
-
+    array = np.asarray( resized, dtype=np.float32, ) / 255.0
     array = np.transpose(array, (2, 0, 1))
     array = np.ascontiguousarray(array)
 
-    tensor = (
-        torch.from_numpy(array)
-        .unsqueeze(0)
-        .to(device)
-    )
-
+    tensor = ( torch.from_numpy(array) .unsqueeze(0) .to(device) )
     model.eval()
 
     with torch.no_grad():
@@ -263,9 +213,7 @@ def predict_binary_mask(
         .astype(np.float32)
     )
 
-    binary_mask = (
-        probability_map >= threshold
-    ).astype(np.uint8)
+    binary_mask = ( probability_map >= threshold ).astype(np.uint8)
 
     return binary_mask, probability_map
 
@@ -279,10 +227,10 @@ def predict_and_extract_roi(
     margin_ratio: float = 0.10,
     keep_largest: bool = True,
     fallback_to_full_image: bool = True,
+    min_component_area_fraction: Optional[float] = None,
 ) -> Tuple[ROIResult, np.ndarray]:
     """
-    Pipeline completo:
-        imagen original -> U-Net -> máscara predicha -> ROI.
+    Pipeline completo: imagen original -> U-Net -> máscara predicha -> ROI.
     """
     binary_mask, probability_map = predict_binary_mask(
         model=model,
@@ -298,6 +246,7 @@ def predict_and_extract_roi(
         margin_ratio=margin_ratio,
         keep_largest=keep_largest,
         fallback_to_full_image=fallback_to_full_image,
+        min_component_area_fraction=min_component_area_fraction,
     )
 
     return roi_result, probability_map
