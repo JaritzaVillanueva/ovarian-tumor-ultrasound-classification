@@ -1,0 +1,8 @@
+{
+  "epoch": 5,
+  "val_weighted_loss": 0.8683594012260437,
+  "val_unweighted_loss": 0.3791596645116806,
+  "val_acc": 0.865,
+  "criterion": "max val_roc_auc",
+  "val_roc_auc": 0.7558733401430031
+}
