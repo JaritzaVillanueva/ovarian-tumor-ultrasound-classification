@@ -1,0 +1,70 @@
+{
+  "architecture": "resnet50",
+  "condition": "A",
+  "experiment": "diagnostic_checkpoint",
+  "seed": 42,
+  "csv_path": "configs/splits/mmotu_experimental_split_standard.csv",
+  "image_dir": "data/processed/MMOTU_OTU_2D_experimental",
+  "train_samples": 800,
+  "validation_samples": 200,
+  "class_weights": [
+    0.5610098242759705,
+    4.597701072692871
+  ],
+  "pretrained": true,
+  "freeze_backbone": false,
+  "num_classes": 2,
+  "batch_size": 32,
+  "epochs_max": 30,
+  "epochs_run": 7,
+  "learning_rate": 0.0001,
+  "learning_rate_source": "yaml",
+  "weight_decay": 0.0001,
+  "optimizer": "AdamW",
+  "use_amp": true,
+  "patience": 5,
+  "min_delta": 0.001,
+  "threshold": 0.5,
+  "scheduler": null,
+  "checkpoint_criterion": "min val_weighted_loss (absolute minimum)",
+  "epoch_best": 2,
+  "val_weighted_loss_best": 0.6463820600509643,
+  "val_unweighted_loss_best": 0.5008950567245484,
+  "val_acc_best": 0.83,
+  "early_stopped": true,
+  "early_stopped_at_epoch": 7,
+  "history_metrics": [
+    "train_loss",
+    "train_acc",
+    "val_loss",
+    "val_unweighted_loss",
+    "val_acc",
+    "val_roc_auc",
+    "val_average_precision",
+    "val_f1_malignant",
+    "val_recall_malignant",
+    "val_specificity",
+    "val_balanced_accuracy"
+  ],
+  "checkpoint_diagnostic": {
+    "early_stopping_criterion": "val_weighted_loss (patience=5, min_delta=0.001)",
+    "best_loss": {
+      "epoch": 2,
+      "value": 0.6463820600509643,
+      "metric": "val_weighted_loss",
+      "checkpoint": "best_loss.pth"
+    },
+    "best_auc": {
+      "epoch": 6,
+      "value": 0.7929009193054137,
+      "metric": "val_roc_auc",
+      "checkpoint": "best_auc.pth"
+    },
+    "best_auc_is_last_epoch": false,
+    "val_predictions": "val_predictions.csv",
+    "validation_metrics": {
+      "best_loss": "validation_metrics_best_loss.json",
+      "best_auc": "validation_metrics_best_auc.json"
+    }
+  }
+}

@@ -407,3 +407,356 @@ class TestReproducibility:
         h2 = run()
         assert h1["train_loss"] == pytest.approx(h2["train_loss"], abs=1e-5)
         assert h1["val_loss"] == pytest.approx(h2["val_loss"], abs=1e-5)
+
+
+# Diagnóstico de checkpoints: best_loss (oficial) y best_auc, con probabilidades de validation por época
+class TestCheckpointDiagnostic:
+    """
+    Cubre el modo opt-in de train_model con auc_save_path y predictions_path:
+    1. compatibilidad sin las opciones nuevas;
+    2. misma trayectoria de entrenamiento con y sin el diagnóstico;
+    3. best_auc coincide con el argmax de val_roc_auc;
+    4. integridad del CSV de probabilidades por época.
+    """
+    EPOCHS = 8
+    N_VAL = 40
+
+    @staticmethod
+    def _make_dataset(n, seed):
+        """Dataset sintético con señal débil, ambas clases y atributo df (image_id, binary_label)."""
+        import pandas as pd
+        from torch.utils.data import Dataset
+
+        generator = torch.Generator().manual_seed(seed)
+        x = torch.randn(n, 4, generator=generator)
+        noise = 0.8 * torch.randn(n, generator=generator)
+        y = ((x[:, 0] + noise) > 0).long()
+        y[0], y[1] = 0, 1  # garantiza ambas clases
+
+        class _TinyDataset(Dataset):
+            def __init__(self):
+                self.x = x
+                self.y = y
+                self.df = pd.DataFrame({
+                    "image_id": [1000 + 7 * i for i in range(n)],
+                    "binary_label": y.numpy(),
+                })
+
+            def __len__(self):
+                return len(self.y)
+
+            def __getitem__(self, idx):
+                return self.x[idx], int(self.y[idx])
+
+        return _TinyDataset()
+
+    def _run(
+        self, directory, diagnostic, val_shuffle=False, val_image_ids=None, val_expected_labels=None,
+        checkpoint_metric="val_loss", record_predictions=False,
+        lr=0.5, epochs=None, patience=100, min_delta=0.0,
+    ):
+        """Entrena un modelo diminuto con seeds fijas. Devuelve (history, val_dataset)."""
+        from torch.utils.data import DataLoader
+        from src.classification.train import train_model, set_seed
+
+        train_ds = self._make_dataset(64, seed=1)
+        val_ds = self._make_dataset(self.N_VAL, seed=2)
+
+        set_seed(99)
+        model = nn.Linear(4, 2)
+        optimizer = torch.optim.SGD(model.parameters(), lr=lr)
+        criterion = nn.CrossEntropyLoss(weight=torch.tensor([0.6, 1.4]))
+
+        train_loader = DataLoader(
+            train_ds, batch_size=16, shuffle=True, generator=torch.Generator().manual_seed(7),
+        )
+        val_loader = DataLoader(val_ds, batch_size=16, shuffle=val_shuffle)
+
+        kwargs = {}
+        if diagnostic or record_predictions:
+            kwargs = dict(
+                predictions_path=str(directory / "val_predictions.csv"),
+                val_image_ids=val_image_ids if val_image_ids is not None else val_ds.df["image_id"].tolist(),
+                val_expected_labels=(
+                    val_expected_labels if val_expected_labels is not None
+                    else val_ds.df["binary_label"].to_numpy()
+                ),
+            )
+        if diagnostic:
+            kwargs["auc_save_path"] = str(directory / "best_auc.pth")
+
+        if diagnostic:
+            save_name = "best_loss.pth"
+        elif checkpoint_metric == "val_roc_auc":
+            save_name = "best_auc.pth"
+        else:
+            save_name = "best.pth"
+
+        history = train_model(
+            model, train_loader, val_loader, criterion, optimizer,
+            device=torch.device("cpu"),
+            epochs=epochs if epochs is not None else self.EPOCHS, save_path=str(directory / save_name),
+            patience=patience, min_delta=min_delta, seed=42, use_amp=False,
+            checkpoint_metric=checkpoint_metric,
+            **kwargs,
+        )
+        return history, val_ds
+
+    # 1. Compatibilidad sin las opciones nuevas
+    def test_default_behavior_is_unchanged(self, tmp_path):
+        from src.classification.train import EPOCH_VALIDATION_METRICS
+
+        history, _ = self._run(tmp_path, diagnostic=False)
+
+        assert sorted(p.name for p in tmp_path.iterdir()) == ["best.pth", "best_meta.json"]
+
+        with open(tmp_path / "best_meta.json") as f:
+            meta = json.load(f)
+        assert set(meta) == {"epoch", "val_weighted_loss", "val_unweighted_loss", "val_acc"}
+
+        expected_keys = {"train_loss", "train_acc", "val_loss", "val_unweighted_loss", "val_acc"}
+        assert set(history) == expected_keys | set(EPOCH_VALIDATION_METRICS)
+
+    def test_validate_one_epoch_default_returns_three_values(self):
+        from torch.utils.data import DataLoader
+        from src.classification.train import validate_one_epoch
+
+        val_ds = self._make_dataset(self.N_VAL, seed=2)
+        result = validate_one_epoch(
+            nn.Linear(4, 2), DataLoader(val_ds, batch_size=16), nn.CrossEntropyLoss(), torch.device("cpu"),
+        )
+        assert len(result) == 3
+
+    # 2. Misma trayectoria con y sin diagnóstico
+    def test_same_training_trajectory_with_and_without_diagnostic(self, tmp_path):
+        plain_dir = tmp_path / "plain"
+        diag_dir = tmp_path / "diag"
+        plain_dir.mkdir()
+        diag_dir.mkdir()
+
+        history_plain, _ = self._run(plain_dir, diagnostic=False)
+        history_diag, _ = self._run(diag_dir, diagnostic=True)
+
+        assert set(history_plain) == set(history_diag)
+        for key in history_plain:
+            assert history_diag[key] == pytest.approx(history_plain[key], abs=1e-9), key
+
+        # El checkpoint oficial y su meta son los mismos que sin diagnóstico
+        state_plain = torch.load(plain_dir / "best.pth", weights_only=True)
+        state_diag = torch.load(diag_dir / "best_loss.pth", weights_only=True)
+        assert state_plain.keys() == state_diag.keys()
+        for name in state_plain:
+            assert torch.equal(state_plain[name], state_diag[name]), name
+
+        with open(plain_dir / "best_meta.json") as f:
+            meta_plain = json.load(f)
+        with open(diag_dir / "best_loss_meta.json") as f:
+            meta_diag = json.load(f)
+        assert meta_diag["epoch"] == meta_plain["epoch"]
+        assert meta_diag["val_weighted_loss"] == pytest.approx(meta_plain["val_weighted_loss"], abs=1e-9)
+        assert meta_diag["criterion"] == "min val_weighted_loss"
+
+    # 3. best_auc coincide con el argmax de val_roc_auc
+    def test_best_auc_matches_argmax_of_val_roc_auc(self, tmp_path):
+        from torch.utils.data import DataLoader
+        from sklearn.metrics import roc_auc_score
+        from src.classification.evaluate import predict
+
+        history, val_ds = self._run(tmp_path, diagnostic=True)
+
+        with open(tmp_path / "best_auc_meta.json") as f:
+            auc_meta = json.load(f)
+        with open(tmp_path / "best_loss_meta.json") as f:
+            loss_meta = json.load(f)
+
+        aucs = history["val_roc_auc"]
+        assert auc_meta["criterion"] == "max val_roc_auc"
+        assert auc_meta["epoch"] == int(np.argmax(aucs)) + 1  # primera época en caso de empate
+        assert auc_meta["val_roc_auc"] == pytest.approx(max(aucs), abs=1e-12)
+        assert loss_meta["epoch"] == int(np.argmin(history["val_loss"])) + 1
+
+        # El checkpoint guardado reproduce la AUC de su época declarada
+        model = nn.Linear(4, 2)
+        model.load_state_dict(torch.load(tmp_path / "best_auc.pth", weights_only=True))
+        y_true, _, y_prob = predict(model, DataLoader(val_ds, batch_size=16), torch.device("cpu"))
+        assert roc_auc_score(y_true, y_prob) == pytest.approx(auc_meta["val_roc_auc"], abs=1e-6)
+
+    # 4. Integridad del CSV de probabilidades
+    def test_val_predictions_csv_integrity(self, tmp_path):
+        import pandas as pd
+        from sklearn.metrics import roc_auc_score
+
+        history, val_ds = self._run(tmp_path, diagnostic=True)
+        df = pd.read_csv(tmp_path / "val_predictions.csv")
+
+        epochs_run = len(history["val_loss"])
+        expected_ids = val_ds.df["image_id"].tolist()
+        expected_labels = val_ds.df["binary_label"].tolist()
+
+        assert list(df.columns) == ["epoch", "image_id", "y_true", "probability_malignant"]
+        assert len(df) == epochs_run * self.N_VAL
+        assert sorted(df["epoch"].unique()) == list(range(1, epochs_run + 1))
+        assert df["probability_malignant"].between(0.0, 1.0).all()
+        assert not df.isna().any().any()
+
+        for epoch in range(1, epochs_run + 1):
+            rows = df[df["epoch"] == epoch]
+            assert rows["image_id"].tolist() == expected_ids
+            assert rows["y_true"].tolist() == expected_labels
+            # Las probabilidades del CSV reproducen la AUC registrada para esa época
+            assert roc_auc_score(rows["y_true"], rows["probability_malignant"]) == pytest.approx(
+                history["val_roc_auc"][epoch - 1], abs=1e-6
+            )
+
+    # Verificaciones de orden de validation
+    def test_shuffled_val_loader_is_rejected(self, tmp_path):
+        with pytest.raises(ValueError, match="shuffle=False"):
+            self._run(tmp_path, diagnostic=True, val_shuffle=True)
+
+    def test_mismatched_number_of_image_ids_is_rejected(self, tmp_path):
+        with pytest.raises(ValueError, match="mismo número de elementos"):
+            self._run(tmp_path, diagnostic=True, val_image_ids=list(range(self.N_VAL - 1)))
+
+    def test_mismatched_label_order_is_rejected(self, tmp_path):
+        wrong_labels = np.array([1 - v for v in self._make_dataset(self.N_VAL, seed=2).df["binary_label"]])
+        with pytest.raises(ValueError, match="no coinciden"):
+            self._run(tmp_path, diagnostic=True, val_expected_labels=wrong_labels)
+
+    # ── Checkpoint oficial por max val_roc_auc (R4) ──────────────────────────────────────────
+    # 1. El checkpoint corresponde al primer argmax de val_roc_auc
+    def test_auc_checkpoint_is_first_argmax_of_val_roc_auc(self, tmp_path):
+        from torch.utils.data import DataLoader
+        from sklearn.metrics import roc_auc_score
+        from src.classification.evaluate import predict
+
+        history, val_ds = self._run(tmp_path, diagnostic=False, checkpoint_metric="val_roc_auc")
+
+        # Solo se guarda el checkpoint por AUC (sin best.pth ni checkpoint por pérdida)
+        assert sorted(p.name for p in tmp_path.iterdir()) == ["best_auc.pth", "best_auc_meta.json"]
+
+        with open(tmp_path / "best_auc_meta.json") as f:
+            meta = json.load(f)
+
+        aucs = history["val_roc_auc"]
+        assert meta["criterion"] == "max val_roc_auc"
+        assert meta["epoch"] == int(np.argmax(aucs)) + 1  # primera época en caso de empate
+        assert meta["val_roc_auc"] == pytest.approx(max(aucs), abs=1e-12)
+        # Los demás campos del meta son los valores en la época seleccionada
+        assert meta["val_weighted_loss"] == pytest.approx(history["val_loss"][meta["epoch"] - 1], abs=1e-12)
+        assert meta["val_acc"] == pytest.approx(history["val_acc"][meta["epoch"] - 1], abs=1e-12)
+
+        # Los pesos guardados reproducen la AUC de esa época
+        model = nn.Linear(4, 2)
+        model.load_state_dict(torch.load(tmp_path / "best_auc.pth", weights_only=True))
+        y_true, _, y_prob = predict(model, DataLoader(val_ds, batch_size=16), torch.device("cpu"))
+        assert roc_auc_score(y_true, y_prob) == pytest.approx(meta["val_roc_auc"], abs=1e-6)
+
+    # 2. Seleccionar por AUC no cambia la trayectoria de entrenamiento
+    def test_auc_checkpoint_does_not_change_training_trajectory(self, tmp_path):
+        loss_dir = tmp_path / "by_loss"
+        auc_dir = tmp_path / "by_auc"
+        loss_dir.mkdir()
+        auc_dir.mkdir()
+
+        history_loss, _ = self._run(loss_dir, diagnostic=False, checkpoint_metric="val_loss")
+        history_auc, _ = self._run(auc_dir, diagnostic=False, checkpoint_metric="val_roc_auc")
+
+        assert set(history_loss) == set(history_auc)
+        for key in history_loss:
+            assert history_auc[key] == pytest.approx(history_loss[key], abs=1e-9), key
+
+    # 3. El early stopping depende solo de val_weighted_loss
+    def test_early_stopping_depends_only_on_val_weighted_loss(self, tmp_path):
+        def expected_stop_epoch(val_loss, patience, min_delta):
+            """Regla de early stopping calculada solo a partir de la val loss ponderada."""
+            reference, counter = float("inf"), 0
+            for epoch, loss in enumerate(val_loss, start=1):
+                if loss < reference - min_delta:
+                    reference, counter = loss, 0
+                else:
+                    counter += 1
+                    if counter >= patience:
+                        return epoch
+            return len(val_loss)
+
+        kwargs = dict(lr=20.0, epochs=15, patience=1, min_delta=0.0)  # lr alto: la val loss oscila
+        loss_dir = tmp_path / "by_loss"
+        auc_dir = tmp_path / "by_auc"
+        loss_dir.mkdir()
+        auc_dir.mkdir()
+
+        history_loss, _ = self._run(loss_dir, diagnostic=False, checkpoint_metric="val_loss", **kwargs)
+        history_auc, _ = self._run(auc_dir, diagnostic=False, checkpoint_metric="val_roc_auc", **kwargs)
+
+        n_loss = len(history_loss["val_loss"])
+        n_auc = len(history_auc["val_loss"])
+
+        assert n_loss < kwargs["epochs"], "El early stopping debía dispararse en este escenario"
+        assert n_auc == n_loss
+        assert expected_stop_epoch(history_auc["val_loss"], kwargs["patience"], kwargs["min_delta"]) == n_auc
+
+    # 4. Override de --seed (lógica que resuelve la seed efectiva)
+    def test_resolve_seed_defaults_to_yaml(self):
+        from src.classification.run_experiment import resolve_seed
+
+        assert resolve_seed(42, None) == (42, "yaml")
+
+    def test_resolve_seed_cli_override_changes_only_effective_seed(self):
+        from src.classification.run_experiment import resolve_seed
+
+        assert resolve_seed(42, 43) == (43, "cli_override")
+        assert resolve_seed(42, 44) == (44, "cli_override")
+        # --seed 42 explícito también se registra como override, aunque coincida con el YAML
+        assert resolve_seed(42, 42) == (42, "cli_override")
+
+    # 5. Probabilidades del checkpoint seleccionado, por image_id y en el orden correcto
+    def test_selected_predictions_match_selected_checkpoint_and_id_order(self, tmp_path):
+        import pandas as pd
+        from torch.utils.data import DataLoader
+        from sklearn.metrics import roc_auc_score
+        from src.classification.evaluate import predict
+        from src.classification.run_experiment import save_selected_predictions
+
+        history, val_ds = self._run(
+            tmp_path, diagnostic=False, checkpoint_metric="val_roc_auc", record_predictions=True,
+        )
+        with open(tmp_path / "best_auc_meta.json") as f:
+            meta = json.load(f)
+
+        # Se recarga el checkpoint seleccionado y se predice como en run_experiment
+        model = nn.Linear(4, 2)
+        model.load_state_dict(torch.load(tmp_path / "best_auc.pth", weights_only=True))
+        val_loader = DataLoader(val_ds, batch_size=16, shuffle=False)
+        y_true, _, y_prob = predict(model, val_loader, torch.device("cpu"))
+
+        output_path = tmp_path / "val_predictions_best_auc.csv"
+        save_selected_predictions(output_path, meta["epoch"], val_loader, y_true, y_prob)
+
+        selected = pd.read_csv(output_path)
+        per_epoch = pd.read_csv(tmp_path / "val_predictions.csv")
+        epoch_rows = per_epoch[per_epoch["epoch"] == meta["epoch"]].reset_index(drop=True)
+
+        assert list(selected.columns) == ["epoch", "image_id", "y_true", "probability_malignant"]
+        assert len(selected) == len(val_ds)
+        assert (selected["epoch"] == meta["epoch"]).all()
+        # Todos los image_id, en el orden del dataset de validation
+        assert selected["image_id"].tolist() == val_ds.df["image_id"].tolist()
+        assert selected["y_true"].tolist() == val_ds.df["binary_label"].tolist()
+        # Las probabilidades son las de la época seleccionada de la misma trayectoria
+        assert selected["probability_malignant"].to_numpy() == pytest.approx(
+            epoch_rows["probability_malignant"].to_numpy(), abs=1e-6
+        )
+        assert roc_auc_score(selected["y_true"], selected["probability_malignant"]) == pytest.approx(
+            meta["val_roc_auc"], abs=1e-6
+        )
+
+    def test_selected_predictions_reject_shuffled_loader(self, tmp_path):
+        from torch.utils.data import DataLoader
+        from src.classification.run_experiment import save_selected_predictions
+
+        val_ds = self._make_dataset(self.N_VAL, seed=2)
+        shuffled_loader = DataLoader(val_ds, batch_size=16, shuffle=True)
+        labels = val_ds.df["binary_label"].to_numpy()
+
+        with pytest.raises(ValueError, match="shuffle=False"):
+            save_selected_predictions(tmp_path / "x.csv", 1, shuffled_loader, labels, np.zeros(len(labels)))

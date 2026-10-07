@@ -1,0 +1,6 @@
+{
+  "epoch": 5,
+  "val_weighted_loss": 0.5878101706504821,
+  "val_unweighted_loss": 0.4399676275253296,
+  "val_acc": 0.82
+}
