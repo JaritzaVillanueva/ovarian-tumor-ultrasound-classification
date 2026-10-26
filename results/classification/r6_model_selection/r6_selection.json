@@ -101,19 +101,14 @@
     "test_used": false,
     "new_training": false
   },
-  "sensitivity_analysis": {
-    "file": "results/classification/r6_model_selection/r6_sensitivity_analysis.csv",
-    "status": "exploratory and post hoc; not used for selection",
-    "ap_gap_selected_minus_runner_up": 0.0020483072079047204,
-    "ap_gap_below_between_seed_sd": true
-  },
   "sources": [
     "results/classification/r4_benchmark/analysis/r4_architecture_summary.csv",
-    "results/classification/r4_benchmark/analysis/r4_metrics_per_seed.csv",
     "results/classification/r5_input_representation/analysis/r5_condition_summary.csv",
     "results/classification/r5_input_representation/analysis/r5_metrics_per_seed.csv",
-    "results/classification/r5_input_representation/analysis/r5_run_validation.csv",
+    "configs/splits/mmotu_experimental_split.csv",
     "results/classification/r4_benchmark/convnext_tiny/A/seed_*/val_predictions_best_auc.csv",
-    "results/classification/r4_benchmark/convnext_tiny/A/seed_*/training_history.json"
+    "results/classification/r4_benchmark/convnext_tiny/A/seed_*/training_history.json",
+    "results/classification/r4_benchmark/convnext_tiny/A/seed_*/best_auc_meta.json",
+    "results/classification/r4_benchmark/convnext_tiny/A/seed_*/run_config.json"
   ]
 }
