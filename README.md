@@ -58,7 +58,7 @@ See [Dataset splits](configs/splits/README.md) for class distribution, manifest 
 | R3 | Bibliographic selection of CNN architectures | Completed; documented separately |
 | R4 | CNN benchmark: 3 architectures × 3 seeds, input A | Completed |
 | R5 | U-Net, ROI generation and comparison of A/B/C | Completed |
-| R6 | Model selection: DenseNet121 with input A | Completed |
+| R6 | Model selection: ConvNeXt-Tiny with input A (mean validation AP, per approved IOV) | Completed |
 | R7–R9 | Optimization and subsequent research stages | Pending |
 
 R4 and R5 comprise **27 formal classification runs**, using train and validation. The final formal classification evaluation on test remains pending. Earlier exploratory evaluations accessed test; these are separate from the formal classification runs.

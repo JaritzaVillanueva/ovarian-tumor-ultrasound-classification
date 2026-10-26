@@ -1,0 +1,107 @@
+{
+  "selected": {
+    "architecture": "densenet121",
+    "condition": "A",
+    "metrics_validation": {
+      "roc_auc": {
+        "mean": 0.8670411985018727,
+        "std_between_seeds": 0.0178211883358673,
+        "ci95_lower": 0.794420326864147,
+        "ci95_upper": 0.92705354102826
+      },
+      "average_precision": {
+        "mean": 0.5392436794605252,
+        "std_between_seeds": 0.0688461034394784,
+        "ci95_lower": 0.40480406508061,
+        "ci95_upper": 0.6999291708439866
+      },
+      "sensitivity": {
+        "mean": 0.6666666666666666,
+        "std_between_seeds": 0.0946211817939151,
+        "ci95_lower": 0.5151515151515151,
+        "ci95_upper": 0.8030303030303031
+      },
+      "specificity": {
+        "mean": 0.8895131086142323,
+        "std_between_seeds": 0.04908367948345,
+        "ci95_lower": 0.8520599250936329,
+        "ci95_upper": 0.9232209737827716
+      }
+    }
+  },
+  "runner_up": {
+    "architecture": "convnext_tiny",
+    "condition": "A",
+    "metrics_validation": {
+      "roc_auc": {
+        "mean": 0.8433775961865849,
+        "std_between_seeds": 0.0369670645416345,
+        "ci95_lower": 0.7625936329588014,
+        "ci95_upper": 0.9047667688117124
+      },
+      "average_precision": {
+        "mean": 0.5412919866684299,
+        "std_between_seeds": 0.0438030649054456,
+        "ci95_lower": 0.3812596960044144,
+        "ci95_upper": 0.699746296523108
+      },
+      "sensitivity": {
+        "mean": 0.4545454545454545,
+        "std_between_seeds": 0.2764892059226463,
+        "ci95_lower": 0.303030303030303,
+        "ci95_upper": 0.5909090909090909
+      },
+      "specificity": {
+        "mean": 0.9157303370786516,
+        "std_between_seeds": 0.1219243506416331,
+        "ci95_lower": 0.8913857677902621,
+        "ci95_upper": 0.9382022471910112
+      }
+    }
+  },
+  "selection_rule": {
+    "primary_criterion": "max mean ROC-AUC on validation (mean of 3 seeds)",
+    "tie_break": "max mean Average Precision",
+    "complementary_criteria": [
+      "average_precision",
+      "std_between_seeds",
+      "sensitivity",
+      "specificity"
+    ],
+    "excluded_criteria": [
+      "accuracy (class imbalance)"
+    ],
+    "candidate_conditions": [
+      "A",
+      "B"
+    ],
+    "excluded_conditions": {
+      "C": "requires reference mask; idealized condition in R5"
+    },
+    "candidate_architectures": [
+      "resnet50",
+      "densenet121",
+      "convnext_tiny"
+    ],
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "threshold": 0.5,
+    "tied_on_primary": false
+  },
+  "data": {
+    "evaluation_split": "validation",
+    "n_validation": 200,
+    "test_used": false,
+    "new_training": false
+  },
+  "sources": [
+    "results/classification/r4_benchmark/analysis/r4_architecture_summary.csv",
+    "results/classification/r4_benchmark/analysis/r4_metrics_per_seed.csv",
+    "results/classification/r5_input_representation/analysis/r5_condition_summary.csv",
+    "results/classification/r5_input_representation/analysis/r5_metrics_per_seed.csv",
+    "results/classification/r5_input_representation/analysis/r5_run_validation.csv"
+  ]
+}

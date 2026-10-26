@@ -8,6 +8,7 @@ This directory preserves preliminary experiments and earlier analyses that prece
 | ------------------------------------------------------------- | --------------------------------------------------------------- |
 | `baselines_preliminares/<arch>/03_entrenamiento_<arch>.ipynb` | Preliminary training of ResNet50, DenseNet121 and ConvNeXt-Tiny |
 | `baselines_preliminares/<arch>/04_evaluacion_<arch>.ipynb`    | Evaluation of the preliminary models on test                    |
+| `00_seleccion_modelo.ipynb`                                   | Previous analysis with ROC-AUC criterion                        |
 | `04_analisis_resultados_formales_R5_R6.ipynb`                 | Earlier single-seed analysis and R6 selection rule              |
 
 Preliminary results are stored in `results/classification/<arch>_baseline/`, with local checkpoints in `models/classification/`.
@@ -32,9 +33,9 @@ The `*_baseline.yaml` files in `configs/classification/` belong to this later fo
 
 `04_analisis_resultados_formales_R5_R6.ipynb` used a single seed (42), condition B and Average Precision to select ConvNeXt-Tiny.
 
-This exploratory rule was superseded by the R6 selection based on mean validation ROC-AUC across three seeds, which selected **DenseNet121-A**.
+`00_seleccion_modelo.ipynb` evaluated mean validation ROC-AUC across three seeds, with which DenseNet121-A ranks first. Its outputs are stored in `results/classification/r6_model_selection/historico/`.
 
-The earlier analysis is preserved to document this methodological change.
+The current R6 selection follows the approved IOV: highest mean validation AP across three seeds (`notebooks/R6_model_selection/01_seleccion_modelo_IOV_AP.ipynb`), which selects **ConvNeXt-Tiny-A**. ROC-AUC is kept there as an alternative sensitivity analysis.
 
 ## Reproducibility Notes
 
@@ -43,4 +44,4 @@ The earlier analysis is preserved to document this methodological change.
 - The single-seed analysis reads `results/classification/formal/` and must remain at its current directory depth.
 - The U-Net's historical test evaluation is documented separately in `notebooks/R5_input_representation/README.md`.
 
-Current training and model selection are implemented in `src/classification/run_experiment.py` and `notebooks/R6_model_selection/00_seleccion_modelo.ipynb`, respectively.
+Current training and model selection are implemented in `src/classification/run_experiment.py` and `notebooks/R6_model_selection/01_seleccion_modelo_IOV_AP.ipynb`, respectively.
