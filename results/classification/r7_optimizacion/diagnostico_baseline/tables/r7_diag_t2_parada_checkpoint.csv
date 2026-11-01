@@ -1,0 +1,4 @@
+seed,epocas_ejecutadas,early_stopped,epoca_fin_entrenamiento,epoca_checkpoint,epocas_posteriores_al_checkpoint,val_roc_auc_checkpoint,val_average_precision_checkpoint,val_loss_ponderada_checkpoint,val_loss_sin_ponderar_checkpoint
+42,13,True,13,8,5,0.8853421859039836,0.5897772903318363,0.4321486639976502,0.41370702505111695
+43,8,True,8,7,1,0.8291624106230848,0.5295229065630265,1.142076768875122,0.3219952416419983
+44,8,True,8,7,1,0.8156281920326863,0.5045757631104272,1.24777836561203,0.32171192198991777

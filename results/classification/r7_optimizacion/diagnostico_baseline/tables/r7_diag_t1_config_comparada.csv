@@ -1,0 +1,38 @@
+campo,seed_42,seed_43,seed_44,constante_entre_semillas
+architecture,convnext_tiny,convnext_tiny,convnext_tiny,True
+condition,A,A,A,True
+experiment,r4_benchmark,r4_benchmark,r4_benchmark,True
+seed,42,43,44,False
+seed_source,cli_override,cli_override,cli_override,True
+csv_path,configs/splits/mmotu_experimental_split_standard.csv,configs/splits/mmotu_experimental_split_standard.csv,configs/splits/mmotu_experimental_split_standard.csv,True
+image_dir,data/processed/MMOTU_OTU_2D_experimental,data/processed/MMOTU_OTU_2D_experimental,data/processed/MMOTU_OTU_2D_experimental,True
+train_samples,800,800,800,True
+validation_samples,200,200,200,True
+class_weights,"[0.5610098242759705, 4.597701072692871]","[0.5610098242759705, 4.597701072692871]","[0.5610098242759705, 4.597701072692871]",True
+pretrained,True,True,True,True
+freeze_backbone,False,False,False,True
+num_classes,2,2,2,True
+batch_size,32,32,32,True
+epochs_max,30,30,30,True
+epochs_run,13,8,8,False
+learning_rate,0.0001,0.0001,0.0001,True
+learning_rate_source,yaml,yaml,yaml,True
+weight_decay,0.0001,0.0001,0.0001,True
+optimizer,AdamW,AdamW,AdamW,True
+use_amp,True,True,True,True
+patience,5,5,5,True
+min_delta,0.001,0.001,0.001,True
+threshold,0.5,0.5,0.5,True
+scheduler,,,,True
+checkpoint_criterion,max val_roc_auc (first epoch among ties),max val_roc_auc (first epoch among ties),max val_roc_auc (first epoch among ties),True
+epoch_best,8,7,7,False
+val_weighted_loss_at_best_checkpoint,0.4321486639976502,1.142076768875122,1.24777836561203,False
+val_unweighted_loss_at_best_checkpoint,0.41370702505111695,0.3219952416419983,0.32171192198991777,False
+val_acc_at_best_checkpoint,0.775,0.905,0.915,False
+early_stopped,True,True,True,True
+early_stopped_at_epoch,13,8,8,False
+history_metrics,"[""train_loss"", ""train_acc"", ""val_loss"", ""val_unweighted_loss"", ""val_acc"", ""val_roc_auc"", ""val_average_precision"", ""val_f1_malignant"", ""val_recall_malignant"", ""val_specificity"", ""val_balanced_accuracy""]","[""train_loss"", ""train_acc"", ""val_loss"", ""val_unweighted_loss"", ""val_acc"", ""val_roc_auc"", ""val_average_precision"", ""val_f1_malignant"", ""val_recall_malignant"", ""val_specificity"", ""val_balanced_accuracy""]","[""train_loss"", ""train_acc"", ""val_loss"", ""val_unweighted_loss"", ""val_acc"", ""val_roc_auc"", ""val_average_precision"", ""val_f1_malignant"", ""val_recall_malignant"", ""val_specificity"", ""val_balanced_accuracy""]",True
+checkpoint_file,best_auc.pth,best_auc.pth,best_auc.pth,True
+val_roc_auc_best,0.8853421859039836,0.8291624106230848,0.8156281920326863,False
+early_stopping_criterion,"val_weighted_loss (patience=5, min_delta=0.001)","val_weighted_loss (patience=5, min_delta=0.001)","val_weighted_loss (patience=5, min_delta=0.001)",True
+val_predictions,val_predictions_best_auc.csv,val_predictions_best_auc.csv,val_predictions_best_auc.csv,True

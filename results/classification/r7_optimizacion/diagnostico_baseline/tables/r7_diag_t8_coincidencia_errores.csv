@@ -1,0 +1,3 @@
+tipo_error,n_imagenes_de_la_clase,n_seed_42,n_seed_43,n_seed_44,interseccion_42_43,jaccard_42_43,interseccion_42_44,jaccard_42_44,interseccion_43_44,jaccard_43_44,interseccion_3_semillas,union_3_semillas,jaccard_3_semillas,sin_error_en_ninguna_semilla
+FP,178,40,4,1,4,0.1,1,0.025,1,0.25,1,40,0.025,138
+FN,22,5,15,16,5,0.3333333333333333,4,0.23529411764705882,14,0.8235294117647058,4,17,0.23529411764705882,5

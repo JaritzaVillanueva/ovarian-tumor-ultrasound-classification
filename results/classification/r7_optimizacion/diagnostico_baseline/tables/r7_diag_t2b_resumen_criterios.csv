@@ -1,0 +1,4 @@
+seed,epoca_ultima_mejora_early_stopping,epoca_min_val_loss,epoca_checkpoint_max_roc_auc,epoca_fin_entrenamiento,criterios_coinciden_en_la_misma_epoca
+42,8,8,8,13,True
+43,3,3,7,8,False
+44,3,3,7,8,False

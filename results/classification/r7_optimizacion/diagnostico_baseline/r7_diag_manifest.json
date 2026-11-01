@@ -1,0 +1,144 @@
+{
+  "notebook": "notebooks/R7_optimizacion/00_diagnostico_baseline_r7.ipynb",
+  "purpose": "Diagnóstico de la configuración basal ConvNeXt-Tiny-A (R7, Fase 0)",
+  "scope": {
+    "architecture": "convnext_tiny",
+    "condition": "A",
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "evaluation_split": "validation",
+    "n_validation": 200,
+    "n_malignant_validation": 22,
+    "threshold": 0.5,
+    "test_used": false,
+    "new_training": false,
+    "new_inference": false,
+    "modifies_r4_r5_r6": false
+  },
+  "sources": [
+    {
+      "path": "results/classification/r4_benchmark/convnext_tiny/A/seed_42/run_config.json",
+      "bytes": 1527
+    },
+    {
+      "path": "results/classification/r4_benchmark/convnext_tiny/A/seed_42/training_history.json",
+      "bytes": 3270
+    },
+    {
+      "path": "results/classification/r4_benchmark/convnext_tiny/A/seed_42/validation_metrics.json",
+      "bytes": 397
+    },
+    {
+      "path": "results/classification/r4_benchmark/convnext_tiny/A/seed_42/best_auc_meta.json",
+      "bytes": 196
+    },
+    {
+      "path": "results/classification/r4_benchmark/convnext_tiny/A/seed_42/val_predictions_best_auc.csv",
+      "bytes": 5679
+    },
+    {
+      "path": "results/classification/r4_benchmark/convnext_tiny/A/seed_43/run_config.json",
+      "bytes": 1523
+    },
+    {
+      "path": "results/classification/r4_benchmark/convnext_tiny/A/seed_43/training_history.json",
+      "bytes": 2165
+    },
+    {
+      "path": "results/classification/r4_benchmark/convnext_tiny/A/seed_43/validation_metrics.json",
+      "bytes": 396
+    },
+    {
+      "path": "results/classification/r4_benchmark/convnext_tiny/A/seed_43/best_auc_meta.json",
+      "bytes": 194
+    },
+    {
+      "path": "results/classification/r4_benchmark/convnext_tiny/A/seed_43/val_predictions_best_auc.csv",
+      "bytes": 5879
+    },
+    {
+      "path": "results/classification/r4_benchmark/convnext_tiny/A/seed_44/run_config.json",
+      "bytes": 1523
+    },
+    {
+      "path": "results/classification/r4_benchmark/convnext_tiny/A/seed_44/training_history.json",
+      "bytes": 2115
+    },
+    {
+      "path": "results/classification/r4_benchmark/convnext_tiny/A/seed_44/validation_metrics.json",
+      "bytes": 396
+    },
+    {
+      "path": "results/classification/r4_benchmark/convnext_tiny/A/seed_44/best_auc_meta.json",
+      "bytes": 194
+    },
+    {
+      "path": "results/classification/r4_benchmark/convnext_tiny/A/seed_44/val_predictions_best_auc.csv",
+      "bytes": 5893
+    },
+    {
+      "path": "results/classification/r6_model_selection/r6_selection.json",
+      "bytes": 3548
+    },
+    {
+      "path": "configs/splits/mmotu_experimental_split_standard.csv",
+      "bytes": 55579
+    }
+  ],
+  "checkpoints_not_loaded": [
+    {
+      "path": "results/classification/r4_benchmark/convnext_tiny/A/seed_42/best_auc.pth",
+      "bytes": 111353152
+    },
+    {
+      "path": "results/classification/r4_benchmark/convnext_tiny/A/seed_43/best_auc.pth",
+      "bytes": 111353152
+    },
+    {
+      "path": "results/classification/r4_benchmark/convnext_tiny/A/seed_44/best_auc.pth",
+      "bytes": 111353152
+    }
+  ],
+  "outputs": [
+    "results/classification/r7_optimizacion/diagnostico_baseline/figures/r7_diag_f10_coincidencia_errores.png",
+    "results/classification/r7_optimizacion/diagnostico_baseline/figures/r7_diag_f1_curvas_perdida.png",
+    "results/classification/r7_optimizacion/diagnostico_baseline/figures/r7_diag_f2_curvas_auc_ap.png",
+    "results/classification/r7_optimizacion/diagnostico_baseline/figures/r7_diag_f3_criterios_parada_checkpoint.png",
+    "results/classification/r7_optimizacion/diagnostico_baseline/figures/r7_diag_f4_histogramas_probabilidad.png",
+    "results/classification/r7_optimizacion/diagnostico_baseline/figures/r7_diag_f5_cajas_probabilidad.png",
+    "results/classification/r7_optimizacion/diagnostico_baseline/figures/r7_diag_f6_ecdf_probabilidad.png",
+    "results/classification/r7_optimizacion/diagnostico_baseline/figures/r7_diag_f7_dispersion_entre_semillas.png",
+    "results/classification/r7_optimizacion/diagnostico_baseline/figures/r7_diag_f8_curvas_precision_recall.png",
+    "results/classification/r7_optimizacion/diagnostico_baseline/figures/r7_diag_f9_matrices_confusion.png",
+    "results/classification/r7_optimizacion/diagnostico_baseline/r7_diag_manifest.json",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t0_metricas_basales_por_semilla.csv",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t0b_reproduccion_metricas_r6.csv",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t0c_historial_largo.csv",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t1_config_comparada.csv",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t2_parada_checkpoint.csv",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t2b_resumen_criterios.csv",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t2c_traza_early_stopping.csv",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t3_evolucion_descriptiva.csv",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t4_comparacion_criterios.csv",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t4b_diferencias_min_loss_vs_checkpoint.csv",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t5_probabilidades_por_clase.csv",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t5b_separacion_entre_clases.csv",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t5c_acuerdo_entre_semillas.csv",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t6_precision_recall.csv",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t7_errores_por_semilla.csv",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t8_coincidencia_errores.csv",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t8b_combinaciones_de_error.csv",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t8c_imagenes_mal_clasificadas.csv",
+    "results/classification/r7_optimizacion/diagnostico_baseline/tables/r7_diag_t9_sintesis_diagnostica.csv"
+  ],
+  "environment": {
+    "python": "3.10.12",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "matplotlib": "3.10.9",
+    "scikit-learn": "1.7.2"
+  }
+}
