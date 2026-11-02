@@ -453,7 +453,7 @@ class TestCheckpointDiagnostic:
     def _run(
         self, directory, diagnostic, val_shuffle=False, val_image_ids=None, val_expected_labels=None,
         checkpoint_metric="val_loss", record_predictions=False,
-        lr=0.5, epochs=None, patience=100, min_delta=0.0,
+        lr=0.5, epochs=None, patience=100, min_delta=0.0, early_stopping=True,
     ):
         """Entrena un modelo diminuto con seeds fijas. Devuelve (history, val_dataset)."""
         from torch.utils.data import DataLoader
@@ -498,6 +498,7 @@ class TestCheckpointDiagnostic:
             epochs=epochs if epochs is not None else self.EPOCHS, save_path=str(directory / save_name),
             patience=patience, min_delta=min_delta, seed=42, use_amp=False,
             checkpoint_metric=checkpoint_metric,
+            early_stopping=early_stopping,
             **kwargs,
         )
         return history, val_ds
@@ -694,6 +695,72 @@ class TestCheckpointDiagnostic:
         assert n_loss < kwargs["epochs"], "El early stopping debía dispararse en este escenario"
         assert n_auc == n_loss
         assert expected_stop_epoch(history_auc["val_loss"], kwargs["patience"], kwargs["min_delta"]) == n_auc
+
+    # 3b. R7: desactivar el early stopping (opt-in) solo elimina la parada anticipada
+    def test_early_stopping_is_enabled_by_default(self):
+        import inspect
+        from src.classification.train import train_model
+
+        assert inspect.signature(train_model).parameters["early_stopping"].default is True
+
+    def test_disabled_early_stopping_runs_all_epochs(self, tmp_path):
+        kwargs = dict(lr=20.0, epochs=15, patience=1, min_delta=0.0)  # escenario en el que sí se detiene
+        on_dir, off_dir = tmp_path / "on", tmp_path / "off"
+        on_dir.mkdir()
+        off_dir.mkdir()
+
+        history_on, _ = self._run(on_dir, diagnostic=False, checkpoint_metric="val_roc_auc", **kwargs)
+        history_off, _ = self._run(
+            off_dir, diagnostic=False, checkpoint_metric="val_roc_auc", early_stopping=False, **kwargs,
+        )
+
+        assert len(history_on["val_loss"]) < kwargs["epochs"]
+        assert all(len(values) == kwargs["epochs"] for values in history_off.values())
+
+    def test_disabled_early_stopping_keeps_the_same_trajectory_until_the_original_stop(self, tmp_path):
+        kwargs = dict(lr=20.0, epochs=15, patience=1, min_delta=0.0)
+        on_dir, off_dir = tmp_path / "on", tmp_path / "off"
+        on_dir.mkdir()
+        off_dir.mkdir()
+
+        history_on, _ = self._run(on_dir, diagnostic=False, checkpoint_metric="val_roc_auc", **kwargs)
+        history_off, _ = self._run(
+            off_dir, diagnostic=False, checkpoint_metric="val_roc_auc", early_stopping=False, **kwargs,
+        )
+
+        n_stop = len(history_on["val_loss"])
+        assert set(history_on) == set(history_off)
+        for key in history_on:
+            assert history_off[key][:n_stop] == pytest.approx(history_on[key], abs=1e-9), key
+
+    def test_disabled_early_stopping_auc_checkpoint_is_first_argmax_over_all_epochs(self, tmp_path):
+        history, _ = self._run(
+            tmp_path, diagnostic=False, checkpoint_metric="val_roc_auc", early_stopping=False,
+            lr=20.0, epochs=15, patience=1, min_delta=0.0,
+        )
+        with open(tmp_path / "best_auc_meta.json") as f:
+            meta = json.load(f)
+
+        assert len(history["val_roc_auc"]) == 15
+        assert meta["epoch"] == int(np.argmax(history["val_roc_auc"])) + 1
+        assert meta["val_roc_auc"] == max(history["val_roc_auc"])
+
+    def test_resolve_output_dir_only_accepts_r7_subfolders(self, tmp_path):
+        pytest.importorskip("torchvision")
+        from src.classification.run_experiment import resolve_output_dir
+
+        accepted = resolve_output_dir(tmp_path, "results/classification/r7_optimizacion/early_stopping/seed_42")
+        assert accepted == (tmp_path / "results/classification/r7_optimizacion/early_stopping/seed_42").resolve()
+
+        for rejected in (
+            "results/classification/r4_benchmark/convnext_tiny/A/seed_42",
+            "results/classification/r6_model_selection",
+            "results/classification/r7_optimizacion",
+            "results/classification/r7_optimizacion/../r4_benchmark",
+            str(tmp_path.parent / "fuera"),
+        ):
+            with pytest.raises(ValueError, match="r7_optimizacion"):
+                resolve_output_dir(tmp_path, rejected)
 
     # 4. Override de --seed (lógica que resuelve la seed efectiva)
     def test_resolve_seed_defaults_to_yaml(self):

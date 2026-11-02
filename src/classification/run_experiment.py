@@ -50,6 +50,9 @@ CONDITION_DIRS = {
 
 CSV_REL = "configs/splits/mmotu_experimental_split_standard.csv"
 
+# Única raíz admitida para --output-dir: separa los experimentos de R7 de los resultados cerrados de R4-R6.
+R7_RESULTS_REL = Path("results") / "classification" / "r7_optimizacion"
+
 
 def resolve_seed(yaml_seed, cli_seed):
     """
@@ -58,6 +61,18 @@ def resolve_seed(yaml_seed, cli_seed):
     if cli_seed is None:
         return yaml_seed, "yaml"
     return cli_seed, "cli_override"
+
+
+def resolve_output_dir(project_root, output_dir_arg):
+    """
+    Devuelve la carpeta de salida indicada con --output-dir. Solo se admiten subcarpetas de
+    results/classification/r7_optimizacion/ (nunca resultados de R4, R5 o R6).
+    """
+    allowed_root = (Path(project_root) / R7_RESULTS_REL).resolve()
+    output_dir = (Path(project_root) / output_dir_arg).resolve()
+    if output_dir == allowed_root or not output_dir.is_relative_to(allowed_root):
+        raise ValueError(f"--output-dir debe ser una subcarpeta de {R7_RESULTS_REL.as_posix()}/.")
+    return output_dir
 
 
 def save_selected_predictions(output_path, epoch, val_loader, y_true, y_prob):
@@ -147,6 +162,23 @@ def main() -> None:
             "val_roc_auc requiere --experiment distinto de 'formal'."
         ),
     )
+    parser.add_argument(
+        "--no-early-stopping",
+        action="store_true",
+        default=False,
+        help=(
+            "R7: desactiva únicamente el early stopping y completa las épocas del YAML. El resto del "
+            "protocolo no cambia. Requiere --experiment distinto de 'formal'."
+        ),
+    )
+    parser.add_argument(
+        "--output-dir",
+        default=None,
+        help=(
+            "R7: carpeta de salida explícita (sustituye a results/classification/<experiment>/<arch>/<cond>/"
+            "[seed_<seed>/]). Debe ser una subcarpeta de results/classification/r7_optimizacion/."
+        ),
+    )
     args = parser.parse_args()
 
     if not re.fullmatch(r"[A-Za-z0-9_.-]+", args.experiment):
@@ -164,14 +196,24 @@ def main() -> None:
         parser.error("--checkpoint-metric val_roc_auc requiere --experiment distinto de 'formal'.")
     if args.checkpoint_metric != "val_loss" and args.save_both_checkpoints:
         parser.error("--save-both-checkpoints solo se usa con --checkpoint-metric val_loss (modo diagnóstico).")
+    if args.no_early_stopping and args.experiment == "formal":
+        parser.error("--no-early-stopping requiere --experiment distinto de 'formal' para no mezclar corridas formales.")
+    if args.no_early_stopping and args.save_both_checkpoints:
+        parser.error("--no-early-stopping no se combina con --save-both-checkpoints (modo diagnóstico).")
 
     project_root = Path.cwd()
     csv_path = project_root / CSV_REL
     image_dir = project_root / CONDITION_DIRS[args.condition]
     config_path = project_root / ARCH_CONFIGS[args.arch]
-    output_dir = project_root / "results" / "classification" / args.experiment / args.arch / args.condition
-    if args.seed is not None:
-        output_dir = output_dir / f"seed_{args.seed}"
+    if args.output_dir is not None:
+        try:
+            output_dir = resolve_output_dir(project_root, args.output_dir)
+        except ValueError as error:
+            parser.error(str(error))
+    else:
+        output_dir = project_root / "results" / "classification" / args.experiment / args.arch / args.condition
+        if args.seed is not None:
+            output_dir = output_dir / f"seed_{args.seed}"
 
     # Validaciones previas
     if not csv_path.exists():
@@ -208,6 +250,7 @@ def main() -> None:
     use_amp = cfg["training"]["use_amp"]
     patience = cfg["early_stopping"]["patience"]
     min_delta = cfg["early_stopping"]["min_delta"]
+    early_stopping = not args.no_early_stopping
     pretrained = cfg["model"]["pretrained"]
     num_classes = cfg["model"]["num_classes"]
 
@@ -219,6 +262,8 @@ def main() -> None:
     print(f"  Condición:    {args.condition}")
     print(f"  Experimento:  {args.experiment}")
     print(f"  Learning rate: {lr} ({lr_source})")
+    if not early_stopping:
+        print(f"  Early stopping: DESACTIVADO ({epochs} épocas)")
     print(f"  Device:       {device}")
     print(f"  Output:       {output_dir}")
     print(f"{'='*60}")
@@ -296,6 +341,7 @@ def main() -> None:
         seed=seed,
         use_amp=use_amp,
         checkpoint_metric=args.checkpoint_metric,
+        early_stopping=early_stopping,
         **diagnostic_kwargs,
     )
 
@@ -425,6 +471,12 @@ def main() -> None:
             f"val_weighted_loss (patience={patience}, min_delta={min_delta})"
         )
         run_config["val_predictions"] = selected_predictions_name
+    if not early_stopping:
+        # Solo en modo --no-early-stopping: patience/min_delta no se aplicaron y no se registran como activos.
+        run_config["patience"] = None
+        run_config["min_delta"] = None
+        run_config["early_stopping_enabled"] = False
+        run_config["early_stopping_criterion"] = "disabled (all epochs_max epochs are run)"
     auc_meta = None
     if diagnostic:
         with open(output_dir / "best_auc_meta.json") as f:
@@ -460,6 +512,9 @@ def main() -> None:
         f"Inconsistencia epoch_best: run_config={run_config['epoch_best']} vs best_meta={best_meta['epoch']}"
     assert run_config[checkpoint_value_keys[0]] == best_meta["val_weighted_loss"], \
         f"Inconsistencia val_weighted_loss"
+    if not early_stopping:
+        assert epochs_run == epochs and not early_stopped, \
+            f"--no-early-stopping: se ejecutaron {epochs_run} de {epochs} épocas"
 
     # Verificar que el checkpoint por AUC corresponde a la época declarada
     if select_by_auc:

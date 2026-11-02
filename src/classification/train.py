@@ -215,6 +215,7 @@ def train_model(
     val_image_ids=None,
     val_expected_labels=None,
     checkpoint_metric: str = "val_loss",
+    early_stopping: bool = True,
 ):
     """
     Entrena un modelo de clasificación.
@@ -223,6 +224,10 @@ def train_model(
         "val_loss"    -> min val_weighted_loss (comportamiento original, por defecto);
         "val_roc_auc" -> max val_roc_auc (primera época en caso de empate).
     El early stopping se basa siempre en val_weighted_loss, sea cual sea checkpoint_metric.
+
+    early_stopping=False (opt-in, R7) desactiva únicamente la parada anticipada: se completan las
+    `epochs` épocas. patience y min_delta no se utilizan; el resto del bucle (entrenamiento,
+    validación, historial y selección del checkpoint) no cambia.
 
     Opciones de diagnóstico (opt-in; por defecto no cambian nada):
         auc_save_path: guarda además un segundo checkpoint seleccionado por max val_roc_auc, dentro
@@ -333,6 +338,9 @@ def train_model(
                 print("  Modelo guardado (best_auc)")
 
         # Early stopping: patience solo se resetea cuando la mejora supera min_delta.
+        if not early_stopping:
+            continue
+
         if val_weighted_loss < (early_stop_reference - min_delta):
             early_stop_reference = val_weighted_loss
             patience_counter = 0
