@@ -454,6 +454,7 @@ class TestCheckpointDiagnostic:
         self, directory, diagnostic, val_shuffle=False, val_image_ids=None, val_expected_labels=None,
         checkpoint_metric="val_loss", record_predictions=False,
         lr=0.5, epochs=None, patience=100, min_delta=0.0, early_stopping=True,
+        class_weights=(0.6, 1.4),
     ):
         """Entrena un modelo diminuto con seeds fijas. Devuelve (history, val_dataset)."""
         from torch.utils.data import DataLoader
@@ -465,7 +466,7 @@ class TestCheckpointDiagnostic:
         set_seed(99)
         model = nn.Linear(4, 2)
         optimizer = torch.optim.SGD(model.parameters(), lr=lr)
-        criterion = nn.CrossEntropyLoss(weight=torch.tensor([0.6, 1.4]))
+        criterion = nn.CrossEntropyLoss(weight=torch.tensor(list(class_weights)))
 
         train_loader = DataLoader(
             train_ds, batch_size=16, shuffle=True, generator=torch.Generator().manual_seed(7),
@@ -827,3 +828,148 @@ class TestCheckpointDiagnostic:
 
         with pytest.raises(ValueError, match="shuffle=False"):
             save_selected_predictions(tmp_path / "x.csv", 1, shuffled_loader, labels, np.zeros(len(labels)))
+
+
+class TestClassWeights:
+    """
+    R7-H2: ponderación de clases con exponente alpha (--class-weight-alpha).
+    Con alpha = 1.0 se conservan los pesos de R4-R6 y B1.
+    """
+    TRAIN_COUNTS = (713, 87)  # entrenamiento: benignas (0) y malignas (1)
+
+    @staticmethod
+    def _labels(n_benign, n_malignant):
+        return np.array([0] * n_benign + [1] * n_malignant)
+
+    @staticmethod
+    def _original_weights(labels):
+        # Fórmula de R4-R6 escrita aparte, para detectar cualquier cambio del comportamiento por defecto
+        _, counts = np.unique(labels, return_counts=True)
+        return torch.tensor([counts.sum() / (len(counts) * c) for c in counts], dtype=torch.float32)
+
+    def test_default_and_alpha_one_reproduce_original_weights(self):
+        from src.classification.utils import compute_class_weights
+
+        labels = self._labels(*self.TRAIN_COUNTS)
+        expected = self._original_weights(labels)
+
+        assert torch.equal(compute_class_weights(labels), expected)
+        assert torch.equal(compute_class_weights(labels, alpha=1.0), expected)
+        assert expected.tolist() == pytest.approx([0.5610, 4.5977], abs=1e-4)
+
+    def test_alpha_half_gives_expected_weights(self):
+        from src.classification.utils import compute_class_weights
+
+        weights = compute_class_weights(self._labels(*self.TRAIN_COUNTS), alpha=0.5)
+
+        assert weights.tolist() == pytest.approx([0.8315, 2.3805], abs=1e-3)
+        assert (weights[1] / weights[0]).item() == pytest.approx((713 / 87) ** 0.5, rel=1e-5)  # ≈ 2.86 (con alpha = 1: ≈ 8.20)
+
+    def test_weights_follow_label_order(self):
+        from src.classification.utils import compute_class_weights
+
+        # Clase 0 mayoritaria: su peso es el menor; con la clase 1 mayoritaria el orden se invierte
+        assert compute_class_weights(self._labels(70, 30), alpha=0.5).argmin().item() == 0
+        assert compute_class_weights(self._labels(30, 70), alpha=0.5).argmin().item() == 1
+
+    @pytest.mark.parametrize("alpha", [0.0, 0.25, 0.5, 1.0])
+    def test_alpha_scales_ratio_and_keeps_mean_weight_per_sample_equal_to_one(self, alpha):
+        from src.classification.utils import compute_class_weights
+
+        n_benign, n_malignant = self.TRAIN_COUNTS
+        weights = compute_class_weights(self._labels(n_benign, n_malignant), alpha=alpha).numpy()
+
+        assert weights[1] / weights[0] == pytest.approx((n_benign / n_malignant) ** alpha, rel=1e-5)
+        assert (n_benign * weights[0] + n_malignant * weights[1]) / (n_benign + n_malignant) == pytest.approx(1.0, abs=1e-5)
+
+    def test_alpha_zero_is_unweighted(self):
+        from src.classification.utils import compute_class_weights
+
+        assert compute_class_weights(self._labels(*self.TRAIN_COUNTS), alpha=0.0).tolist() == pytest.approx([1.0, 1.0])
+
+    @pytest.mark.parametrize("alpha", [-0.1, 1.5])
+    def test_invalid_alpha_is_rejected(self, alpha):
+        from src.classification.utils import compute_class_weights
+
+        with pytest.raises(ValueError, match="alpha"):
+            compute_class_weights(self._labels(*self.TRAIN_COUNTS), alpha=alpha)
+
+    # Compatibilidad con R4-R6 y B1: los pesos por defecto coinciden con los registrados en sus corridas
+    @pytest.mark.parametrize(
+        "run_dir",
+        [
+            "r4_benchmark/convnext_tiny/A/seed_42",
+            "r4_benchmark/convnext_tiny/A/seed_43",
+            "r4_benchmark/convnext_tiny/A/seed_44",
+            "r7_optimizacion/early_stopping/seed_42",
+        ],
+    )
+    def test_default_weights_match_recorded_historical_runs(self, run_dir):
+        import pandas as pd
+        from pathlib import Path
+        from src.classification.utils import compute_class_weights
+
+        root = Path(__file__).resolve().parents[1]
+        run_config_path = root / "results" / "classification" / run_dir / "run_config.json"
+        if not run_config_path.exists():
+            pytest.skip(f"No existe {run_config_path}")
+
+        manifest = pd.read_csv(root / "configs" / "splits" / "mmotu_experimental_split_standard.csv")
+        train_labels = manifest.loc[manifest["experimental_split"] == "train", "binary_label"].to_numpy()
+        with open(run_config_path) as f:
+            recorded = json.load(f)["class_weights"]
+
+        assert compute_class_weights(train_labels).tolist() == recorded
+
+    # Particiones y etiquetas sin cambios (frecuencias documentadas en configs/splits/README.md)
+    def test_partitions_and_binary_labels_are_unchanged(self):
+        import pandas as pd
+        from pathlib import Path
+
+        root = Path(__file__).resolve().parents[1]
+        manifest = pd.read_csv(root / "configs" / "splits" / "mmotu_experimental_split_standard.csv")
+
+        counts = manifest.groupby(["experimental_split", "binary_label"]).size().to_dict()
+        assert counts == {
+            ("train", 0): 713, ("train", 1): 87,
+            ("validation", 0): 178, ("validation", 1): 22,
+            ("test", 0): 421, ("test", 1): 48,
+        }
+        assert ((manifest["binary_class"] == "malignant") == (manifest["binary_label"] == 1)).all()
+
+    # B2 mantiene el early stopping activo y el checkpoint por máximo val_roc_auc con los pesos atenuados
+    def test_attenuated_weights_keep_early_stopping_and_auc_checkpoint(self, tmp_path):
+        from src.classification.utils import compute_class_weights
+
+        weights = tuple(compute_class_weights(self._labels(*self.TRAIN_COUNTS), alpha=0.5).tolist())
+        history, _ = TestCheckpointDiagnostic()._run(
+            tmp_path, diagnostic=False, checkpoint_metric="val_roc_auc",
+            lr=20.0, epochs=15, patience=1, min_delta=0.0, class_weights=weights,  # escenario en el que sí se detiene
+        )
+        with open(tmp_path / "best_auc_meta.json") as f:
+            meta = json.load(f)
+
+        assert len(history["val_loss"]) < 15, "El early stopping debía seguir activo"
+        assert meta["criterion"] == "max val_roc_auc"
+        assert meta["epoch"] == int(np.argmax(history["val_roc_auc"])) + 1
+
+    @pytest.mark.parametrize(
+        "extra_args, message",
+        [
+            (["--experiment", "x", "--class-weight-alpha", "1.5"], "entre 0 y 1"),
+            (["--experiment", "x", "--class-weight-alpha", "-0.1"], "entre 0 y 1"),
+            (["--class-weight-alpha", "0.5"], "formal"),
+        ],
+    )
+    def test_cli_rejects_invalid_class_weight_alpha(self, monkeypatch, capsys, extra_args, message):
+        import sys
+
+        pytest.importorskip("torchvision")
+        from src.classification import run_experiment
+
+        monkeypatch.setattr(sys, "argv", ["run_experiment", "--arch", "convnext_tiny", "--condition", "A", *extra_args])
+        with pytest.raises(SystemExit) as exit_info:
+            run_experiment.main()
+
+        assert exit_info.value.code == 2
+        assert message in capsys.readouterr().err

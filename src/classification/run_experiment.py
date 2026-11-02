@@ -179,6 +179,15 @@ def main() -> None:
             "[seed_<seed>/]). Debe ser una subcarpeta de results/classification/r7_optimizacion/."
         ),
     )
+    parser.add_argument(
+        "--class-weight-alpha",
+        type=float,
+        default=None,
+        help=(
+            "R7: exponente de la ponderación de clases, en [0, 1]. 1.0 (por defecto) = frecuencia inversa "
+            "(R4-R6); 0.5 = ponderación atenuada. Requiere --experiment distinto de 'formal'."
+        ),
+    )
     args = parser.parse_args()
 
     if not re.fullmatch(r"[A-Za-z0-9_.-]+", args.experiment):
@@ -196,6 +205,11 @@ def main() -> None:
         parser.error("--checkpoint-metric val_roc_auc requiere --experiment distinto de 'formal'.")
     if args.checkpoint_metric != "val_loss" and args.save_both_checkpoints:
         parser.error("--save-both-checkpoints solo se usa con --checkpoint-metric val_loss (modo diagnóstico).")
+    if args.class_weight_alpha is not None:
+        if not 0.0 <= args.class_weight_alpha <= 1.0:
+            parser.error("--class-weight-alpha debe estar entre 0 y 1.")
+        if args.experiment == "formal":
+            parser.error("--class-weight-alpha requiere --experiment distinto de 'formal' para no mezclar corridas formales.")
     if args.no_early_stopping and args.experiment == "formal":
         parser.error("--no-early-stopping requiere --experiment distinto de 'formal' para no mezclar corridas formales.")
     if args.no_early_stopping and args.save_both_checkpoints:
@@ -293,7 +307,8 @@ def main() -> None:
 
     # Class weights (desde train) 
     train_labels = ds_train.df["binary_label"].values
-    class_weights = compute_class_weights(train_labels).to(device)
+    class_weight_alpha = 1.0 if args.class_weight_alpha is None else args.class_weight_alpha
+    class_weights = compute_class_weights(train_labels, alpha=class_weight_alpha).to(device)
     print(f"  Class weights: {class_weights}")
 
     # Modelo 
@@ -471,6 +486,9 @@ def main() -> None:
             f"val_weighted_loss (patience={patience}, min_delta={min_delta})"
         )
         run_config["val_predictions"] = selected_predictions_name
+    if args.class_weight_alpha is not None:
+        # Solo si se indica --class-weight-alpha; class_weights ya registra los pesos efectivos.
+        run_config["class_weight_alpha"] = class_weight_alpha
     if not early_stopping:
         # Solo en modo --no-early-stopping: patience/min_delta no se aplicaron y no se registran como activos.
         run_config["patience"] = None
