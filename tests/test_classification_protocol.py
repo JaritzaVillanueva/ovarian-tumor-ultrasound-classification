@@ -454,7 +454,7 @@ class TestCheckpointDiagnostic:
         self, directory, diagnostic, val_shuffle=False, val_image_ids=None, val_expected_labels=None,
         checkpoint_metric="val_loss", record_predictions=False,
         lr=0.5, epochs=None, patience=100, min_delta=0.0, early_stopping=True,
-        class_weights=(0.6, 1.4),
+        class_weights=(0.6, 1.4), loss=None,
     ):
         """Entrena un modelo diminuto con seeds fijas. Devuelve (history, val_dataset)."""
         from torch.utils.data import DataLoader
@@ -466,7 +466,7 @@ class TestCheckpointDiagnostic:
         set_seed(99)
         model = nn.Linear(4, 2)
         optimizer = torch.optim.SGD(model.parameters(), lr=lr)
-        criterion = nn.CrossEntropyLoss(weight=torch.tensor(list(class_weights)))
+        criterion = loss if loss is not None else nn.CrossEntropyLoss(weight=torch.tensor(list(class_weights)))
 
         train_loader = DataLoader(
             train_ds, batch_size=16, shuffle=True, generator=torch.Generator().manual_seed(7),
@@ -962,6 +962,174 @@ class TestClassWeights:
         ],
     )
     def test_cli_rejects_invalid_class_weight_alpha(self, monkeypatch, capsys, extra_args, message):
+        import sys
+
+        pytest.importorskip("torchvision")
+        from src.classification import run_experiment
+
+        monkeypatch.setattr(sys, "argv", ["run_experiment", "--arch", "convnext_tiny", "--condition", "A", *extra_args])
+        with pytest.raises(SystemExit) as exit_info:
+            run_experiment.main()
+
+        assert exit_info.value.code == 2
+        assert message in capsys.readouterr().err
+
+
+class TestFocalLoss:
+    """
+    R7-H3: Focal Loss ponderada (src/classification/losses.py).
+    Con gamma = 0 debe reproducir la entropía cruzada ponderada del protocolo R4-R6.
+    """
+    WEIGHTS = (0.5610, 4.5977)  # pesos originales (alpha = 1.0)
+
+    @staticmethod
+    def _batch(n=64, seed=0, scale=3.0):
+        generator = torch.Generator().manual_seed(seed)
+        logits = scale * torch.randn(n, 2, generator=generator)
+        target = torch.randint(0, 2, (n,), generator=generator)
+        target[0], target[1] = 0, 1  # ambas clases presentes
+        return logits, target
+
+    def test_gamma_zero_reproduces_weighted_cross_entropy_value_and_gradient(self):
+        from src.classification.losses import WeightedFocalLoss
+
+        weights = torch.tensor(self.WEIGHTS)
+        logits, target = self._batch()
+
+        logits_ce = logits.clone().requires_grad_(True)
+        logits_focal = logits.clone().requires_grad_(True)
+        loss_ce = nn.CrossEntropyLoss(weight=weights, reduction="mean")(logits_ce, target)
+        loss_focal = WeightedFocalLoss(weight=weights, gamma=0.0)(logits_focal, target)
+        loss_ce.backward()
+        loss_focal.backward()
+
+        assert loss_focal.item() == pytest.approx(loss_ce.item(), rel=1e-6)
+        assert torch.allclose(logits_focal.grad, logits_ce.grad, rtol=1e-5, atol=1e-7)
+
+    def test_gamma_two_is_finite_and_backpropagates_also_with_extreme_logits(self):
+        from src.classification.losses import WeightedFocalLoss
+
+        weights = torch.tensor(self.WEIGHTS)
+        for scale in (3.0, 80.0):  # el segundo caso lleva p_t hacia 0 y hacia 1
+            logits, target = self._batch(scale=scale)
+            logits.requires_grad_(True)
+            loss = WeightedFocalLoss(weight=weights, gamma=2.0)(logits, target)
+            loss.backward()
+
+            assert torch.isfinite(loss)
+            assert torch.isfinite(logits.grad).all()
+            assert logits.grad.abs().sum() > 0
+
+    def test_matches_the_formula_with_class_weights(self):
+        from src.classification.losses import WeightedFocalLoss
+
+        weights = torch.tensor(self.WEIGHTS)
+        logits, target = self._batch(n=32, seed=1)
+        gamma = 2.0
+
+        probs = torch.softmax(logits.double(), dim=1)
+        p_t = probs[torch.arange(len(target)), target]
+        w = weights.double()[target]
+        expected = (-(w * (1 - p_t) ** gamma * torch.log(p_t))).sum() / w.sum()
+
+        assert WeightedFocalLoss(weight=weights, gamma=gamma)(logits, target).item() == pytest.approx(expected.item(), rel=1e-5)
+
+    def test_class_weights_change_the_loss_and_gamma_reduces_it(self):
+        from src.classification.losses import WeightedFocalLoss
+
+        logits, target = self._batch(seed=2)
+        weighted = WeightedFocalLoss(weight=torch.tensor(self.WEIGHTS), gamma=2.0)(logits, target)
+        unweighted = WeightedFocalLoss(weight=None, gamma=2.0)(logits, target)
+        cross_entropy = WeightedFocalLoss(weight=torch.tensor(self.WEIGHTS), gamma=0.0)(logits, target)
+
+        assert weighted.item() != pytest.approx(unweighted.item(), rel=1e-3)
+        assert weighted.item() < cross_entropy.item()  # (1 - p_t)^gamma <= 1
+
+    def test_negative_gamma_is_rejected(self):
+        from src.classification.losses import WeightedFocalLoss
+
+        with pytest.raises(ValueError, match="gamma"):
+            WeightedFocalLoss(gamma=-1.0)
+
+    def test_default_criterion_is_the_original_weighted_cross_entropy(self):
+        from src.classification.losses import build_criterion
+        from src.classification.utils import compute_class_weights
+
+        weights = compute_class_weights(np.array([0] * 713 + [1] * 87))
+        criterion = build_criterion("cross_entropy", weights)
+
+        assert type(criterion) is nn.CrossEntropyLoss
+        assert criterion.reduction == "mean"
+        assert torch.equal(criterion.weight, weights)
+
+        logits, target = self._batch()
+        assert torch.equal(criterion(logits, target), nn.CrossEntropyLoss(weight=weights)(logits, target))
+
+    def test_unknown_loss_type_is_rejected(self):
+        from src.classification.losses import build_criterion
+
+        with pytest.raises(ValueError, match="loss_type"):
+            build_criterion("hinge", torch.tensor(self.WEIGHTS))
+
+    # B3 se entrena con los pesos originales (alpha = 1.0), no con los de B2
+    def test_focal_uses_the_original_class_weights(self):
+        from src.classification.losses import build_criterion
+        from src.classification.utils import compute_class_weights
+
+        weights = compute_class_weights(np.array([0] * 713 + [1] * 87))
+        criterion = build_criterion("focal", weights, 2.0)
+
+        assert criterion.weight.tolist() == pytest.approx([0.5610, 4.5977], abs=1e-4)
+        assert criterion.gamma == 2.0
+
+    # Integración con el bucle de entrenamiento existente
+    def test_focal_gamma_zero_gives_the_same_training_trajectory_as_cross_entropy(self, tmp_path):
+        from src.classification.losses import WeightedFocalLoss
+
+        ce_dir, focal_dir = tmp_path / "ce", tmp_path / "focal"
+        ce_dir.mkdir()
+        focal_dir.mkdir()
+        helper = TestCheckpointDiagnostic()
+
+        history_ce, _ = helper._run(ce_dir, diagnostic=False, checkpoint_metric="val_roc_auc", lr=1.0, epochs=6, patience=100)
+        history_focal, _ = helper._run(
+            focal_dir, diagnostic=False, checkpoint_metric="val_roc_auc", lr=1.0, epochs=6, patience=100,
+            loss=WeightedFocalLoss(weight=torch.tensor([0.6, 1.4]), gamma=0.0),
+        )
+
+        assert set(history_ce) == set(history_focal)
+        for key in history_ce:
+            assert history_focal[key] == pytest.approx(history_ce[key], abs=1e-5), key
+
+    def test_focal_keeps_early_stopping_auc_checkpoint_and_unweighted_validation_loss(self, tmp_path):
+        from src.classification.losses import WeightedFocalLoss
+
+        history, _ = TestCheckpointDiagnostic()._run(
+            tmp_path, diagnostic=False, checkpoint_metric="val_roc_auc",
+            lr=20.0, epochs=15, patience=1, min_delta=0.0,  # escenario en el que sí se detiene
+            loss=WeightedFocalLoss(weight=torch.tensor(self.WEIGHTS), gamma=2.0),
+        )
+        with open(tmp_path / "best_auc_meta.json") as f:
+            meta = json.load(f)
+
+        assert len(history["val_loss"]) < 15, "El early stopping debía seguir activo"
+        assert meta["criterion"] == "max val_roc_auc"
+        assert meta["epoch"] == int(np.argmax(history["val_roc_auc"])) + 1
+        # val_unweighted_loss sigue siendo la entropía cruzada sin pesos, distinta de la pérdida focal ponderada
+        assert all(np.isfinite(history["val_unweighted_loss"])) and history["val_unweighted_loss"] != history["val_loss"]
+
+    @pytest.mark.parametrize(
+        "extra_args, message",
+        [
+            (["--loss-type", "focal"], "formal"),
+            (["--experiment", "x", "--loss-type", "hinge"], "invalid choice"),
+            (["--experiment", "x", "--focal-gamma", "2.0"], "requiere --loss-type focal"),
+            (["--experiment", "x", "--loss-type", "cross_entropy", "--focal-gamma", "2.0"], "requiere --loss-type focal"),
+            (["--experiment", "x", "--loss-type", "focal", "--focal-gamma", "-1"], "mayor o igual que 0"),
+            (["--experiment", "x", "--loss-type", "focal", "--class-weight-alpha", "0.5"], "pesos originales"),
+        ],
+    )
+    def test_cli_validates_loss_type_and_gamma(self, monkeypatch, capsys, extra_args, message):
         import sys
 
         pytest.importorskip("torchvision")
