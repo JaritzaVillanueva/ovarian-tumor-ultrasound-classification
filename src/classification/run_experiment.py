@@ -21,6 +21,7 @@ from sklearn.metrics import roc_auc_score
 from src.classification.dataset import MMOTUClassificationDataset
 from src.classification.dataloader import create_dataloader
 from src.classification.evaluate import predict, evaluate_predictions
+from src.classification.losses import build_criterion
 from src.classification.models import (
     create_resnet50_classifier,
     create_densenet121_classifier,
@@ -188,6 +189,21 @@ def main() -> None:
             "(R4-R6); 0.5 = ponderación atenuada. Requiere --experiment distinto de 'formal'."
         ),
     )
+    parser.add_argument(
+        "--loss-type",
+        choices=["cross_entropy", "focal"],
+        default=None,
+        help=(
+            "R7: función de pérdida. cross_entropy (por defecto) = entropía cruzada ponderada de R4-R6; "
+            "focal = Focal Loss ponderada con los mismos pesos de clase. Requiere --experiment distinto de 'formal'."
+        ),
+    )
+    parser.add_argument(
+        "--focal-gamma",
+        type=float,
+        default=None,
+        help="R7: exponente gamma (>= 0) de la Focal Loss. Solo con --loss-type focal; 2.0 si no se indica.",
+    )
     args = parser.parse_args()
 
     if not re.fullmatch(r"[A-Za-z0-9_.-]+", args.experiment):
@@ -210,6 +226,15 @@ def main() -> None:
             parser.error("--class-weight-alpha debe estar entre 0 y 1.")
         if args.experiment == "formal":
             parser.error("--class-weight-alpha requiere --experiment distinto de 'formal' para no mezclar corridas formales.")
+    if args.loss_type is not None and args.experiment == "formal":
+        parser.error("--loss-type requiere --experiment distinto de 'formal' para no mezclar corridas formales.")
+    if args.focal_gamma is not None:
+        if args.loss_type != "focal":
+            parser.error("--focal-gamma requiere --loss-type focal.")
+        if args.focal_gamma < 0:
+            parser.error("--focal-gamma debe ser mayor o igual que 0.")
+    if args.loss_type == "focal" and args.class_weight_alpha not in (None, 1.0):
+        parser.error("--loss-type focal se entrena con los pesos originales: no se combina con --class-weight-alpha distinto de 1.0.")
     if args.no_early_stopping and args.experiment == "formal":
         parser.error("--no-early-stopping requiere --experiment distinto de 'formal' para no mezclar corridas formales.")
     if args.no_early_stopping and args.save_both_checkpoints:
@@ -317,7 +342,11 @@ def main() -> None:
     model = create_model( pretrained=pretrained, num_classes=num_classes, freeze_backbone=False, ).to(device)
 
     # Criterion y optimizer 
-    criterion = nn.CrossEntropyLoss(weight=class_weights)
+    loss_type = "cross_entropy" if args.loss_type is None else args.loss_type
+    focal_gamma = 2.0 if args.focal_gamma is None else args.focal_gamma
+    criterion = build_criterion(loss_type, class_weights, focal_gamma)
+    if loss_type == "focal":
+        print(f"  Pérdida: Focal Loss ponderada (gamma={focal_gamma})")
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
 
     # Entrenamiento 
@@ -489,6 +518,10 @@ def main() -> None:
     if args.class_weight_alpha is not None:
         # Solo si se indica --class-weight-alpha; class_weights ya registra los pesos efectivos.
         run_config["class_weight_alpha"] = class_weight_alpha
+    if loss_type == "focal":
+        # Solo con Focal Loss; sin ella el formato de run_config.json no cambia.
+        run_config["loss_type"] = loss_type
+        run_config["focal_gamma"] = focal_gamma
     if not early_stopping:
         # Solo en modo --no-early-stopping: patience/min_delta no se aplicaron y no se registran como activos.
         run_config["patience"] = None
