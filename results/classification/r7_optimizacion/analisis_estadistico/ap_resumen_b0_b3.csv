@@ -1,0 +1,5 @@
+config,ap_medio,ap_sd_semillas,delta_ap_semilla_42,delta_ap_semilla_43,delta_ap_semilla_44,delta_ap_medio,delta_sd_semillas,semillas_delta_positivo,ic95_boot_inf,ic95_boot_sup,ee_boot,frac_replicas_delta_positivo
+B0,0.5413,0.0438,,,,,,,,,,
+B1,0.5599,0.0867,0.0217,-0.0698,0.1038,0.0186,0.0868,2.0,-0.0452,0.0919,0.0349,0.727
+B2,0.6114,0.0359,0.0153,0.1205,0.0744,0.0701,0.0528,3.0,0.0044,0.1387,0.0351,0.982
+B3,0.5454,0.0755,-0.1292,0.0411,0.1005,0.0041,0.1192,2.0,-0.0643,0.0825,0.0372,0.578
