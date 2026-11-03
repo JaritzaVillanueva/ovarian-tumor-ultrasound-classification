@@ -1,0 +1,4 @@
+ensamble,AP observado,IC95% inf,IC95% sup,EE bootstrap
+Ensamble B0,0.6029,0.441,0.7652,0.0861
+Ensamble B2,0.6321,0.4607,0.8069,0.089
+Ensamble B0+B2 (exploratorio),0.6425,0.4777,0.8102,0.085

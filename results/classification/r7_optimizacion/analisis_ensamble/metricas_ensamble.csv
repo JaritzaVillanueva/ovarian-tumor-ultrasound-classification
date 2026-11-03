@@ -1,0 +1,10 @@
+modelo,tipo,config,ap,roc_auc,sensibilidad,especificidad,precision,f1,tn,fp,fn,tp
+B0 semilla 42,individual,B0,0.5898,0.8853,0.7727,0.7753,0.2982,0.4304,138,40,5,17
+B0 semilla 43,individual,B0,0.5295,0.8292,0.3182,0.9775,0.6364,0.4242,174,4,15,7
+B0 semilla 44,individual,B0,0.5046,0.8156,0.2727,0.9944,0.8571,0.4138,177,1,16,6
+B2 semilla 42,individual,B2,0.605,0.8639,0.5455,0.9326,0.5,0.5217,166,12,10,12
+B2 semilla 43,individual,B2,0.6501,0.8731,0.5,0.9719,0.6875,0.5789,173,5,11,11
+B2 semilla 44,individual,B2,0.579,0.8233,0.3182,0.9888,0.7778,0.4516,176,2,15,7
+Ensamble B0,ensamble,B0,0.6029,0.9014,0.3182,0.9719,0.5833,0.4118,173,5,15,7
+Ensamble B2,ensamble,B2,0.6321,0.8693,0.4091,0.9831,0.75,0.5294,175,3,13,9
+Ensamble B0+B2 (exploratorio),ensamble (exploratorio),B0+B2,0.6425,0.906,0.4091,0.9719,0.6429,0.5,173,5,13,9

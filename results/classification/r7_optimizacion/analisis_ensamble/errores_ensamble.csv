@@ -1,0 +1,4 @@
+ensamble,falsos positivos (de 178 negativas),falsos negativos (de 22 positivas),FN categoría 6 (de 15),FN categoría 7 (de 7)
+Ensamble B0,5,15,11,4
+Ensamble B2,3,13,9,4
+Ensamble B0+B2 (exploratorio),5,13,9,4

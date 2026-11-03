@@ -1,0 +1,2 @@
+comparación,ΔAP observado,media bootstrap,EE bootstrap,IC95% inf,IC95% sup,réplicas con ΔAP > 0,n_boot,boot_seed
+Ensamble B2 - Ensamble B0,0.0292,0.0286,0.0481,-0.0609,0.1266,0.726,2000,20260101
