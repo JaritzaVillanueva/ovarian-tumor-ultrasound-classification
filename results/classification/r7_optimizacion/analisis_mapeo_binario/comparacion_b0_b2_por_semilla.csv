@@ -1,0 +1,4 @@
+seed,ap_principal_b0,ap_principal_b2,ap_principal_delta,auc_principal_b0,auc_principal_b2,auc_principal_delta,ap_cat7_vs_0a5_b0,ap_cat7_vs_0a5_b2,ap_cat7_vs_0a5_delta,auc_cat7_vs_0a5_b0,auc_cat7_vs_0a5_b2,auc_cat7_vs_0a5_delta,cat6_positivas_b0,cat6_positivas_b2,cat7_positivas_b0,cat7_positivas_b2,falsos_positivos_b0,falsos_positivos_b2
+42,0.5898,0.605,0.0153,0.8853,0.8639,-0.0215,0.5317,0.4778,-0.054,0.9021,0.7753,-0.1268,12,9,5,3,40,12
+43,0.5295,0.6501,0.1205,0.8292,0.8731,0.0439,0.5147,0.5911,0.0764,0.8058,0.8483,0.0425,4,7,3,4,4,5
+44,0.5046,0.579,0.0744,0.8156,0.8233,0.0077,0.4973,0.4802,-0.0172,0.7721,0.8162,0.0441,3,4,3,3,1,2
