@@ -1,0 +1,6 @@
+fuente,medida,B0,B2,B2 - B0,IC95% bootstrap inf,IC95% bootstrap sup,nota
+06,AP medio de los 3 modelos individuales,0.5413,0.6114,0.0701,,,
+06,AP del ensamble de 3 semillas,0.6029,0.6321,0.0292,-0.0609,0.1266,IC del ΔAP entre ensambles (notebook 06); 3 inferencias por imagen frente a 1
+06,ROC-AUC del ensamble de 3 semillas,0.9014,0.8693,-0.0321,,,
+05,"AP tarea principal (0-5 vs 6-7), media de 3 semillas",0.5413,0.6114,0.0701,,,"ΔAP por semilla: +0.0153, +0.1205, +0.0744"
+05,"AP tarea secundaria (0-5 vs 7), media de 3 semillas",0.5146,0.5164,0.0018,,,"subconjunto de 185 imágenes; no comparable con la tarea principal; ΔAP por semilla: -0.0540, +0.0764, -0.0172"

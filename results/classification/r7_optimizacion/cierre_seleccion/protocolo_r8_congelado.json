@@ -1,0 +1,93 @@
+{
+  "etapa": "R8 - evaluacion final en test (protocolo congelado en el cierre de R7)",
+  "estado": "congelado antes de usar test; no implementado",
+  "modelos": {
+    "arquitectura": "convnext_tiny",
+    "representacion": "A",
+    "configuraciones": {
+      "B0": {
+        "class_weights": [
+          0.5610098242759705,
+          4.597701072692871
+        ],
+        "rol": "referencia",
+        "carpeta": "results/classification/r4_benchmark/convnext_tiny/A"
+      },
+      "B2": {
+        "class_weights": [
+          0.8315487504005432,
+          2.380525588989258
+        ],
+        "class_weight_alpha": 0.5,
+        "rol": "protocolo final de clasificacion",
+        "carpeta": "results/classification/r7_optimizacion/class_weights"
+      }
+    },
+    "semillas": [
+      42,
+      43,
+      44
+    ],
+    "checkpoint": "best_auc.pth (maximo val_roc_auc, seleccionado en validation)",
+    "total_modelos": 6,
+    "ensambles": false
+  },
+  "datos": {
+    "conjunto": "test",
+    "mismas_imagenes_para_ambas_configuraciones": true,
+    "augmentation": false
+  },
+  "prohibido_con_test": [
+    "reentrenar",
+    "recalibrar",
+    "ajustar umbrales",
+    "seleccionar modelos, semillas o configuraciones",
+    "definir metas numericas retrospectivas"
+  ],
+  "umbral": 0.5,
+  "metricas_por_semilla": [
+    "average_precision",
+    "roc_auc",
+    "sensibilidad",
+    "especificidad",
+    "precision",
+    "f1",
+    "balanced_accuracy",
+    "matriz_de_confusion"
+  ],
+  "resumen_entre_semillas": {
+    "estadisticos": [
+      "media",
+      "desviacion_estandar_muestral_n_menos_1"
+    ]
+  },
+  "comparacion_b2_vs_b0": {
+    "estadistico": "media de los tres delta AP por semilla (B2 - B0)",
+    "intervalo": "percentil 95 % por bootstrap pareado y estratificado por imagen",
+    "n_bootstrap": 2000,
+    "semilla_bootstrap": 20260101,
+    "indices": "los mismos para todas las semillas y ambas configuraciones; remuestreo dentro de cada clase",
+    "incertidumbres_separadas": [
+      "remuestreo de imagenes (bootstrap)",
+      "variabilidad entre semillas"
+    ]
+  },
+  "limitaciones_a_declarar": [
+    "sin identificadores de paciente: no se asume independencia entre imagenes",
+    "acceso exploratorio previo al conjunto test",
+    "B2 seleccionado sobre validation",
+    "categorias 6 y 7 agrupadas en la clase positiva operacional; la categoria 6 no es malignidad histologica"
+  ],
+  "interpretacion": "un intervalo favorable no se interpreta como validez clinica",
+  "iov_mapeo_binario": {
+    "texto": "Se realiza un análisis de sensibilidad del desempeño respecto del mapeo de las categorías originales a la etiqueta binaria, documentando su influencia y las limitaciones de interpretación",
+    "origen": "informe actualizado",
+    "estado": "propuesto; pendiente de aprobación formal del asesor"
+  },
+  "registro_previo_a_la_evaluacion": {
+    "commit_git": "registrar el hash completo del commit, con el árbol de trabajo limpio, antes de evaluar",
+    "sha256_particiones": "registrar el SHA-256 del archivo de particiones usado (csv_path de run_config.json) antes de evaluar",
+    "sha256_checkpoints": "registrar el SHA-256 de los seis best_auc.pth antes de evaluar y comprobarlo al evaluar",
+    "inventario_preliminar": "precomprobaciones_r8_archivos.csv (entorno local; no sustituye el registro anterior)"
+  }
+}
