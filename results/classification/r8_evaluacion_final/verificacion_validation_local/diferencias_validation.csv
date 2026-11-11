@@ -1,0 +1,4 @@
+corrida,estado,max_abs_diff,mean_abs_diff,n_sobre_tolerancia,cambios_de_clase_al_umbral_0.5,mismas_etiquetas,image_id_max_diff,dif_average_precision,dif_roc_auc,dif_sensibilidad,dif_especificidad,dif_precision,dif_f1,dif_balanced_accuracy
+B0_seed42,no_aprobada,0.0003452897071838379,2.7809241437351378e-05,13,0,True,1010,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+B0_seed43,no_aprobada,0.0002161860466003418,9.593724753366938e-06,5,0,True,926,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+B0_seed44,no_aprobada,0.00018781423568725586,9.07578119950274e-06,4,0,True,223,0.0,0.0,0.0,0.0,0.0,0.0,0.0

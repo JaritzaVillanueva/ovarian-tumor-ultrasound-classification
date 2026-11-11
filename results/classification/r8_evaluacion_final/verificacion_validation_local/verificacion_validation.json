@@ -1,0 +1,322 @@
+{
+  "estado": "no_superada",
+  "tolerancia_prob": 0.0001,
+  "tolerancia_estandar": true,
+  "corridas_ejecutadas": 3,
+  "corridas_esperadas": 6,
+  "corridas": {
+    "B0_seed42": {
+      "mismo_conjunto_de_image_id": true,
+      "n_regeneradas": 200,
+      "n_guardadas": 200,
+      "tolerancia": 0.0001,
+      "mismas_etiquetas": true,
+      "max_abs_diff": 0.0003452897071838379,
+      "image_id_max_diff": 1010,
+      "mean_abs_diff": 2.7809241437351378e-05,
+      "n_sobre_tolerancia": 13,
+      "cambios_de_clase_al_umbral_0.5": 0,
+      "max_abs_diff_metricas": {
+        "average_precision": 0.0,
+        "roc_auc": 0.0,
+        "sensibilidad": 0.0,
+        "especificidad": 0.0,
+        "precision": 0.0,
+        "f1": 0.0,
+        "balanced_accuracy": 0.0
+      },
+      "metricas_regeneradas": {
+        "average_precision": 0.5897772903318363,
+        "roc_auc": 0.8853421859039836,
+        "sensibilidad": 0.7727272727272727,
+        "especificidad": 0.7752808988764045,
+        "precision": 0.2982456140350877,
+        "f1": 0.43037974683544306,
+        "balanced_accuracy": 0.7740040858018387,
+        "tn": 138,
+        "fp": 40,
+        "fn": 5,
+        "tp": 17
+      },
+      "aprobada": false,
+      "max_abs_diff_vs_validation_metrics_json": {
+        "average_precision": 0.0,
+        "roc_auc": 0.0
+      },
+      "sha256_checkpoint": "44960476dfdbe79d7ee2ed171d9fd2a14ad65e46061dfb58065220c53d220c60",
+      "estado": "no_aprobada"
+    },
+    "B0_seed43": {
+      "mismo_conjunto_de_image_id": true,
+      "n_regeneradas": 200,
+      "n_guardadas": 200,
+      "tolerancia": 0.0001,
+      "mismas_etiquetas": true,
+      "max_abs_diff": 0.0002161860466003418,
+      "image_id_max_diff": 926,
+      "mean_abs_diff": 9.593724753366938e-06,
+      "n_sobre_tolerancia": 5,
+      "cambios_de_clase_al_umbral_0.5": 0,
+      "max_abs_diff_metricas": {
+        "average_precision": 0.0,
+        "roc_auc": 0.0,
+        "sensibilidad": 0.0,
+        "especificidad": 0.0,
+        "precision": 0.0,
+        "f1": 0.0,
+        "balanced_accuracy": 0.0
+      },
+      "metricas_regeneradas": {
+        "average_precision": 0.5295229065630265,
+        "roc_auc": 0.8291624106230848,
+        "sensibilidad": 0.3181818181818182,
+        "especificidad": 0.9775280898876404,
+        "precision": 0.6363636363636364,
+        "f1": 0.42424242424242425,
+        "balanced_accuracy": 0.6478549540347293,
+        "tn": 174,
+        "fp": 4,
+        "fn": 15,
+        "tp": 7
+      },
+      "aprobada": false,
+      "max_abs_diff_vs_validation_metrics_json": {
+        "average_precision": 0.0,
+        "roc_auc": 0.0
+      },
+      "sha256_checkpoint": "b741267084d44fc1daf3b20fcd47a23f829571b93c8f84798daf30300214ea3f",
+      "estado": "no_aprobada"
+    },
+    "B0_seed44": {
+      "mismo_conjunto_de_image_id": true,
+      "n_regeneradas": 200,
+      "n_guardadas": 200,
+      "tolerancia": 0.0001,
+      "mismas_etiquetas": true,
+      "max_abs_diff": 0.00018781423568725586,
+      "image_id_max_diff": 223,
+      "mean_abs_diff": 9.07578119950274e-06,
+      "n_sobre_tolerancia": 4,
+      "cambios_de_clase_al_umbral_0.5": 0,
+      "max_abs_diff_metricas": {
+        "average_precision": 0.0,
+        "roc_auc": 0.0,
+        "sensibilidad": 0.0,
+        "especificidad": 0.0,
+        "precision": 0.0,
+        "f1": 0.0,
+        "balanced_accuracy": 0.0
+      },
+      "metricas_regeneradas": {
+        "average_precision": 0.5045757631104272,
+        "roc_auc": 0.8156281920326863,
+        "sensibilidad": 0.2727272727272727,
+        "especificidad": 0.9943820224719101,
+        "precision": 0.8571428571428571,
+        "f1": 0.41379310344827586,
+        "balanced_accuracy": 0.6335546475995915,
+        "tn": 177,
+        "fp": 1,
+        "fn": 16,
+        "tp": 6
+      },
+      "aprobada": false,
+      "max_abs_diff_vs_validation_metrics_json": {
+        "average_precision": 0.0,
+        "roc_auc": 0.0
+      },
+      "sha256_checkpoint": "06f988180523c28629911d56c0441652b63dfd31ec98be66d27acee0b7e67e4e",
+      "estado": "no_aprobada"
+    }
+  },
+  "precheck": {
+    "estado": "pendiente",
+    "comprobaciones": [
+      {
+        "comprobacion": "B0 semilla 42: run_config compatible con el protocolo",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B0 semilla 42: best_auc_meta coherente",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B0 semilla 42: checkpoint presente",
+        "estado": "cumple",
+        "detalle": "111353152 bytes"
+      },
+      {
+        "comprobacion": "B0 semilla 43: run_config compatible con el protocolo",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B0 semilla 43: best_auc_meta coherente",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B0 semilla 43: checkpoint presente",
+        "estado": "cumple",
+        "detalle": "111353152 bytes"
+      },
+      {
+        "comprobacion": "B0 semilla 44: run_config compatible con el protocolo",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B0 semilla 44: best_auc_meta coherente",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B0 semilla 44: checkpoint presente",
+        "estado": "cumple",
+        "detalle": "111353152 bytes"
+      },
+      {
+        "comprobacion": "B2 semilla 42: run_config compatible con el protocolo",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B2 semilla 42: best_auc_meta coherente",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B2 semilla 42: checkpoint presente",
+        "estado": "pendiente",
+        "detalle": "no está en este entorno: verificar en el entorno donde se entrenó"
+      },
+      {
+        "comprobacion": "B2 semilla 43: run_config compatible con el protocolo",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B2 semilla 43: best_auc_meta coherente",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B2 semilla 43: checkpoint presente",
+        "estado": "pendiente",
+        "detalle": "no está en este entorno: verificar en el entorno donde se entrenó"
+      },
+      {
+        "comprobacion": "B2 semilla 44: run_config compatible con el protocolo",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B2 semilla 44: best_auc_meta coherente",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B2 semilla 44: checkpoint presente",
+        "estado": "pendiente",
+        "detalle": "no está en este entorno: verificar en el entorno donde se entrenó"
+      },
+      {
+        "comprobacion": "semilla 42: B0 y B2 comparten hiperparámetros",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "semilla 43: B0 y B2 comparten hiperparámetros",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "semilla 44: B0 y B2 comparten hiperparámetros",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "partición operativa presente",
+        "estado": "cumple",
+        "detalle": "configs/splits/mmotu_experimental_split_standard.csv"
+      },
+      {
+        "comprobacion": "partición canónica presente",
+        "estado": "cumple",
+        "detalle": "configs/splits/mmotu_experimental_split.csv"
+      },
+      {
+        "comprobacion": "estado de Git",
+        "estado": "cumple",
+        "detalle": "feat/r8-evaluacion-final @ a547117e343b0c30c2c4cba3716f0a7af044bca7; cambios en archivos versionados: False"
+      }
+    ]
+  },
+  "registro_previo": {
+    "fecha_utc": "2026-11-03T13:05:18+00:00",
+    "git": {
+      "commit": "a547117e343b0c30c2c4cba3716f0a7af044bca7",
+      "rama": "feat/r8-evaluacion-final",
+      "cambios_en_archivos_versionados": false
+    },
+    "sha256_protocolo": "c74c7e2bda8bafc69928629a432229870bd3739054ce6fd2361f6edf79ee52e6",
+    "sha256_particiones": {
+      "operativa": {
+        "ruta": "configs/splits/mmotu_experimental_split_standard.csv",
+        "sha256": "8e0e89645364dfecc51aa2209c5a7bfa0bf6020b29428258d9a3b4981dbf9854"
+      },
+      "canonica": {
+        "ruta": "configs/splits/mmotu_experimental_split.csv",
+        "sha256": "dd19cc05b8f24dc0b16ccc585194bf588264f87defbd4411490f5180e67e4e52"
+      }
+    },
+    "checkpoints": {
+      "B0_seed42": {
+        "ruta": "results/classification/r4_benchmark/convnext_tiny/A/seed_42/best_auc.pth",
+        "existe": true,
+        "bytes": 111353152,
+        "sha256": "44960476dfdbe79d7ee2ed171d9fd2a14ad65e46061dfb58065220c53d220c60"
+      },
+      "B0_seed43": {
+        "ruta": "results/classification/r4_benchmark/convnext_tiny/A/seed_43/best_auc.pth",
+        "existe": true,
+        "bytes": 111353152,
+        "sha256": "b741267084d44fc1daf3b20fcd47a23f829571b93c8f84798daf30300214ea3f"
+      },
+      "B0_seed44": {
+        "ruta": "results/classification/r4_benchmark/convnext_tiny/A/seed_44/best_auc.pth",
+        "existe": true,
+        "bytes": 111353152,
+        "sha256": "06f988180523c28629911d56c0441652b63dfd31ec98be66d27acee0b7e67e4e"
+      },
+      "B2_seed42": {
+        "ruta": "results/classification/r7_optimizacion/class_weights/seed_42/best_auc.pth",
+        "existe": false,
+        "bytes": null,
+        "sha256": null
+      },
+      "B2_seed43": {
+        "ruta": "results/classification/r7_optimizacion/class_weights/seed_43/best_auc.pth",
+        "existe": false,
+        "bytes": null,
+        "sha256": null
+      },
+      "B2_seed44": {
+        "ruta": "results/classification/r7_optimizacion/class_weights/seed_44/best_auc.pth",
+        "existe": false,
+        "bytes": null,
+        "sha256": null
+      }
+    }
+  },
+  "entorno": {
+    "python": "3.13.1",
+    "torch": "2.10.0+cpu",
+    "device": "cpu",
+    "sistema": "Windows-11-10.0.26200-SP0",
+    "torchvision": "0.25.0+cpu"
+  },
+  "split_usado": "validation"
+}
