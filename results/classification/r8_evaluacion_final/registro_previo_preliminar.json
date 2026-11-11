@@ -1,0 +1,57 @@
+{
+  "fecha_utc": "2026-11-03T13:26:59+00:00",
+  "git": {
+    "commit": "fe0765f7725bb26253d7cdb14ab46118853eec20",
+    "rama": "feat/r8-evaluacion-final",
+    "cambios_en_archivos_versionados": false
+  },
+  "sha256_protocolo": "bfdc5ea4a7d45fde2e13b3ac5ff281b55b37a144eb4e90e591150e2be7e5060c",
+  "sha256_particiones": {
+    "operativa": {
+      "ruta": "configs/splits/mmotu_experimental_split_standard.csv",
+      "sha256": "8e0e89645364dfecc51aa2209c5a7bfa0bf6020b29428258d9a3b4981dbf9854"
+    },
+    "canonica": {
+      "ruta": "configs/splits/mmotu_experimental_split.csv",
+      "sha256": "dd19cc05b8f24dc0b16ccc585194bf588264f87defbd4411490f5180e67e4e52"
+    }
+  },
+  "checkpoints": {
+    "B0_seed42": {
+      "ruta": "results/classification/r4_benchmark/convnext_tiny/A/seed_42/best_auc.pth",
+      "existe": true,
+      "bytes": 111353152,
+      "sha256": "44960476dfdbe79d7ee2ed171d9fd2a14ad65e46061dfb58065220c53d220c60"
+    },
+    "B0_seed43": {
+      "ruta": "results/classification/r4_benchmark/convnext_tiny/A/seed_43/best_auc.pth",
+      "existe": true,
+      "bytes": 111353152,
+      "sha256": "b741267084d44fc1daf3b20fcd47a23f829571b93c8f84798daf30300214ea3f"
+    },
+    "B0_seed44": {
+      "ruta": "results/classification/r4_benchmark/convnext_tiny/A/seed_44/best_auc.pth",
+      "existe": true,
+      "bytes": 111353152,
+      "sha256": "06f988180523c28629911d56c0441652b63dfd31ec98be66d27acee0b7e67e4e"
+    },
+    "B2_seed42": {
+      "ruta": "results/classification/r7_optimizacion/class_weights/seed_42/best_auc.pth",
+      "existe": true,
+      "bytes": 111353152,
+      "sha256": "554db6a3d28bedb1a1134f3527f2888b32fb7db8e93b5a187ebe7e1d512d5ca1"
+    },
+    "B2_seed43": {
+      "ruta": "results/classification/r7_optimizacion/class_weights/seed_43/best_auc.pth",
+      "existe": true,
+      "bytes": 111353152,
+      "sha256": "6dbc118a2d5b3f9be2ef83e4da3839971b6e8838d3d7d8f65a544868fac32c97"
+    },
+    "B2_seed44": {
+      "ruta": "results/classification/r7_optimizacion/class_weights/seed_44/best_auc.pth",
+      "existe": true,
+      "bytes": 111353152,
+      "sha256": "775f1fd3d682569ab4a2e043fa83a505ca6db397eed510868105ec3bdd79fcab"
+    }
+  }
+}

@@ -1,0 +1,445 @@
+{
+  "estado": "superada",
+  "tolerancia_prob": 0.0001,
+  "tolerancia_estandar": true,
+  "corridas_ejecutadas": 6,
+  "corridas_esperadas": 6,
+  "corridas": {
+    "B0_seed42": {
+      "mismo_conjunto_de_image_id": true,
+      "n_regeneradas": 200,
+      "n_guardadas": 200,
+      "tolerancia": 0.0001,
+      "mismas_etiquetas": true,
+      "max_abs_diff": 1.1102230246251565e-16,
+      "image_id_max_diff": 22,
+      "mean_abs_diff": 3.9166261379952605e-17,
+      "n_sobre_tolerancia": 0,
+      "cambios_de_clase_al_umbral_0.5": 0,
+      "max_abs_diff_metricas": {
+        "average_precision": 0.0,
+        "roc_auc": 0.0,
+        "sensibilidad": 0.0,
+        "especificidad": 0.0,
+        "precision": 0.0,
+        "f1": 0.0,
+        "balanced_accuracy": 0.0
+      },
+      "metricas_regeneradas": {
+        "average_precision": 0.5897772903318363,
+        "roc_auc": 0.8853421859039836,
+        "sensibilidad": 0.7727272727272727,
+        "especificidad": 0.7752808988764045,
+        "precision": 0.2982456140350877,
+        "f1": 0.43037974683544306,
+        "balanced_accuracy": 0.7740040858018387,
+        "tn": 138,
+        "fp": 40,
+        "fn": 5,
+        "tp": 17
+      },
+      "aprobada": true,
+      "max_abs_diff_vs_validation_metrics_json": {
+        "average_precision": 0.0,
+        "roc_auc": 0.0
+      },
+      "sha256_checkpoint": "44960476dfdbe79d7ee2ed171d9fd2a14ad65e46061dfb58065220c53d220c60",
+      "estado": "aprobada"
+    },
+    "B0_seed43": {
+      "mismo_conjunto_de_image_id": true,
+      "n_regeneradas": 200,
+      "n_guardadas": 200,
+      "tolerancia": 0.0001,
+      "mismas_etiquetas": true,
+      "max_abs_diff": 1.1102230246251565e-16,
+      "image_id_max_diff": 22,
+      "mean_abs_diff": 4.319380140019313e-17,
+      "n_sobre_tolerancia": 0,
+      "cambios_de_clase_al_umbral_0.5": 0,
+      "max_abs_diff_metricas": {
+        "average_precision": 0.0,
+        "roc_auc": 0.0,
+        "sensibilidad": 0.0,
+        "especificidad": 0.0,
+        "precision": 0.0,
+        "f1": 0.0,
+        "balanced_accuracy": 0.0
+      },
+      "metricas_regeneradas": {
+        "average_precision": 0.5295229065630265,
+        "roc_auc": 0.8291624106230848,
+        "sensibilidad": 0.3181818181818182,
+        "especificidad": 0.9775280898876404,
+        "precision": 0.6363636363636364,
+        "f1": 0.42424242424242425,
+        "balanced_accuracy": 0.6478549540347293,
+        "tn": 174,
+        "fp": 4,
+        "fn": 15,
+        "tp": 7
+      },
+      "aprobada": true,
+      "max_abs_diff_vs_validation_metrics_json": {
+        "average_precision": 0.0,
+        "roc_auc": 0.0
+      },
+      "sha256_checkpoint": "b741267084d44fc1daf3b20fcd47a23f829571b93c8f84798daf30300214ea3f",
+      "estado": "aprobada"
+    },
+    "B0_seed44": {
+      "mismo_conjunto_de_image_id": true,
+      "n_regeneradas": 200,
+      "n_guardadas": 200,
+      "tolerancia": 0.0001,
+      "mismas_etiquetas": true,
+      "max_abs_diff": 1.1102230246251565e-16,
+      "image_id_max_diff": 280,
+      "mean_abs_diff": 4.458835644455261e-17,
+      "n_sobre_tolerancia": 0,
+      "cambios_de_clase_al_umbral_0.5": 0,
+      "max_abs_diff_metricas": {
+        "average_precision": 0.0,
+        "roc_auc": 0.0,
+        "sensibilidad": 0.0,
+        "especificidad": 0.0,
+        "precision": 0.0,
+        "f1": 0.0,
+        "balanced_accuracy": 0.0
+      },
+      "metricas_regeneradas": {
+        "average_precision": 0.5045757631104272,
+        "roc_auc": 0.8156281920326863,
+        "sensibilidad": 0.2727272727272727,
+        "especificidad": 0.9943820224719101,
+        "precision": 0.8571428571428571,
+        "f1": 0.41379310344827586,
+        "balanced_accuracy": 0.6335546475995915,
+        "tn": 177,
+        "fp": 1,
+        "fn": 16,
+        "tp": 6
+      },
+      "aprobada": true,
+      "max_abs_diff_vs_validation_metrics_json": {
+        "average_precision": 0.0,
+        "roc_auc": 0.0
+      },
+      "sha256_checkpoint": "06f988180523c28629911d56c0441652b63dfd31ec98be66d27acee0b7e67e4e",
+      "estado": "aprobada"
+    },
+    "B2_seed42": {
+      "mismo_conjunto_de_image_id": true,
+      "n_regeneradas": 200,
+      "n_guardadas": 200,
+      "tolerancia": 0.0001,
+      "mismas_etiquetas": true,
+      "max_abs_diff": 1.1102230246251565e-16,
+      "image_id_max_diff": 1428,
+      "mean_abs_diff": 4.1552996937407884e-17,
+      "n_sobre_tolerancia": 0,
+      "cambios_de_clase_al_umbral_0.5": 0,
+      "max_abs_diff_metricas": {
+        "average_precision": 0.0,
+        "roc_auc": 0.0,
+        "sensibilidad": 0.0,
+        "especificidad": 0.0,
+        "precision": 0.0,
+        "f1": 0.0,
+        "balanced_accuracy": 0.0
+      },
+      "metricas_regeneradas": {
+        "average_precision": 0.6050274987380022,
+        "roc_auc": 0.8638917262512769,
+        "sensibilidad": 0.5454545454545454,
+        "especificidad": 0.9325842696629213,
+        "precision": 0.5,
+        "f1": 0.5217391304347826,
+        "balanced_accuracy": 0.7390194075587333,
+        "tn": 166,
+        "fp": 12,
+        "fn": 10,
+        "tp": 12
+      },
+      "aprobada": true,
+      "max_abs_diff_vs_validation_metrics_json": {
+        "average_precision": 0.0,
+        "roc_auc": 0.0
+      },
+      "sha256_checkpoint": "554db6a3d28bedb1a1134f3527f2888b32fb7db8e93b5a187ebe7e1d512d5ca1",
+      "estado": "aprobada"
+    },
+    "B2_seed43": {
+      "mismo_conjunto_de_image_id": true,
+      "n_regeneradas": 200,
+      "n_guardadas": 200,
+      "tolerancia": 0.0001,
+      "mismas_etiquetas": true,
+      "max_abs_diff": 1.1102230246251565e-16,
+      "image_id_max_diff": 223,
+      "mean_abs_diff": 4.3351552816289776e-17,
+      "n_sobre_tolerancia": 0,
+      "cambios_de_clase_al_umbral_0.5": 0,
+      "max_abs_diff_metricas": {
+        "average_precision": 0.0,
+        "roc_auc": 0.0,
+        "sensibilidad": 0.0,
+        "especificidad": 0.0,
+        "precision": 0.0,
+        "f1": 0.0,
+        "balanced_accuracy": 0.0
+      },
+      "metricas_regeneradas": {
+        "average_precision": 0.6500539729801743,
+        "roc_auc": 0.8730847803881512,
+        "sensibilidad": 0.5,
+        "especificidad": 0.9719101123595506,
+        "precision": 0.6875,
+        "f1": 0.5789473684210527,
+        "balanced_accuracy": 0.7359550561797753,
+        "tn": 173,
+        "fp": 5,
+        "fn": 11,
+        "tp": 11
+      },
+      "aprobada": true,
+      "max_abs_diff_vs_validation_metrics_json": {
+        "average_precision": 0.0,
+        "roc_auc": 0.0
+      },
+      "sha256_checkpoint": "6dbc118a2d5b3f9be2ef83e4da3839971b6e8838d3d7d8f65a544868fac32c97",
+      "estado": "aprobada"
+    },
+    "B2_seed44": {
+      "mismo_conjunto_de_image_id": true,
+      "n_regeneradas": 200,
+      "n_guardadas": 200,
+      "tolerancia": 0.0001,
+      "mismas_etiquetas": true,
+      "max_abs_diff": 1.1102230246251565e-16,
+      "image_id_max_diff": 22,
+      "mean_abs_diff": 4.7110481748297016e-17,
+      "n_sobre_tolerancia": 0,
+      "cambios_de_clase_al_umbral_0.5": 0,
+      "max_abs_diff_metricas": {
+        "average_precision": 0.0,
+        "roc_auc": 0.0,
+        "sensibilidad": 0.0,
+        "especificidad": 0.0,
+        "precision": 0.0,
+        "f1": 0.0,
+        "balanced_accuracy": 0.0
+      },
+      "metricas_regeneradas": {
+        "average_precision": 0.5790232371346031,
+        "roc_auc": 0.8232890704800817,
+        "sensibilidad": 0.3181818181818182,
+        "especificidad": 0.9887640449438202,
+        "precision": 0.7777777777777778,
+        "f1": 0.45161290322580644,
+        "balanced_accuracy": 0.6534729315628192,
+        "tn": 176,
+        "fp": 2,
+        "fn": 15,
+        "tp": 7
+      },
+      "aprobada": true,
+      "max_abs_diff_vs_validation_metrics_json": {
+        "average_precision": 0.0,
+        "roc_auc": 0.0
+      },
+      "sha256_checkpoint": "775f1fd3d682569ab4a2e043fa83a505ca6db397eed510868105ec3bdd79fcab",
+      "estado": "aprobada"
+    }
+  },
+  "precheck": {
+    "estado": "completo",
+    "comprobaciones": [
+      {
+        "comprobacion": "B0 semilla 42: run_config compatible con el protocolo",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B0 semilla 42: best_auc_meta coherente",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B0 semilla 42: checkpoint presente",
+        "estado": "cumple",
+        "detalle": "111353152 bytes"
+      },
+      {
+        "comprobacion": "B0 semilla 43: run_config compatible con el protocolo",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B0 semilla 43: best_auc_meta coherente",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B0 semilla 43: checkpoint presente",
+        "estado": "cumple",
+        "detalle": "111353152 bytes"
+      },
+      {
+        "comprobacion": "B0 semilla 44: run_config compatible con el protocolo",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B0 semilla 44: best_auc_meta coherente",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B0 semilla 44: checkpoint presente",
+        "estado": "cumple",
+        "detalle": "111353152 bytes"
+      },
+      {
+        "comprobacion": "B2 semilla 42: run_config compatible con el protocolo",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B2 semilla 42: best_auc_meta coherente",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B2 semilla 42: checkpoint presente",
+        "estado": "cumple",
+        "detalle": "111353152 bytes"
+      },
+      {
+        "comprobacion": "B2 semilla 43: run_config compatible con el protocolo",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B2 semilla 43: best_auc_meta coherente",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B2 semilla 43: checkpoint presente",
+        "estado": "cumple",
+        "detalle": "111353152 bytes"
+      },
+      {
+        "comprobacion": "B2 semilla 44: run_config compatible con el protocolo",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B2 semilla 44: best_auc_meta coherente",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "B2 semilla 44: checkpoint presente",
+        "estado": "cumple",
+        "detalle": "111353152 bytes"
+      },
+      {
+        "comprobacion": "semilla 42: B0 y B2 comparten hiperparámetros",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "semilla 43: B0 y B2 comparten hiperparámetros",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "semilla 44: B0 y B2 comparten hiperparámetros",
+        "estado": "cumple",
+        "detalle": ""
+      },
+      {
+        "comprobacion": "partición operativa presente",
+        "estado": "cumple",
+        "detalle": "configs/splits/mmotu_experimental_split_standard.csv"
+      },
+      {
+        "comprobacion": "partición canónica presente",
+        "estado": "cumple",
+        "detalle": "configs/splits/mmotu_experimental_split.csv"
+      },
+      {
+        "comprobacion": "estado de Git",
+        "estado": "cumple",
+        "detalle": "feat/r8-evaluacion-final @ fe0765f7725bb26253d7cdb14ab46118853eec20; cambios en archivos versionados: False"
+      }
+    ]
+  },
+  "registro_previo": {
+    "fecha_utc": "2026-11-03T13:23:24+00:00",
+    "git": {
+      "commit": "fe0765f7725bb26253d7cdb14ab46118853eec20",
+      "rama": "feat/r8-evaluacion-final",
+      "cambios_en_archivos_versionados": false
+    },
+    "sha256_protocolo": "bfdc5ea4a7d45fde2e13b3ac5ff281b55b37a144eb4e90e591150e2be7e5060c",
+    "sha256_particiones": {
+      "operativa": {
+        "ruta": "configs/splits/mmotu_experimental_split_standard.csv",
+        "sha256": "8e0e89645364dfecc51aa2209c5a7bfa0bf6020b29428258d9a3b4981dbf9854"
+      },
+      "canonica": {
+        "ruta": "configs/splits/mmotu_experimental_split.csv",
+        "sha256": "dd19cc05b8f24dc0b16ccc585194bf588264f87defbd4411490f5180e67e4e52"
+      }
+    },
+    "checkpoints": {
+      "B0_seed42": {
+        "ruta": "results/classification/r4_benchmark/convnext_tiny/A/seed_42/best_auc.pth",
+        "existe": true,
+        "bytes": 111353152,
+        "sha256": "44960476dfdbe79d7ee2ed171d9fd2a14ad65e46061dfb58065220c53d220c60"
+      },
+      "B0_seed43": {
+        "ruta": "results/classification/r4_benchmark/convnext_tiny/A/seed_43/best_auc.pth",
+        "existe": true,
+        "bytes": 111353152,
+        "sha256": "b741267084d44fc1daf3b20fcd47a23f829571b93c8f84798daf30300214ea3f"
+      },
+      "B0_seed44": {
+        "ruta": "results/classification/r4_benchmark/convnext_tiny/A/seed_44/best_auc.pth",
+        "existe": true,
+        "bytes": 111353152,
+        "sha256": "06f988180523c28629911d56c0441652b63dfd31ec98be66d27acee0b7e67e4e"
+      },
+      "B2_seed42": {
+        "ruta": "results/classification/r7_optimizacion/class_weights/seed_42/best_auc.pth",
+        "existe": true,
+        "bytes": 111353152,
+        "sha256": "554db6a3d28bedb1a1134f3527f2888b32fb7db8e93b5a187ebe7e1d512d5ca1"
+      },
+      "B2_seed43": {
+        "ruta": "results/classification/r7_optimizacion/class_weights/seed_43/best_auc.pth",
+        "existe": true,
+        "bytes": 111353152,
+        "sha256": "6dbc118a2d5b3f9be2ef83e4da3839971b6e8838d3d7d8f65a544868fac32c97"
+      },
+      "B2_seed44": {
+        "ruta": "results/classification/r7_optimizacion/class_weights/seed_44/best_auc.pth",
+        "existe": true,
+        "bytes": 111353152,
+        "sha256": "775f1fd3d682569ab4a2e043fa83a505ca6db397eed510868105ec3bdd79fcab"
+      }
+    }
+  },
+  "entorno": {
+    "python": "3.10.12",
+    "torch": "2.5.1+cu121",
+    "device": "cuda",
+    "sistema": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35",
+    "torchvision": "0.20.1+cu121"
+  },
+  "split_usado": "validation"
+}
