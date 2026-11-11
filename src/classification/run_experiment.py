@@ -19,6 +19,15 @@ from torch.utils.data import SequentialSampler
 from sklearn.metrics import roc_auc_score
 
 from src.classification.dataset import MMOTUClassificationDataset
+from src.classification.cv_folds_e2 import (
+    DERIVED_COLUMNS,
+    FOLD_MANIFEST_NAME,
+    N_FOLDS,
+    check_train_validation_disjoint,
+    derive_fold_rows,
+    read_csv_rows,
+    write_csv_rows,
+)
 from src.classification.dataloader import create_dataloader
 from src.classification.evaluate import predict, evaluate_predictions
 from src.classification.losses import build_criterion
@@ -204,6 +213,20 @@ def main() -> None:
         default=None,
         help="R7: exponente gamma (>= 0) de la Focal Loss. Solo con --loss-type focal; 2.0 si no se indica.",
     )
+    parser.add_argument(
+        "--split-csv",
+        default=None,
+        help=(
+            "E2: CSV de folds (configs/splits/cv_folds_e2.csv), relativo a la raíz del proyecto. Requiere --fold, "
+            "--output-dir y --experiment distinto de 'formal'. Sin él se usa el manifiesto E1 de siempre."
+        ),
+    )
+    parser.add_argument(
+        "--fold",
+        type=int,
+        default=None,
+        help=f"E2: fold (0 a {N_FOLDS - 1}) usado como validation; los demás forman train. Requiere --split-csv.",
+    )
     args = parser.parse_args()
 
     if not re.fullmatch(r"[A-Za-z0-9_.-]+", args.experiment):
@@ -240,8 +263,19 @@ def main() -> None:
     if args.no_early_stopping and args.save_both_checkpoints:
         parser.error("--no-early-stopping no se combina con --save-both-checkpoints (modo diagnóstico).")
 
+    if (args.split_csv is None) != (args.fold is None):
+        parser.error("--split-csv y --fold se usan juntos.")
+    if args.split_csv is not None:
+        if args.experiment == "formal":
+            parser.error("--split-csv requiere --experiment distinto de 'formal' para no mezclar corridas formales.")
+        if args.output_dir is None:
+            parser.error("--split-csv requiere --output-dir (una carpeta por fold, bajo r7_optimizacion/).")
+        if not 0 <= args.fold < N_FOLDS:
+            parser.error(f"--fold debe estar entre 0 y {N_FOLDS - 1}.")
+
     project_root = Path.cwd()
-    csv_path = project_root / CSV_REL
+    csv_path = project_root / (CSV_REL if args.split_csv is None else args.split_csv)
+    folder_column = None  # E2: se fija más abajo; None = carpeta física = split (comportamiento original)
     image_dir = project_root / CONDITION_DIRS[args.condition]
     config_path = project_root / ARCH_CONFIGS[args.arch]
     if args.output_dir is not None:
@@ -273,6 +307,13 @@ def main() -> None:
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    if args.split_csv is not None:
+        # E2: manifiesto de este fold (fold = validation, resto = train), guardado junto a los resultados.
+        fold_rows = derive_fold_rows(read_csv_rows(csv_path), args.fold)
+        csv_path = output_dir / FOLD_MANIFEST_NAME
+        write_csv_rows(csv_path, fold_rows, DERIVED_COLUMNS)
+        folder_column = "e1_split"
+
     # Cargar config desde YAML
     with open(config_path) as f:
         cfg = yaml.safe_load(f)
@@ -303,6 +344,8 @@ def main() -> None:
     print(f"  Learning rate: {lr} ({lr_source})")
     if not early_stopping:
         print(f"  Early stopping: DESACTIVADO ({epochs} épocas)")
+    if args.split_csv is not None:
+        print(f"  Esquema E2:   fold {args.fold} de {N_FOLDS} ({args.split_csv})")
     print(f"  Device:       {device}")
     print(f"  Output:       {output_dir}")
     print(f"{'='*60}")
@@ -316,6 +359,7 @@ def main() -> None:
         split="train",
         transform=get_train_transforms(),
         condition=args.condition,
+        folder_column=folder_column,
     )
     ds_val = MMOTUClassificationDataset(
         csv_file=str(csv_path),
@@ -323,8 +367,11 @@ def main() -> None:
         split="validation",
         transform=get_val_transforms(),
         condition=args.condition,
+        folder_column=folder_column,
     )
     print(f"  Train: {len(ds_train)} | Validation: {len(ds_val)}")
+    if args.split_csv is not None:
+        check_train_validation_disjoint(ds_train.df["image_id"], ds_val.df["image_id"])
 
     # Dataloaders
     train_loader = create_dataloader( ds_train, batch_size=batch_size, shuffle=True, num_workers=4, seed=seed, )
@@ -478,7 +525,7 @@ def main() -> None:
         "experiment": args.experiment,
         "seed": seed,
         "seed_source": seed_source,
-        "csv_path": CSV_REL,
+        "csv_path": CSV_REL if args.split_csv is None else args.split_csv,
         "image_dir": CONDITION_DIRS[args.condition],
         "train_samples": len(ds_train),
         "validation_samples": len(ds_val),
@@ -515,6 +562,11 @@ def main() -> None:
             f"val_weighted_loss (patience={patience}, min_delta={min_delta})"
         )
         run_config["val_predictions"] = selected_predictions_name
+    if args.split_csv is not None:
+        # Solo en corridas E2; sin --split-csv el formato de run_config.json no cambia.
+        run_config["evaluation_scheme"] = "E2"
+        run_config["fold"] = args.fold
+        run_config["fold_manifest"] = FOLD_MANIFEST_NAME
     if args.class_weight_alpha is not None:
         # Solo si se indica --class-weight-alpha; class_weights ya registra los pesos efectivos.
         run_config["class_weight_alpha"] = class_weight_alpha

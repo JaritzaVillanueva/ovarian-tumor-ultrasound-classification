@@ -17,7 +17,10 @@ class MMOTUClassificationDataset(Dataset):
         split,
         transform=None,
         condition="A",
+        folder_column=None,
     ):
+        # folder_column (E2): columna del CSV con la carpeta física de la imagen (train/validation de E1).
+        # Con None (por defecto) la carpeta es `split`, como siempre.
 
         self.df = pd.read_csv(csv_file)
         self.df = self.df[ self.df["experimental_split"] == split ].reset_index(drop=True)
@@ -26,6 +29,7 @@ class MMOTUClassificationDataset(Dataset):
         self.split = split
         self.transform = transform
         self.condition = condition
+        self.folder_column = folder_column
 
     def __len__(self):
         return len(self.df)
@@ -40,7 +44,8 @@ class MMOTUClassificationDataset(Dataset):
 
         label = int( row["binary_label"] )
 
-        image_path = ( self.image_dir / self.split / "images" / image_name )
+        folder = self.split if self.folder_column is None else row[self.folder_column]
+        image_path = ( self.image_dir / folder / "images" / image_name )
         image = Image.open( image_path ).convert("RGB")
 
         if self.transform:
