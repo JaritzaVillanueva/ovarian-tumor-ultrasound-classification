@@ -1,0 +1,384 @@
+{
+  "etapa": "R7 - brazo del agente de optimización (experimento r7_agente)",
+  "estado": "borrador v1 aprobado con cambios por el autor; pendiente de commit; ninguna corrida ejecutada; los argumentos nuevos de entrenamiento aún no están implementados (Fase 4)",
+  "version": "v1",
+  "fecha_redaccion": "2026-11-11",
+  "enmiendas": [],
+  "regla_de_enmiendas": "ninguna técnica, valor, regla ni comando nuevo entra después de commitear este archivo sin una enmienda commiteada y registrada en la trazabilidad. Las reglas de lectura y de elección no se cambian después de ver resultados.",
+  "marcas": {
+    "eleccion_del_autor_sin_fuente": [
+      "a02 (learning rate 2e-4)",
+      "rampa de 15 épocas del decaimiento coseno de a03 (--cosine-epochs 15)"
+    ],
+    "decision_del_agente_sin_fuente": [
+      "a05: stochastic depth 0.3 (sin valor publicado para ConvNeXt-Tiny en datos pequeños)",
+      "a04: layer decay 0.8 aplicado a Tiny (los valores publicados son para otros tamaños y otro preentrenamiento)",
+      "a08: magnitudes de la intensidad del aumento, tomadas de rangos usados por Tupper y Gagné pero no probadas como aumento de intensidad sobre un aumento ya suave",
+      "a09: la resolución 288 es un valor propio (múltiplo de 32)",
+      "a10: decaimiento EMA 0.99 (ver ema_a10)"
+    ],
+    "cita_por_verificar": "toda cita o cifra marcada [CITA POR VERIFICAR] se leyó solo mediante un resumen automático de la página y debe confirmarse en el texto original antes de usarla en la tesis"
+  },
+  "base_y_referencias": {
+    "base_de_la_busqueda": "B0 (ConvNeXt-Tiny, imagen completa, α = 1.0); cada candidata cambia un solo factor respecto de B0",
+    "referencias": {
+      "B0": "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1 (semilla 42, 5 folds; no se repite)",
+      "B2": "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05 (semilla 42, 5 folds; no se repite)"
+    },
+    "valores_de_referencia_semilla_42": {
+      "fuente": "results/classification/r7_optimizacion/robustez_e2/analisis/metricas_por_configuracion_y_fold.csv",
+      "B0": {"ap_medio": 0.5716, "roc_auc_medio": 0.8969, "ap_por_fold": [0.4939, 0.6906, 0.5870, 0.5057, 0.5806]},
+      "B2": {"ap_medio": 0.5285, "roc_auc_medio": 0.8542, "ap_por_fold": [0.3479, 0.6054, 0.6165, 0.6092, 0.4634]},
+      "nota": "B2 no supera a B0 en E2 (resumen_delta.csv: ΔAP medio -0.0431, 2 de 5 folds a favor); por eso se usan las dos referencias a la vez"
+    }
+  },
+  "fijos": {
+    "arquitectura": "convnext_tiny",
+    "condicion": "A (imagen completa)",
+    "preentrenamiento": "pesos DEFAULT de torchvision",
+    "particion": "configs/splits/cv_folds_e2.csv (5 folds estratificados, semilla de la partición 42; no se crean otras)",
+    "sha256_particion_generada_localmente": "5ccf322817e8e73c3c25363f3104a4549f00ba21a2b70d8374d62af543ebea6d",
+    "test": "excluido por completo; ninguna corrida lo lee",
+    "mapeo_binario": "el del repositorio (categorías 6 y 7 en la clase positiva operacional)",
+    "alpha_pesos_de_clase": "1.0 en todas las candidatas (no se busca); los pesos se calculan con las etiquetas de train de cada fold",
+    "lote": 32,
+    "optimizador": "AdamW (learning rate 1e-4 y weight decay 1e-4 salvo que la candidata los cambie)",
+    "amp": true,
+    "epocas_max": 30,
+    "early_stopping": "val_weighted_loss, patience 5, min_delta 0.001, activo",
+    "criterio_de_checkpoint": "máximo val_roc_auc del fold, primera época en caso de empate (--checkpoint-metric val_roc_auc); no se cambia",
+    "umbral": 0.5,
+    "semilla_etapa_1": 42,
+    "semillas_confirmacion": [43, 44],
+    "semillas_modelo_final": [42, 43, 44],
+    "una_estrategia_por_factor": "cada factor se prueba con una sola técnica; el learning rate se prueba con dos valores (a01, a02) por ser el barrido de un mismo parámetro"
+  },
+  "declaraciones_sobre_early_stopping_y_checkpoint": [
+    "El criterio de checkpoint (máx val_roc_auc) no cambia en ninguna candidata.",
+    "α queda fijo en 1.0: la pérdida ponderada de validación y, con ella, el early stopping son los de B0 en todas las candidatas.",
+    "a06 (label smoothing): el suavizado se aplica solo a la pérdida de entrenamiento; la pérdida de validación que alimenta el early stopping se calcula sin suavizado (criterio de validación separado), para no cambiar el criterio.",
+    "a10 (EMA): la validación, el early stopping y el checkpoint se evalúan con los pesos EMA, de modo que la entrada del early stopping CAMBIA (pérdida del modelo EMA). Se declara.",
+    "a01, a02 y a03 no cambian el criterio, pero cambian la trayectoria de la pérdida y por tanto el momento en que se detiene el entrenamiento.",
+    "a08 y a09 cambian lo que ve el entrenamiento (aumento) o todo el pipeline de imagen (resolución, en train y en validation); el criterio no cambia."
+  ],
+  "metricas": {
+    "primaria": "average_precision (AP) en el fold de validation, en el checkpoint seleccionado",
+    "secundaria": "roc_auc en el mismo checkpoint",
+    "descriptivas": "época elegida y épocas ejecutadas"
+  },
+  "candidatas": [
+    {
+      "id": "a01_lr5e5",
+      "factor": "learning rate pico",
+      "valor": "5e-5",
+      "flags": "--learning-rate 5e-5",
+      "argumento_existente": true,
+      "fuente": "Los comandos de fine-tuning de ConvNeXt del repositorio oficial usan lr 5e-5 (TRAINING.md, https://github.com/facebookresearch/ConvNeXt)",
+      "estado_de_la_fuente": "leída con WebFetch; no hay valor específico para ConvNeXt-Tiny"
+    },
+    {
+      "id": "a02_lr2e4",
+      "factor": "learning rate pico",
+      "valor": "2e-4",
+      "flags": "--learning-rate 2e-4",
+      "argumento_existente": true,
+      "fuente": "ninguna",
+      "marca": "elección del autor, sin fuente"
+    },
+    {
+      "id": "a03_cosine",
+      "factor": "calentamiento y decaimiento coseno",
+      "valor": "calentamiento lineal de 1 época, coseno hasta 1e-6 en 15 épocas; después se mantiene en 1e-6",
+      "flags": "--lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6",
+      "argumento_existente": false,
+      "fuente": "calentamiento y coseno: Liu et al. 2022 (receta de entrenamiento de ConvNeXt, Tabla 5); coseno: Loshchilov y Hutter, SGDR, arXiv:1608.03983; calentamiento: Goyal et al., arXiv:1706.02677",
+      "estado_de_la_fuente": "existencia verificada; valores de la Tabla 5 leídos por extracción automática [CITA POR VERIFICAR]",
+      "marca": "elección del autor, sin fuente (la rampa de 15 épocas; la mediana de épocas ejecutadas de las 10 corridas de B0 y B2 en E2 es 13)"
+    },
+    {
+      "id": "a04_llrd08",
+      "factor": "decaimiento del learning rate por capa",
+      "valor": "0.8 por módulo: 8 módulos de model.features (índices 0 a 7) y la cabeza; el módulo i recibe lr x 0.8^(8-i), la cabeza recibe lr",
+      "flags": "--layer-decay 0.8",
+      "argumento_existente": false,
+      "fuente": "el fine-tuning oficial de ConvNeXt usa layer_decay 0.8 (preentrenamiento ImageNet-22K) y 0.7 (ImageNet-1K, modelos B y L) (TRAINING.md); ajuste por capa: Howard y Ruder 2018, doi:10.18653/v1/P18-1031",
+      "estado_de_la_fuente": "TRAINING.md leído con WebFetch; el apartado de ajuste discriminativo de Howard y Ruder no se leyó [CITA POR VERIFICAR]",
+      "marca": "decisión del agente, sin valor publicado para ConvNeXt-Tiny"
+    },
+    {
+      "id": "a05_dp03",
+      "factor": "stochastic depth",
+      "valor": "0.3 (el valor por defecto de torchvision para ConvNeXt-Tiny es 0.1)",
+      "flags": "--drop-path-rate 0.3",
+      "argumento_existente": false,
+      "fuente": "Huang et al. 2016, doi:10.1007/978-3-319-46493-0_39; valor por defecto: torchvision/models/convnext.py (rama main)",
+      "estado_de_la_fuente": "existencia y DOI verificados; el valor por defecto se leyó en la rama main de torchvision y la versión instalada en Falcon no está verificada",
+      "marca": "decisión del agente, sin fuente para el valor 0.3"
+    },
+    {
+      "id": "a06_ls01",
+      "factor": "label smoothing",
+      "valor": "0.1 (solo en la pérdida de entrenamiento)",
+      "flags": "--label-smoothing 0.1",
+      "argumento_existente": false,
+      "fuente": "Liu et al. 2022 (receta, Tabla 5: 0.1); Müller, Kornblith y Hinton 2019, arXiv:1906.02629",
+      "estado_de_la_fuente": "existencia verificada; valor de la Tabla 5 por extracción automática [CITA POR VERIFICAR]; la semántica exacta de label_smoothing combinada con weight en nn.CrossEntropyLoss de PyTorch 2.5 debe revisarse en la documentación al implementar"
+    },
+    {
+      "id": "a08_augmod",
+      "factor": "intensidad del aumento de datos",
+      "valor": "rotación ±30° (hoy ±10°) y brillo/contraste ±0.2 (hoy ±0.1); se mantienen el giro horizontal, la traslación 5 % y el zoom 0.9 a 1.1 actuales",
+      "flags": "--augmentation moderate",
+      "argumento_existente": false,
+      "fuente": "Tupper y Gagné 2025, Revisiting Data Augmentation for Ultrasound Images, TMLR, arXiv:2501.13193 (rotación ±30°, brillo/contraste ±0.2 en su Tabla 3)",
+      "estado_de_la_fuente": "existencia verificada; las cifras de MMOTU y de la Tabla 3 se leyeron por extracción automática [CITA POR VERIFICAR]",
+      "marca": "decisión del agente: el estudio compara contra no aplicar aumento, no contra un aumento suave"
+    },
+    {
+      "id": "a09_res288",
+      "factor": "resolución de entrada",
+      "valor": "288 x 288 (train y validation; hoy 224)",
+      "flags": "--image-size 288",
+      "argumento_existente": false,
+      "fuente": "Sabottke y Spieler 2020, doi:10.1148/ryai.2019190015 (los hallazgos sutiles tienden a mejorar con más resolución, no siempre)",
+      "estado_de_la_fuente": "existencia y DOI verificados; hallazgos leídos en resúmenes de búsqueda",
+      "marca": "decisión del agente, sin fuente para el valor 288; costo ≈ 1.65 veces los píxeles (no medido); la memoria de la RTX 3080 con lote 32 y AMP no está verificada"
+    },
+    {
+      "id": "a10_ema099",
+      "factor": "promedio exponencial de pesos (EMA)",
+      "valor": "decaimiento 0.99 por iteración; EMA inicializada con los pesos de partida, sin corrección de sesgo ni calentamiento; la validación usa los pesos EMA",
+      "flags": "--ema-decay 0.99",
+      "argumento_existente": false,
+      "fuente": "Liu et al. 2022, §3.1 (EMA 0.9999 en el preentrenamiento); Izmailov et al. 2018, arXiv:1803.05407",
+      "estado_de_la_fuente": "existencia verificada; cita de §3.1 por extracción automática [CITA POR VERIFICAR]. El apéndice del propio ConvNeXt indica, según la misma extracción, que el fine-tuning con EMA no mejoró [CITA POR VERIFICAR]: la expectativa previa es baja",
+      "marca": "decisión del agente; ver ema_a10 para la condición de inclusión"
+    }
+  ],
+  "ema_a10": {
+    "condicion_del_autor": "a10 entra solo si su decaimiento tiene efecto en ~300 pasos",
+    "pasos": "800 imágenes de train por fold / lote 32 = 25 iteraciones por época; una corrida típica de B0/B2 ejecuta 9 a 19 épocas, es decir 225 a 475 pasos (mediana 13 épocas ≈ 325 pasos)",
+    "calculo": "peso residual de los pesos iniciales tras n pasos = decaimiento^n. Con 0.9999: 0.9999^300 ≈ 0.97 (la EMA casi no se mueve de los pesos iniciales: sin efecto). Con 0.99: 0.99^300 ≈ 0.05; horizonte ≈ 1/(1-0.99) = 100 pasos ≈ 4 épocas",
+    "decision": "se incluye con 0.99 porque a ese valor la EMA sí refleja el entrenamiento en ~300 pasos; con 0.9999 se excluiría. Limitación: sin corrección de sesgo, al final de la época 4 (100 pasos) los pesos iniciales aún pesan 0.99^100 ≈ 0.37 (y 0.99^25 ≈ 0.78 en la época 1); en los folds cuyo checkpoint de AUC cae en épocas tempranas (B0 fold 3: época 4; B0 fold 0: época 6) la EMA va rezagada. Esto puede perjudicar a a10 y se declara.",
+    "estado": "cálculos aritméticos propios a partir de metricas_por_configuracion_y_fold.csv; sin ejecución"
+  },
+  "descartadas": [
+    {"tecnica": "giro vertical", "motivo": "genera sombras acústicas físicamente irreales (Tirindelli et al., arXiv:2105.02188, leído en ar5iv) y fue la única augmentación que perjudicó en la clasificación de MMOTU (Tupper y Gagné, Tabla 1) [CITA POR VERIFICAR: cifras de MMOTU]"},
+    {"tecnica": "Mixup / CutMix", "motivo": "mezclan anatomías de dos imágenes (razonamiento propio, sin fuente); el fine-tuning oficial de ConvNeXt los desactiva (--mixup 0 --cutmix 0, TRAINING.md)"},
+    {"tecnica": "borrado aleatorio / cutout", "motivo": "puede borrar la lesión y dejar la etiqueta sin soporte visual (razonamiento propio, sin fuente)"},
+    {"tecnica": "deformaciones elásticas, cizalla fuerte, rotaciones mayores de 30°", "motivo": "pueden alterar la forma de la lesión (razonamiento propio, sin fuente)"},
+    {"tecnica": "RandAugment / TrivialAugment", "motivo": "no se descarta por daño (Tupper y Gagné reportan TrivialAugment efectiva en ecografía [CITA POR VERIFICAR]); queda fuera por la regla de una estrategia por factor y por presupuesto. Trabajo futuro."},
+    {"tecnica": "muestreo balanceado / pérdida de clases balanceada", "motivo": "el factor desbalance ya lo cubre α (R7-H2); una estrategia por factor. Referencias: Buda et al. 2018, doi:10.1016/j.neunet.2018.07.011; Cui et al. 2019, doi:10.1109/CVPR.2019.00949"},
+    {"tecnica": "weight decay 0.05 (a07)", "motivo": "retirada por el autor; además, con AdamW desacoplado, lr x wd ≈ 5e-6 por paso durante ≈ 300 pasos hace esperar un efecto casi nulo (inferencia propia)"},
+    {"tecnica": "etapa 2 de combinaciones", "motivo": "retirada por el autor para ajustar el presupuesto; no se prueban combinaciones de factores"},
+    {"tecnica": "focal loss, sin early stopping, ensambles", "motivo": "ya evaluados en R7 (B3, B1, analisis_ensamble)"},
+    {"tecnica": "TTA, SAM, SWA completo, cambio de arquitectura o de preentrenamiento", "motivo": "TTA altera la evaluación (R8 congelado con augmentation: false); SAM duplica el costo; el cambio de arquitectura o de preentrenamiento cambia la definición del brazo"},
+    {"tecnica": "cuadrícula exhaustiva y optimización bayesiana", "motivo": "fuera de presupuesto; con ruido del orden del margen una búsqueda adaptativa fina ajustaría ruido. Búsqueda aleatoria frente a cuadrícula: Bergstra y Bengio 2012, JMLR 13:281-305"}
+  ],
+  "metodo_de_busqueda": {
+    "tipo": "por etapas con regla escrita; base B0; un factor por candidata; sin combinaciones",
+    "etapa_1": "9 candidatas (a01, a02, a03, a04, a05, a06, a08, a09, a10; el id a07 queda sin uso) x 5 folds, semilla 42 = 45 corridas",
+    "seleccion_del_finalista": {
+      "elegibles": "candidatas con ΔROC-AUC medio frente a B0 >= -0.02 (tope de caída aplicado ya aquí para no confirmar una candidata que no puede cumplir la regla final)",
+      "finalista": "la elegible con mayor AP medio entre los 5 folds (semilla 42); empate (diferencia < 0.005): mayor ROC-AUC medio; luego menor id",
+      "sin_elegibles": "si ninguna es elegible no hay confirmación (75 -> 45 corridas), no hay ganadora y se aplica sin_ganadora",
+      "nota": "la confirmación se corre aunque el ΔAP del finalista sea pequeño o negativo: el presupuesto es fijo (75 corridas) y aporta además B0 y B2 con tres semillas"
+    },
+    "confirmacion": {
+      "configuraciones": ["finalista", "B0", "B2"],
+      "semillas": [43, 44],
+      "folds": [0, 1, 2, 3, 4],
+      "corridas": 30,
+      "nota_sobre_b0_b2": "B0 y B2 se corren con las semillas 43 y 44 (corridas nuevas); las corridas de semilla 42 ya existen y no se repiten",
+      "uso": "la decisión usa SOLO las semillas 43 y 44; las corridas de la semilla 42 no entran en la regla de elección"
+    },
+    "fallos": "una corrida que falla por causa de infraestructura (por ejemplo memoria) se repite una vez con el mismo comando; si vuelve a fallar la configuración se registra como descartada y cuenta como probada. No hay parada anticipada por futilidad: cada candidata corre sus 5 folds."
+  },
+  "reglas_de_lectura": {
+    "delta_por_fold": "Δ_k = métrica(configuración) - métrica(referencia) en el fold k, k = 0..4, mismas imágenes de validation. En la confirmación, la métrica de cada fold es el promedio de las semillas 43 y 44 de esa configuración en ese fold.",
+    "resumen": "media de los 5 Δ, mínimo, máximo, número de folds con Δ > 0, Δ < 0 y Δ = 0; desviación estándar muestral (n-1) solo como descriptiva",
+    "consistencia_en_ambas_direcciones": {
+      "mejor_consistente": "Δ AP estrictamente positivo en al menos 4 de 5 folds",
+      "peor_consistente": "Δ AP estrictamente negativo en al menos 4 de 5 folds",
+      "no_consistente": "cualquier otro caso; un Δ exactamente 0 no cuenta en ningún signo",
+      "uso": "cada comparación (finalista frente a B0, finalista frente a B2, B2 frente a B0) se informa en las dos direcciones; no se declara que una configuración es mejor o peor si la comparación no es consistente"
+    },
+    "metrica_secundaria": "ROC-AUC con los mismos estadísticos descriptivos; el veredicto de consistencia se basa solo en AP",
+    "p_valor": "con 5 folds no se reporta p-valor, intervalo de confianza ni prueba de hipótesis",
+    "no_se_hace": [
+      "presentar el AP medio entre folds como estimación final del desempeño",
+      "usar test",
+      "cambiar estas reglas después de ver los resultados"
+    ]
+  },
+  "regla_de_eleccion": {
+    "se_evalua_con": "solo semillas 43 y 44 (promedio por fold de ambas semillas), 5 folds de E2",
+    "la_finalista_es_ganadora_si_cumple_todas": [
+      "ΔAP medio frente a B0 >= +0.04",
+      "ΔAP medio frente a B2 >= +0.04",
+      "mejor_consistente frente a B0 (ΔAP > 0 en al menos 4 de 5 folds)",
+      "mejor_consistente frente a B2 (ΔAP > 0 en al menos 4 de 5 folds)",
+      "caída de ROC-AUC medio <= 0.02 frente a B0 (ΔAUC medio >= -0.02)",
+      "caída de ROC-AUC medio <= 0.02 frente a B2 (ΔAUC medio >= -0.02)"
+    ],
+    "nota": "con los valores de semilla 42, B0 es la referencia que limita el ΔAP medio y el tope de ROC-AUC (AP 0.572 y AUC 0.897 frente a 0.528 y 0.854 de B2); B2 puede limitar la consistencia por fold. Esto puede cambiar con las semillas nuevas.",
+    "si_cumple": "el agente propone su configuración como tercer modelo y se aplica modelo_final_r8",
+    "sin_ganadora": "si el finalista no cumple alguna condición, o no hay finalista, el agente no propone modelo: R8 se mantiene con B0 y B2 (results/classification/r7_optimizacion/cierre_seleccion/protocolo_r8_congelado.json, 6 modelos). No se sustituye por B2 ni se elige otra candidata. Se reporta: número de configuraciones y de corridas probadas, la tabla completa (incluidas las descartadas y las peores), el finalista con su resultado de confirmación, los resultados de B2 frente a B0 con tres semillas, y que la prueba tiene poca potencia (error estándar de ΔAP ≈ 0.047 con una semilla), por lo que no se concluye que las técnicas no funcionen."
+  },
+  "modelo_final_r8": {
+    "aplica_solo_si": "hay ganadora según regla_de_eleccion",
+    "esquema": "E1: las mismas 800 imágenes de train y 200 de validation de B0 y B2 (configs/splits/mmotu_experimental_split_standard.csv), semillas 42, 43 y 44, mismo criterio de checkpoint (--checkpoint-metric val_roc_auc), sin --split-csv, para que los modelos que lleguen a test sean comparables",
+    "no_es_seleccion": "no se elige nada con este reentrenamiento; el AP de validation E1 de la ganadora tampoco es independiente (la validation de E1 está dentro del conjunto de E2)",
+    "r8": "incorporar el modelo a R8 requiere una enmienda del autor a protocolo_r8_congelado.json (hoy 6 modelos, pasaría a 9); no la hace el agente",
+    "plantilla": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed {seed} --checkpoint-metric val_roc_auc {flags_del_finalista} --output-dir results/classification/r7_optimizacion/agente/modelo_final/seed_{seed}",
+    "semillas": [42, 43, 44],
+    "corridas": 3,
+    "fuera_de_las_75": true
+  },
+  "presupuesto": {
+    "configuraciones_nuevas_probadas": 9,
+    "configuraciones_de_referencia": "B0 y B2 (corridas de semilla 42 ya existentes; con semillas 43 y 44 se corren nuevas)",
+    "corridas_etapa_1": 45,
+    "corridas_confirmacion": 30,
+    "corridas_totales": 75,
+    "corridas_adicionales_condicionales": "3 de modelo final en E1 solo si hay ganadora (fuera de las 75)",
+    "tiempo_estimado_horas": "3.9 a 7.1",
+    "calculo_del_tiempo": "75 corridas x 3 a 5 min (rango dado por el autor) = 3.75 a 6.25 h; más el sobrecosto de a09 (≈ 1.65 veces los píxeles, supuesto de costo proporcional): 5 corridas de etapa 1 + 10 de confirmación si a09 fuera finalista = hasta ≈ 0.8 h",
+    "estado": "NO medido. Ningún archivo del repositorio registra el tiempo por corrida.",
+    "medicion_sugerida_en_falcon": "stat -c '%y  %n' results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_*/fold_manifest.csv results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_*/training_history.json  (la diferencia entre ambas marcas aproxima el tiempo de entrenamiento; dividir entre epocas_ejecutadas de metricas_por_configuracion_y_fold.csv)"
+  },
+  "comandos": {
+    "nota": "No ejecutar hasta que el protocolo esté commiteado y el código nuevo (Fase 4) esté implementado y revisado. Raíz del repositorio, entorno ovarian_cnn_env en Falcon. Una línea por corrida; cada una escribe en su carpeta y no sobrescribe si ya contiene artefactos (sin --overwrite). Solo a01 y a02 usan argumentos que existen hoy; el resto fallará con 'unrecognized arguments' hasta la Fase 4.",
+    "etapa_1": [
+      {"id": "a01_lr5e5_fold0", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --learning-rate 5e-5 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/corridas/a01_lr5e5/fold_0"},
+      {"id": "a01_lr5e5_fold1", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --learning-rate 5e-5 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/corridas/a01_lr5e5/fold_1"},
+      {"id": "a01_lr5e5_fold2", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --learning-rate 5e-5 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/corridas/a01_lr5e5/fold_2"},
+      {"id": "a01_lr5e5_fold3", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --learning-rate 5e-5 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/corridas/a01_lr5e5/fold_3"},
+      {"id": "a01_lr5e5_fold4", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --learning-rate 5e-5 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/corridas/a01_lr5e5/fold_4"},
+      {"id": "a02_lr2e4_fold0", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --learning-rate 2e-4 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/corridas/a02_lr2e4/fold_0"},
+      {"id": "a02_lr2e4_fold1", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --learning-rate 2e-4 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/corridas/a02_lr2e4/fold_1"},
+      {"id": "a02_lr2e4_fold2", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --learning-rate 2e-4 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/corridas/a02_lr2e4/fold_2"},
+      {"id": "a02_lr2e4_fold3", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --learning-rate 2e-4 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/corridas/a02_lr2e4/fold_3"},
+      {"id": "a02_lr2e4_fold4", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --learning-rate 2e-4 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/corridas/a02_lr2e4/fold_4"},
+      {"id": "a03_cosine_fold0", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/corridas/a03_cosine/fold_0"},
+      {"id": "a03_cosine_fold1", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/corridas/a03_cosine/fold_1"},
+      {"id": "a03_cosine_fold2", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/corridas/a03_cosine/fold_2"},
+      {"id": "a03_cosine_fold3", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/corridas/a03_cosine/fold_3"},
+      {"id": "a03_cosine_fold4", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/corridas/a03_cosine/fold_4"},
+      {"id": "a04_llrd08_fold0", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --layer-decay 0.8 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/corridas/a04_llrd08/fold_0"},
+      {"id": "a04_llrd08_fold1", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --layer-decay 0.8 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/corridas/a04_llrd08/fold_1"},
+      {"id": "a04_llrd08_fold2", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --layer-decay 0.8 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/corridas/a04_llrd08/fold_2"},
+      {"id": "a04_llrd08_fold3", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --layer-decay 0.8 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/corridas/a04_llrd08/fold_3"},
+      {"id": "a04_llrd08_fold4", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --layer-decay 0.8 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/corridas/a04_llrd08/fold_4"},
+      {"id": "a05_dp03_fold0", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --drop-path-rate 0.3 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/corridas/a05_dp03/fold_0"},
+      {"id": "a05_dp03_fold1", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --drop-path-rate 0.3 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/corridas/a05_dp03/fold_1"},
+      {"id": "a05_dp03_fold2", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --drop-path-rate 0.3 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/corridas/a05_dp03/fold_2"},
+      {"id": "a05_dp03_fold3", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --drop-path-rate 0.3 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/corridas/a05_dp03/fold_3"},
+      {"id": "a05_dp03_fold4", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --drop-path-rate 0.3 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/corridas/a05_dp03/fold_4"},
+      {"id": "a06_ls01_fold0", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --label-smoothing 0.1 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/corridas/a06_ls01/fold_0"},
+      {"id": "a06_ls01_fold1", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --label-smoothing 0.1 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/corridas/a06_ls01/fold_1"},
+      {"id": "a06_ls01_fold2", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --label-smoothing 0.1 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/corridas/a06_ls01/fold_2"},
+      {"id": "a06_ls01_fold3", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --label-smoothing 0.1 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/corridas/a06_ls01/fold_3"},
+      {"id": "a06_ls01_fold4", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --label-smoothing 0.1 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/corridas/a06_ls01/fold_4"},
+      {"id": "a08_augmod_fold0", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --augmentation moderate --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/corridas/a08_augmod/fold_0"},
+      {"id": "a08_augmod_fold1", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --augmentation moderate --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/corridas/a08_augmod/fold_1"},
+      {"id": "a08_augmod_fold2", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --augmentation moderate --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/corridas/a08_augmod/fold_2"},
+      {"id": "a08_augmod_fold3", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --augmentation moderate --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/corridas/a08_augmod/fold_3"},
+      {"id": "a08_augmod_fold4", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --augmentation moderate --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/corridas/a08_augmod/fold_4"},
+      {"id": "a09_res288_fold0", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --image-size 288 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/corridas/a09_res288/fold_0"},
+      {"id": "a09_res288_fold1", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --image-size 288 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/corridas/a09_res288/fold_1"},
+      {"id": "a09_res288_fold2", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --image-size 288 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/corridas/a09_res288/fold_2"},
+      {"id": "a09_res288_fold3", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --image-size 288 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/corridas/a09_res288/fold_3"},
+      {"id": "a09_res288_fold4", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --image-size 288 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/corridas/a09_res288/fold_4"},
+      {"id": "a10_ema099_fold0", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --ema-decay 0.99 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/corridas/a10_ema099/fold_0"},
+      {"id": "a10_ema099_fold1", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --ema-decay 0.99 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/corridas/a10_ema099/fold_1"},
+      {"id": "a10_ema099_fold2", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --ema-decay 0.99 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/corridas/a10_ema099/fold_2"},
+      {"id": "a10_ema099_fold3", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --ema-decay 0.99 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/corridas/a10_ema099/fold_3"},
+      {"id": "a10_ema099_fold4", "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --ema-decay 0.99 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/corridas/a10_ema099/fold_4"}
+    ],
+    "confirmacion": {
+      "plantilla": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed {seed} --checkpoint-metric val_roc_auc {flags} --split-csv configs/splits/cv_folds_e2.csv --fold {k} --output-dir results/classification/r7_optimizacion/agente/confirmacion/{id}/seed_{seed}/fold_{k}",
+      "sustituciones": {
+        "seed": [43, 44],
+        "k": [0, 1, 2, 3, 4],
+        "id_y_flags": [
+          {"id": "b0", "flags": "(vacío: sin flags; omitir el campo y no dejar espacios dobles)"},
+          {"id": "b2", "flags": "--class-weight-alpha 0.5"},
+          {"id": "<id del finalista>", "flags": "<flags de la candidata finalista, tal como figuran en candidatas[].flags>"}
+        ]
+      },
+      "total": "3 configuraciones x 2 semillas x 5 folds = 30 corridas",
+      "como_se_fijan": "los 20 comandos de B0 y B2 y los 10 del finalista se generan por sustitución mecánica de la plantilla, sin otra decisión; una vez elegido el finalista con la regla de seleccion_del_finalista, se guardan en comandos_confirmacion.json y el autor verifica que coinciden con la plantilla antes de correr. Esto no es una técnica nueva: no requiere enmienda."
+    }
+  },
+  "salida_de_cada_corrida": {
+    "carpetas": {
+      "etapa_1": "results/classification/r7_optimizacion/agente/corridas/<id>/fold_<k>/",
+      "confirmacion": "results/classification/r7_optimizacion/agente/confirmacion/<id>/seed_<s>/fold_<k>/",
+      "modelo_final": "results/classification/r7_optimizacion/agente/modelo_final/seed_<s>/"
+    },
+    "archivos": "los mismos que las corridas E2 de robustez_e2 (fold_manifest.csv, run_config.json, training_history.json, best_auc_meta.json, validation_metrics.json, val_predictions_best_auc.csv; best_auc.pth no va a git)"
+  },
+  "registro": {
+    "archivo": "results/classification/r7_optimizacion/agente/registro_intentos.csv",
+    "regla": "una fila por configuración, fold y semilla probados, incluidas las fallidas y las descartadas; no se borran filas",
+    "columnas": ["etapa", "config_id", "fold", "seed", "flags", "ap", "roc_auc", "epoca_elegida", "epocas_ejecutadas", "estado", "ruta", "nota"]
+  },
+  "sesgo_de_ganador": {
+    "declaracion": "el AP de la configuración elegida está sesgado al alza por haberla elegido entre varias; la estimación válida del desempeño es la de test en R8.",
+    "calculo_de_la_probabilidad_de_falso_positivo_de_la_regla_de_signo": {
+      "supuesto": "hipótesis nula de que ninguna candidata difiere de B0, signo de cada Δ por fold equiprobable e independiente entre folds",
+      "una_candidata": "P(Δ AP > 0 en al menos 4 de 5 folds) = (C(5,4) + C(5,5)) / 2^5 = 6/32 = 0.1875",
+      "nueve_candidatas_de_este_protocolo": "P(al menos una de 9 lo cumple) = 1 - (1 - 0.1875)^9 = 1 - 0.8125^9 ≈ 1 - 0.154 = 0.846 (≈ 0.85)",
+      "nota_sobre_0.94": "el 0.94 citado en la Fase 1 correspondía a 14 candidatas: 1 - 0.8125^14 ≈ 0.945, un diseño que incluía la etapa 2 (hoy retirada). Con las 9 candidatas de este protocolo el valor es ≈ 0.85; el 0.94 no se usa.",
+      "alcance": "solo la regla de signo frente a una referencia; los demás requisitos (margen de 0.04, tope de ROC-AUC, B2) lo reducen pero no se cuantifican. Los folds no son independientes, así que es una aproximación gruesa."
+    },
+    "por_que_hay_confirmacion": "la decisión se toma solo con las semillas 43 y 44 para que no dependa de la selección hecha con la semilla 42",
+    "puntos_a_declarar": [
+      "El AP medio del finalista en la etapa 1 es el máximo de 9 estimaciones ruidosas: sesgo al alza (Cawley y Talbot 2010, JMLR 11:2079-2107; Varma y Simon 2006, doi:10.1186/1471-2105-7-91).",
+      "Ruido: la desviación estándar muestral de ΔAP por fold entre B2 y B0 es ≈ 0.106, de modo que el error estándar de la media es ≈ 0.047, del orden del margen de 0.04 (cálculo propio con metricas_por_configuracion_y_fold.csv; verificar). En E1 la desviación estándar del AP de B0 entre semillas es 0.044 (early_stopping/analysis/b0_vs_b1_resumen.csv).",
+      "E2 no es independiente de la selección previa: sus 1000 imágenes incluyen las 200 de validation de E1 con las que se seleccionaron B2 y el criterio de checkpoint (protocolo_robustez_e2.json, limitaciones).",
+      "Los 5 folds comparten imágenes de entrenamiento y no hay agrupación por paciente; no existe un estimador insesgado de la varianza de la validación cruzada K-fold (Bengio y Grandvalet 2004, JMLR 5:1089-1105). Por eso no se reportan p-valores.",
+      "La confirmación con semillas nuevas elimina el sesgo de selección por semilla, pero usa las mismas imágenes y el finalista fue elegido en esos mismos folds: su AP de confirmación sigue siendo optimista.",
+      "El AP de validation E1 del modelo final reentrenado tampoco es independiente (la validation de E1 está dentro del conjunto de E2).",
+      "Se reporta el número total de configuraciones probadas (9 candidatas, más B0 y B2 como referencias) y el de corridas (incluidas las fallidas y las descartadas), con todas las filas de registro_intentos.csv."
+    ]
+  },
+  "limitaciones_a_declarar": [
+    "E2 es estratificada y no por paciente: puede sobreestimar",
+    "una semilla por fold en la etapa 1; dos en la confirmación",
+    "cada fold de validation tiene 21 o 22 positivas operacionales: el AP por fold es ruidoso",
+    "categorías 6 y 7 agrupadas en la clase positiva operacional; la categoría 6 no es malignidad histológica",
+    "el efecto de cada factor se mide solo desde la base B0 y sin combinaciones: no se detectan interacciones",
+    "el early stopping por val_weighted_loss puede detener el entrenamiento antes del máximo de AUC (en varias corridas de B0 y B2 el checkpoint de AUC es la última época ejecutada, según metricas_por_configuracion_y_fold.csv); no se modifica porque el criterio está fijo"
+  ],
+  "fuentes": [
+    {"ref": "Liu et al., A ConvNet for the 2020s, CVPR 2022", "id": "doi:10.1109/CVPR52688.2022.01167; arXiv:2201.03545", "estado": "existencia y DOI verificados; valores de las Tablas 5 y 6 por extracción automática [CITA POR VERIFICAR]"},
+    {"ref": "Repositorio oficial de ConvNeXt, TRAINING.md", "id": "https://github.com/facebookresearch/ConvNeXt", "estado": "leído con WebFetch"},
+    {"ref": "torchvision, models/convnext.py (rama main)", "id": "https://github.com/pytorch/vision/blob/main/torchvision/models/convnext.py", "estado": "leído con WebFetch; versión en Falcon no verificada"},
+    {"ref": "Loshchilov y Hutter, SGDR, ICLR 2017", "id": "arXiv:1608.03983", "estado": "existencia verificada"},
+    {"ref": "Goyal et al., Accurate, Large Minibatch SGD", "id": "arXiv:1706.02677", "estado": "existencia y contenido sobre calentamiento verificados en resumen de búsqueda"},
+    {"ref": "Howard y Ruder, ULMFiT, ACL 2018", "id": "doi:10.18653/v1/P18-1031", "estado": "existencia y DOI verificados; apartado de ajuste discriminativo no leído [CITA POR VERIFICAR]"},
+    {"ref": "Huang et al., Deep Networks with Stochastic Depth, ECCV 2016", "id": "doi:10.1007/978-3-319-46493-0_39", "estado": "existencia y DOI verificados"},
+    {"ref": "Müller, Kornblith y Hinton, When does label smoothing help?, NeurIPS 2019", "id": "arXiv:1906.02629", "estado": "existencia verificada"},
+    {"ref": "Tupper y Gagné, Revisiting Data Augmentation for Ultrasound Images, TMLR 2025", "id": "arXiv:2501.13193; doi:10.48550/arXiv.2501.13193", "estado": "existencia verificada; cifras de MMOTU y rangos por extracción automática [CITA POR VERIFICAR]"},
+    {"ref": "Tirindelli et al., Rethinking Ultrasound Augmentation: A Physics-Inspired Approach", "id": "arXiv:2105.02188", "estado": "cita sobre giro vertical leída en ar5iv; revista o congreso y DOI de la editorial [CITA POR VERIFICAR]"},
+    {"ref": "Sabottke y Spieler, The Effect of Image Resolution on Deep Learning in Radiography, Radiol Artif Intell 2020", "id": "doi:10.1148/ryai.2019190015", "estado": "existencia y DOI verificados"},
+    {"ref": "Izmailov et al., Averaging Weights Leads to Wider Optima and Better Generalization, UAI 2018", "id": "arXiv:1803.05407", "estado": "existencia verificada"},
+    {"ref": "Buda, Maki y Mazurowski, Neural Networks 106:249-259, 2018", "id": "doi:10.1016/j.neunet.2018.07.011", "estado": "existencia y DOI verificados (solo para la técnica descartada)"},
+    {"ref": "Cui et al., Class-Balanced Loss, CVPR 2019", "id": "doi:10.1109/CVPR.2019.00949", "estado": "existencia y DOI verificados (solo para la técnica descartada)"},
+    {"ref": "Bergstra y Bengio, Random Search for Hyper-Parameter Optimization, JMLR 13:281-305, 2012", "id": "https://jmlr.org/papers/v13/bergstra12a.html", "estado": "existencia verificada"},
+    {"ref": "Cawley y Talbot, JMLR 11:2079-2107, 2010", "id": "https://www.jmlr.org/papers/v11/cawley10a.html", "estado": "existencia verificada; contenido leído en resumen"},
+    {"ref": "Varma y Simon, BMC Bioinformatics 7:91, 2006", "id": "doi:10.1186/1471-2105-7-91", "estado": "existencia y DOI verificados"},
+    {"ref": "Bengio y Grandvalet, JMLR 5:1089-1105, 2004", "id": "https://www.jmlr.org/papers/v5/grandvalet04a.html", "estado": "existencia verificada"}
+  ],
+  "no_verificado": [
+    "tiempo por corrida y por época en la RTX 3080 (no medido)",
+    "memoria de la RTX 3080 con lote 32, AMP y resolución 288",
+    "versión de torchvision en Falcon y su stochastic_depth_prob por defecto para ConvNeXt-Tiny",
+    "semántica de label_smoothing con pesos de clase en nn.CrossEntropyLoss de PyTorch 2.5",
+    "error estándar de ΔAP ≈ 0.047 y desviación 0.106 (cálculo propio)",
+    "independencia de los folds en el cálculo de 0.846",
+    "SHA-256 de la partición en Falcon (el indicado fue generado localmente; si difiere solo por finales de línea decide la comparación fold a fold, como en protocolo_robustez_e2.json)"
+  ]
+}
