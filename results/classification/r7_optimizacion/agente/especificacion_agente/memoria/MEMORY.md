@@ -1,0 +1,2 @@
+- [Protocolo v1 del agente](project_protocolo_agente_v1.md) — base B0, 9 candidatas, confirmación 43/44, 75 corridas, sin ganadora = R8 con B0 y B2
+- [Recalcular cifras y marcar citas](feedback_recalcular_y_marcar_citas.md) — 0.94 vs 0.85; rotular fuentes por estado de verificación
