@@ -1,0 +1,210 @@
+{
+  "etapa": "R7 - verificación de robustez con el esquema E2 (validación cruzada de 5 folds)",
+  "estado": "revisado conjuntamente; listo para commit; ninguna corrida E2 ejecutada",
+  "esquema": {
+    "nombre": "E2",
+    "particion": "configs/splits/cv_folds_e2.csv: 5 folds estratificados por etiqueta binaria sobre las 1000 imágenes del train oficial; semilla de la partición 42; 200 imágenes por fold; positivas 22/22/22/22/21",
+    "sha256_particion_generada_localmente": "5ccf322817e8e73c3c25363f3104a4549f00ba21a2b70d8374d62af543ebea6d",
+    "verificacion": "python -m src.classification.cv_folds_e2 --verify (en Falcon, antes de la primera corrida). Debe imprimir 'Coincide con la regeneración (semilla 42): sí'; el SHA-256 debe coincidir o, si difiere solo por finales de línea, esa comparación fold a fold es la que decide",
+    "test": "excluido por completo; ninguna corrida lo lee",
+    "agrupacion": "ninguna: no hay identificadores de paciente. E2 puede sobreestimar y solo es un chequeo de robustez y de selección de configuraciones, no una estimación final.",
+    "uso_de_cada_fold": "el fold k es validation y los otros cuatro son train; el aumento de datos se aplica solo a train; los pesos de clase se calculan con las etiquetas de train de cada fold"
+  },
+  "configuraciones": {
+    "convnext_a_alpha1": {
+      "arquitectura": "convnext_tiny",
+      "representacion": "A",
+      "class_weight_alpha": 1.0,
+      "descripcion": "ConvNeXt-Tiny, representación A, pesos de clase α = 1.0 (frecuencia inversa). Es la configuración B0 de R7 y el «ConvNeXt-Tiny-A» de R6."
+    },
+    "convnext_a_alpha05": {
+      "arquitectura": "convnext_tiny",
+      "representacion": "A",
+      "class_weight_alpha": 0.5,
+      "descripcion": "ConvNeXt-Tiny, representación A, pesos de clase atenuados α = 0.5. Es la configuración B2 de R7."
+    },
+    "densenet_a_alpha1": {
+      "arquitectura": "densenet121",
+      "representacion": "A",
+      "class_weight_alpha": 1.0,
+      "descripcion": "DenseNet-121, representación A, pesos de clase α = 1.0 (frecuencia inversa). Es el «DenseNet-A» de R6."
+    }
+  },
+  "comparaciones": [
+    {
+      "id": "C1",
+      "nombre": "ConvNeXt-Tiny-A frente a DenseNet-A",
+      "delta": "AP(convnext_a_alpha1) - AP(densenet_a_alpha1), por fold"
+    },
+    {
+      "id": "C2",
+      "nombre": "B0 frente a B2",
+      "delta": "AP(convnext_a_alpha05) - AP(convnext_a_alpha1), por fold (B2 - B0)"
+    }
+  ],
+  "nota_sobre_el_numero_de_corridas": {
+    "pedido": "4 configuraciones x 5 folds = 20 corridas",
+    "protocolo": "3 configuraciones x 5 folds = 15 corridas",
+    "motivo": "ConvNeXt-Tiny-A y B0 son la misma configuración: results/classification/r4_benchmark/convnext_tiny/A/seed_42/run_config.json (convnext_tiny, condición A, pesos con alpha 1.0, lr 1e-4, patience 5, min_delta 0.001, checkpoint max val_roc_auc) es B0 según results/classification/r7_optimizacion/cierre_seleccion/protocolo_r8_congelado.json. Con la misma semilla, la misma partición y el mismo comando, una cuarta configuración sería una repetición. Se comparte entre C1 y C2.",
+    "decision": "se aceptan 15 corridas (3 configuraciones x 5 folds); la opción de 20 queda descartada porque B0 y ConvNeXt-A son la misma configuración"
+  },
+  "entrenamiento": {
+    "semilla": 42,
+    "semillas_por_fold": 1,
+    "hiperparametros": "los del YAML de cada arquitectura, sin cambios (lr 1e-4, batch 32, AdamW, weight decay 1e-4, AMP, 30 épocas como máximo)",
+    "early_stopping": "igual que en E1: val_weighted_loss, patience 5, min_delta 0.001, activo",
+    "criterio_de_checkpoint": "igual que en E1: máximo val_roc_auc del fold (primera época en caso de empate), --checkpoint-metric val_roc_auc. Se mantiene: no se cambia a AP ni a pérdida para E2.",
+    "ap_por_epoca": "cada corrida E2 conserva en training_history.json el val_average_precision (y val_roc_auc y val_loss) de todas las épocas ejecutadas, de modo que el análisis de sensibilidad del criterio de checkpoint (src/classification/checkpoint_sensitivity.py) pueda repetirse con E2 sin reentrenar. Es descriptivo y no modifica el criterio ni el veredicto.",
+    "umbral_de_las_metricas_dependientes_de_umbral": 0.5,
+    "pesos_de_clase_por_fold": "calculados con las etiquetas de train de cada fold: folds 0 a 3 tienen 87 positivas en train (mismos pesos que E1, 713/87); el fold 4 tiene 88 (712/88)",
+    "total_corridas": 15
+  },
+  "metricas": {
+    "primaria": "average_precision (AP) en el fold de validation, en el checkpoint seleccionado",
+    "secundaria": "roc_auc en el mismo checkpoint"
+  },
+  "reglas_de_lectura": {
+    "delta_por_fold": "delta_k = métrica(primera configuración) - métrica(segunda configuración) en el fold k, k = 0..4, mismas imágenes de validation",
+    "resumen": "media de los 5 delta, mínimo y máximo (rango) y número de folds con delta > 0, delta < 0 y delta = 0",
+    "consistencia": "una comparación es consistente solo si el signo del delta AP es el mismo (estrictamente positivo o estrictamente negativo) en al menos 4 de 5 folds; un delta exactamente 0 no cuenta en ningún signo",
+    "declarar_mejor": "no se declara que una configuración es mejor que otra si la comparación no es consistente según la regla anterior",
+    "regla_robustez_de_b0": "si DenseNet-A supera a ConvNeXt-A en AP en al menos 4 de 5 folds (delta C1 = AP ConvNeXt-A - AP DenseNet-A estrictamente negativo en al menos 4 folds), el informe declara que la elección de B0 no es robusta a esta partición. Esto no modifica R8: B0 y B2 están congelados. Si la regla no se cumple, el informe no concluye que B0 sea robusto: reporta media, rango y signos según las reglas anteriores.",
+    "p_valor": "con 5 folds no se reporta p-valor, intervalo de confianza ni prueba de hipótesis; solo media, rango y signos",
+    "metrica_secundaria": "ROC-AUC se reporta con los mismos estadísticos descriptivos; el veredicto de consistencia se basa solo en AP",
+    "no_se_hace": [
+      "presentar el promedio de AP entre folds como estimación final del desempeño",
+      "usar test",
+      "cambiar estas reglas después de ver los resultados"
+    ]
+  },
+  "comandos_para_falcon": {
+    "nota": "No ejecutar hasta la revisión conjunta. Raíz del repositorio, entorno ovarian_cnn_env. Una línea por corrida; cada una escribe en su carpeta 'salida' y no sobrescribe si ya contiene artefactos (sin --overwrite).",
+    "corridas": [
+      {
+        "id": "convnext_a_alpha1_fold0",
+        "configuracion": "convnext_a_alpha1",
+        "fold": 0,
+        "salida": "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_0",
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_robustez_e2 --seed 42 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_0"
+      },
+      {
+        "id": "convnext_a_alpha05_fold0",
+        "configuracion": "convnext_a_alpha05",
+        "fold": 0,
+        "salida": "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_0",
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_robustez_e2 --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_0"
+      },
+      {
+        "id": "densenet_a_alpha1_fold0",
+        "configuracion": "densenet_a_alpha1",
+        "fold": 0,
+        "salida": "results/classification/r7_optimizacion/robustez_e2/corridas/densenet_a_alpha1/fold_0",
+        "comando": "python -m src.classification.run_experiment --arch densenet121 --condition A --experiment r7_robustez_e2 --seed 42 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/robustez_e2/corridas/densenet_a_alpha1/fold_0"
+      },
+      {
+        "id": "convnext_a_alpha1_fold1",
+        "configuracion": "convnext_a_alpha1",
+        "fold": 1,
+        "salida": "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_1",
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_robustez_e2 --seed 42 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_1"
+      },
+      {
+        "id": "convnext_a_alpha05_fold1",
+        "configuracion": "convnext_a_alpha05",
+        "fold": 1,
+        "salida": "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_1",
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_robustez_e2 --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_1"
+      },
+      {
+        "id": "densenet_a_alpha1_fold1",
+        "configuracion": "densenet_a_alpha1",
+        "fold": 1,
+        "salida": "results/classification/r7_optimizacion/robustez_e2/corridas/densenet_a_alpha1/fold_1",
+        "comando": "python -m src.classification.run_experiment --arch densenet121 --condition A --experiment r7_robustez_e2 --seed 42 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/robustez_e2/corridas/densenet_a_alpha1/fold_1"
+      },
+      {
+        "id": "convnext_a_alpha1_fold2",
+        "configuracion": "convnext_a_alpha1",
+        "fold": 2,
+        "salida": "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_2",
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_robustez_e2 --seed 42 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_2"
+      },
+      {
+        "id": "convnext_a_alpha05_fold2",
+        "configuracion": "convnext_a_alpha05",
+        "fold": 2,
+        "salida": "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_2",
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_robustez_e2 --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_2"
+      },
+      {
+        "id": "densenet_a_alpha1_fold2",
+        "configuracion": "densenet_a_alpha1",
+        "fold": 2,
+        "salida": "results/classification/r7_optimizacion/robustez_e2/corridas/densenet_a_alpha1/fold_2",
+        "comando": "python -m src.classification.run_experiment --arch densenet121 --condition A --experiment r7_robustez_e2 --seed 42 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/robustez_e2/corridas/densenet_a_alpha1/fold_2"
+      },
+      {
+        "id": "convnext_a_alpha1_fold3",
+        "configuracion": "convnext_a_alpha1",
+        "fold": 3,
+        "salida": "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_3",
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_robustez_e2 --seed 42 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_3"
+      },
+      {
+        "id": "convnext_a_alpha05_fold3",
+        "configuracion": "convnext_a_alpha05",
+        "fold": 3,
+        "salida": "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_3",
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_robustez_e2 --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_3"
+      },
+      {
+        "id": "densenet_a_alpha1_fold3",
+        "configuracion": "densenet_a_alpha1",
+        "fold": 3,
+        "salida": "results/classification/r7_optimizacion/robustez_e2/corridas/densenet_a_alpha1/fold_3",
+        "comando": "python -m src.classification.run_experiment --arch densenet121 --condition A --experiment r7_robustez_e2 --seed 42 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/robustez_e2/corridas/densenet_a_alpha1/fold_3"
+      },
+      {
+        "id": "convnext_a_alpha1_fold4",
+        "configuracion": "convnext_a_alpha1",
+        "fold": 4,
+        "salida": "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_4",
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_robustez_e2 --seed 42 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_4"
+      },
+      {
+        "id": "convnext_a_alpha05_fold4",
+        "configuracion": "convnext_a_alpha05",
+        "fold": 4,
+        "salida": "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_4",
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_robustez_e2 --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_4"
+      },
+      {
+        "id": "densenet_a_alpha1_fold4",
+        "configuracion": "densenet_a_alpha1",
+        "fold": 4,
+        "salida": "results/classification/r7_optimizacion/robustez_e2/corridas/densenet_a_alpha1/fold_4",
+        "comando": "python -m src.classification.run_experiment --arch densenet121 --condition A --experiment r7_robustez_e2 --seed 42 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/robustez_e2/corridas/densenet_a_alpha1/fold_4"
+      }
+    ]
+  },
+  "salida_de_cada_corrida": {
+    "carpeta": "results/classification/r7_optimizacion/robustez_e2/corridas/<configuracion>/fold_<k>/",
+    "archivos": {
+      "fold_manifest.csv": "manifiesto del fold (fold = validation, resto = train, e1_split = carpeta física de la imagen)",
+      "run_config.json": "configuración efectiva; incluye evaluation_scheme = E2, fold, fold_manifest y csv_path = configs/splits/cv_folds_e2.csv",
+      "training_history.json": "métricas de validation por época (incluye val_average_precision y val_roc_auc)",
+      "best_auc_meta.json": "época y valores del checkpoint seleccionado",
+      "validation_metrics.json": "métricas del checkpoint recargado sobre el fold de validation",
+      "val_predictions_best_auc.csv": "probabilidad de malignidad por image_id del fold, en el checkpoint seleccionado",
+      "best_auc.pth": "checkpoint; no va a git (*.pth está en .gitignore); solo en Falcon"
+    },
+    "analisis_posterior": "robustez_e2/analisis/ (script y notebook por escribir tras la revisión conjunta): tabla de AP y ROC-AUC por configuración y fold, delta por fold, media, rango y signos de C1 y C2"
+  },
+  "limitaciones_a_declarar": [
+    "E2 es estratificada y no por paciente: puede sobreestimar, y los 5 folds no son independientes entre sí (comparten imágenes de entrenamiento)",
+    "una semilla por fold: no separa la variabilidad por semilla de la variabilidad por fold",
+    "cada fold de validation tiene 21 o 22 positivas operacionales; el AP por fold es ruidoso",
+    "categorías 6 y 7 agrupadas en la clase positiva operacional; la categoría 6 no es malignidad histológica",
+    "las 1000 imágenes de E2 incluyen las 200 de validation de E1, sobre las que se seleccionaron B2 y el criterio de checkpoint: E2 no es independiente de esa selección"
+  ]
+}
