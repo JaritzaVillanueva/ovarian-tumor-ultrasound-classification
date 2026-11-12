@@ -1,0 +1,7 @@
+comparacion,criterio,n_folds,media,minimo,maximo,folds_positivos,folds_negativos,folds_cero,consistente_4_de_5,favorece,folds_con_signo_distinto_a_auc_max,signo_de_la_media_distinto_a_auc_max,veredicto_de_consistencia_distinto_a_auc_max
+C1,auc_max,5,-0.018051607482266675,-0.10942661410382715,0.04296999683864916,2,3,0,False,ninguna,0,False,False
+C1,ap_max,5,0.003728170711115475,-0.07340181924445055,0.07668558467277192,3,2,0,False,ninguna,1,True,False
+C1,loss_min,5,0.02114412112589046,-0.09199853053854035,0.09457170354296063,3,2,0,False,ninguna,1,True,False
+C2,auc_max,5,-0.0430899812562283,-0.14603547310181325,0.10345550906381618,2,3,0,False,ninguna,0,False,False
+C2,ap_max,5,-0.05743993315418283,-0.18117049833730065,0.04214234342034151,1,4,0,True,segunda,1,False,True
+C2,loss_min,5,-0.07396176943103036,-0.2119320207297773,0.06019479111730697,2,3,0,False,ninguna,2,False,False

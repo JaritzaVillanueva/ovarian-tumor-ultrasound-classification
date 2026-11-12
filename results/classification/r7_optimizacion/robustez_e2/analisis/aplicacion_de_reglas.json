@@ -1,0 +1,97 @@
+{
+  "protocolo": {
+    "archivo": "results/classification/r7_optimizacion/robustez_e2/protocolo_robustez_e2.json",
+    "commit_de_referencia": "6de5349",
+    "idéntico_al_commit": true,
+    "estado": "revisado conjuntamente; listo para commit; ninguna corrida E2 ejecutada"
+  },
+  "metrica_del_veredicto": "AP",
+  "comparaciones": {
+    "C1": {
+      "nombre": "ConvNeXt-Tiny-A frente a DenseNet-A",
+      "delta": "convnext_a_alpha1 - densenet_a_alpha1",
+      "regla_consistencia": "una comparación es consistente solo si el signo del delta AP es el mismo (estrictamente positivo o estrictamente negativo) en al menos 4 de 5 folds; un delta exactamente 0 no cuenta en ningún signo",
+      "regla_declarar_mejor": "no se declara que una configuración es mejor que otra si la comparación no es consistente según la regla anterior",
+      "resumen_ap": {
+        "comparacion": "C1",
+        "metrica": "AP",
+        "n_folds": 5,
+        "media": -0.018051607482266675,
+        "minimo": -0.10942661410382715,
+        "maximo": 0.04296999683864916,
+        "folds_positivos": 2,
+        "folds_negativos": 3,
+        "folds_cero": 0
+      },
+      "consistente": false,
+      "favorece": null,
+      "frase_del_veredicto": "Comparación C1 no consistente en AP (+2 / -3 / 0:0 en 5 folds): no se declara que convnext_a_alpha1 sea mejor que densenet_a_alpha1 ni lo contrario.",
+      "nota_frase": "formulación derivada de las reglas 'consistencia' y 'declarar_mejor'; el protocolo no fija su texto",
+      "roc_auc_descriptivo": {
+        "comparacion": "C1",
+        "metrica": "ROC-AUC",
+        "n_folds": 5,
+        "media": 0.030686542967630227,
+        "minimo": 0.001532175689479165,
+        "maximo": 0.09678243105209405,
+        "folds_positivos": 5,
+        "folds_negativos": 0,
+        "folds_cero": 0,
+        "nota": "metrica_secundaria: se reporta sin veredicto de consistencia"
+      }
+    },
+    "C2": {
+      "nombre": "B0 frente a B2",
+      "delta": "convnext_a_alpha05 - convnext_a_alpha1",
+      "regla_consistencia": "una comparación es consistente solo si el signo del delta AP es el mismo (estrictamente positivo o estrictamente negativo) en al menos 4 de 5 folds; un delta exactamente 0 no cuenta en ningún signo",
+      "regla_declarar_mejor": "no se declara que una configuración es mejor que otra si la comparación no es consistente según la regla anterior",
+      "resumen_ap": {
+        "comparacion": "C2",
+        "metrica": "AP",
+        "n_folds": 5,
+        "media": -0.0430899812562283,
+        "minimo": -0.14603547310181325,
+        "maximo": 0.10345550906381618,
+        "folds_positivos": 2,
+        "folds_negativos": 3,
+        "folds_cero": 0
+      },
+      "consistente": false,
+      "favorece": null,
+      "frase_del_veredicto": "Comparación C2 no consistente en AP (+2 / -3 / 0:0 en 5 folds): no se declara que convnext_a_alpha05 sea mejor que convnext_a_alpha1 ni lo contrario.",
+      "nota_frase": "formulación derivada de las reglas 'consistencia' y 'declarar_mejor'; el protocolo no fija su texto",
+      "roc_auc_descriptivo": {
+        "comparacion": "C2",
+        "metrica": "ROC-AUC",
+        "n_folds": 5,
+        "media": -0.042710406159028394,
+        "minimo": -0.10495403472931564,
+        "maximo": 0.00025536261491310164,
+        "folds_positivos": 1,
+        "folds_negativos": 4,
+        "folds_cero": 0,
+        "nota": "metrica_secundaria: se reporta sin veredicto de consistencia"
+      }
+    }
+  },
+  "regla_robustez_de_b0": {
+    "texto_del_protocolo": "si DenseNet-A supera a ConvNeXt-A en AP en al menos 4 de 5 folds (delta C1 = AP ConvNeXt-A - AP DenseNet-A estrictamente negativo en al menos 4 folds), el informe declara que la elección de B0 no es robusta a esta partición. Esto no modifica R8: B0 y B2 están congelados. Si la regla no se cumple, el informe no concluye que B0 sea robusto: reporta media, rango y signos según las reglas anteriores.",
+    "condicion": "delta C1 (ConvNeXt-A - DenseNet-A) en AP estrictamente negativo en al menos 4 de 5 folds",
+    "folds_negativos": 3,
+    "se_cumple": false,
+    "frase_del_veredicto": "La regla no se cumple (DenseNet-A supera a ConvNeXt-A en AP en 3 de 5 folds): el informe no concluye que B0 sea robusto y reporta media, rango y signos."
+  },
+  "regla_c2": {
+    "existe_en_el_protocolo": false,
+    "nota": "El protocolo no define una regla específica para C2: se lee con 'consistencia' y 'declarar_mejor' (ver comparaciones.C2). Añadir una regla ahora, con los resultados ya conocidos, contradiría 'no_se_hace: cambiar estas reglas después de ver los resultados'."
+  },
+  "otras_reglas": {
+    "p_valor": "con 5 folds no se reporta p-valor, intervalo de confianza ni prueba de hipótesis; solo media, rango y signos",
+    "metrica_secundaria": "ROC-AUC se reporta con los mismos estadísticos descriptivos; el veredicto de consistencia se basa solo en AP",
+    "no_se_hace": [
+      "presentar el promedio de AP entre folds como estimación final del desempeño",
+      "usar test",
+      "cambiar estas reglas después de ver los resultados"
+    ]
+  }
+}

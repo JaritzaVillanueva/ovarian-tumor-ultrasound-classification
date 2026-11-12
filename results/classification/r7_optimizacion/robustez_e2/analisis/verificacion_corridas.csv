@@ -1,0 +1,272 @@
+corrida,comprobacion,ok,detalle
+convnext_a_alpha1_fold0,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=0"
+convnext_a_alpha1_fold0,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha1_fold0,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha1_fold0,config: pesos de clase (exponente),True,alpha=1.0
+convnext_a_alpha1_fold0,config: hiperparámetros del protocolo,True,
+convnext_a_alpha1_fold0,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha1_fold0,config: early stopping activo,True,
+convnext_a_alpha1_fold0,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha1_fold0,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha1_fold0,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha1_fold0,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.5610098242759705, 4.597701072692871]"
+convnext_a_alpha1_fold0,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha1_fold0,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.49394984, recalculado=0.49394984"
+convnext_a_alpha1_fold0,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.87436159, recalculado=0.87436159"
+convnext_a_alpha1_fold0,historial: longitud = épocas ejecutadas y AP por época presente,True,11 épocas
+convnext_a_alpha1_fold0,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=6, run_config=6, meta=6"
+convnext_a_alpha1_fold0,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.493950, json=0.493950"
+convnext_a_alpha1_fold0,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.874362, json=0.874362"
+convnext_a_alpha05_fold0,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=0"
+convnext_a_alpha05_fold0,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha05_fold0,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha05_fold0,config: pesos de clase (exponente),True,alpha=0.5
+convnext_a_alpha05_fold0,config: hiperparámetros del protocolo,True,
+convnext_a_alpha05_fold0,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha05_fold0,config: early stopping activo,True,
+convnext_a_alpha05_fold0,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha05_fold0,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha05_fold0,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha05_fold0,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.8315487504005432, 2.380525588989258]"
+convnext_a_alpha05_fold0,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha05_fold0,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.34791437, recalculado=0.34791437"
+convnext_a_alpha05_fold0,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.76940756, recalculado=0.76940756"
+convnext_a_alpha05_fold0,historial: longitud = épocas ejecutadas y AP por época presente,True,10 épocas
+convnext_a_alpha05_fold0,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=8, run_config=8, meta=8"
+convnext_a_alpha05_fold0,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.347914, json=0.347914"
+convnext_a_alpha05_fold0,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.769408, json=0.769408"
+densenet_a_alpha1_fold0,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=0"
+densenet_a_alpha1_fold0,"config: arquitectura, condición, experimento, semilla",True,densenet121/A/r7_robustez_e2/seed 42
+densenet_a_alpha1_fold0,config: partición,True,configs/splits/cv_folds_e2.csv
+densenet_a_alpha1_fold0,config: pesos de clase (exponente),True,alpha=1.0
+densenet_a_alpha1_fold0,config: hiperparámetros del protocolo,True,
+densenet_a_alpha1_fold0,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+densenet_a_alpha1_fold0,config: early stopping activo,True,
+densenet_a_alpha1_fold0,config: 800 train y 200 validation,True,800/200
+densenet_a_alpha1_fold0,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+densenet_a_alpha1_fold0,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+densenet_a_alpha1_fold0,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.5610098242759705, 4.597701072692871]"
+densenet_a_alpha1_fold0,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+densenet_a_alpha1_fold0,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.45097984, recalculado=0.45097984"
+densenet_a_alpha1_fold0,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.77757916, recalculado=0.77757916"
+densenet_a_alpha1_fold0,historial: longitud = épocas ejecutadas y AP por época presente,True,8 épocas
+densenet_a_alpha1_fold0,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=5, run_config=5, meta=5"
+densenet_a_alpha1_fold0,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.450980, json=0.450980"
+densenet_a_alpha1_fold0,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.777579, json=0.777579"
+convnext_a_alpha1_fold1,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=1"
+convnext_a_alpha1_fold1,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha1_fold1,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha1_fold1,config: pesos de clase (exponente),True,alpha=1.0
+convnext_a_alpha1_fold1,config: hiperparámetros del protocolo,True,
+convnext_a_alpha1_fold1,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha1_fold1,config: early stopping activo,True,
+convnext_a_alpha1_fold1,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha1_fold1,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha1_fold1,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha1_fold1,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.5610098242759705, 4.597701072692871]"
+convnext_a_alpha1_fold1,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha1_fold1,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.69061900, recalculado=0.69061900"
+convnext_a_alpha1_fold1,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.90398366, recalculado=0.90398366"
+convnext_a_alpha1_fold1,historial: longitud = épocas ejecutadas y AP por época presente,True,18 épocas
+convnext_a_alpha1_fold1,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=18, run_config=18, meta=18"
+convnext_a_alpha1_fold1,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.690619, json=0.690619"
+convnext_a_alpha1_fold1,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.903984, json=0.903984"
+convnext_a_alpha05_fold1,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=1"
+convnext_a_alpha05_fold1,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha05_fold1,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha05_fold1,config: pesos de clase (exponente),True,alpha=0.5
+convnext_a_alpha05_fold1,config: hiperparámetros del protocolo,True,
+convnext_a_alpha05_fold1,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha05_fold1,config: early stopping activo,True,
+convnext_a_alpha05_fold1,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha05_fold1,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha05_fold1,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha05_fold1,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.8315487504005432, 2.380525588989258]"
+convnext_a_alpha05_fold1,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha05_fold1,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.60542258, recalculado=0.60542258"
+convnext_a_alpha05_fold1,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.87691522, recalculado=0.87691522"
+convnext_a_alpha05_fold1,historial: longitud = épocas ejecutadas y AP por época presente,True,13 épocas
+convnext_a_alpha05_fold1,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=13, run_config=13, meta=13"
+convnext_a_alpha05_fold1,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.605423, json=0.605423"
+convnext_a_alpha05_fold1,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.876915, json=0.876915"
+densenet_a_alpha1_fold1,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=1"
+densenet_a_alpha1_fold1,"config: arquitectura, condición, experimento, semilla",True,densenet121/A/r7_robustez_e2/seed 42
+densenet_a_alpha1_fold1,config: partición,True,configs/splits/cv_folds_e2.csv
+densenet_a_alpha1_fold1,config: pesos de clase (exponente),True,alpha=1.0
+densenet_a_alpha1_fold1,config: hiperparámetros del protocolo,True,
+densenet_a_alpha1_fold1,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+densenet_a_alpha1_fold1,config: early stopping activo,True,
+densenet_a_alpha1_fold1,config: 800 train y 200 validation,True,800/200
+densenet_a_alpha1_fold1,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+densenet_a_alpha1_fold1,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+densenet_a_alpha1_fold1,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.5610098242759705, 4.597701072692871]"
+densenet_a_alpha1_fold1,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+densenet_a_alpha1_fold1,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.65371742, recalculado=0.65371742"
+densenet_a_alpha1_fold1,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.87589377, recalculado=0.87589377"
+densenet_a_alpha1_fold1,historial: longitud = épocas ejecutadas y AP por época presente,True,9 épocas
+densenet_a_alpha1_fold1,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=9, run_config=9, meta=9"
+densenet_a_alpha1_fold1,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.653717, json=0.653717"
+densenet_a_alpha1_fold1,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.875894, json=0.875894"
+convnext_a_alpha1_fold2,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=2"
+convnext_a_alpha1_fold2,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha1_fold2,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha1_fold2,config: pesos de clase (exponente),True,alpha=1.0
+convnext_a_alpha1_fold2,config: hiperparámetros del protocolo,True,
+convnext_a_alpha1_fold2,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha1_fold2,config: early stopping activo,True,
+convnext_a_alpha1_fold2,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha1_fold2,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha1_fold2,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha1_fold2,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.5610098242759705, 4.597701072692871]"
+convnext_a_alpha1_fold2,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha1_fold2,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.58696475, recalculado=0.58696475"
+convnext_a_alpha1_fold2,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.89504597, recalculado=0.89504597"
+convnext_a_alpha1_fold2,historial: longitud = épocas ejecutadas y AP por época presente,True,17 épocas
+convnext_a_alpha1_fold2,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=17, run_config=17, meta=17"
+convnext_a_alpha1_fold2,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.586965, json=0.586965"
+convnext_a_alpha1_fold2,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.895046, json=0.895046"
+convnext_a_alpha05_fold2,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=2"
+convnext_a_alpha05_fold2,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha05_fold2,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha05_fold2,config: pesos de clase (exponente),True,alpha=0.5
+convnext_a_alpha05_fold2,config: hiperparámetros del protocolo,True,
+convnext_a_alpha05_fold2,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha05_fold2,config: early stopping activo,True,
+convnext_a_alpha05_fold2,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha05_fold2,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha05_fold2,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha05_fold2,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.8315487504005432, 2.380525588989258]"
+convnext_a_alpha05_fold2,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha05_fold2,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.61650007, recalculado=0.61650007"
+convnext_a_alpha05_fold2,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.89530133, recalculado=0.89530133"
+convnext_a_alpha05_fold2,historial: longitud = épocas ejecutadas y AP por época presente,True,16 épocas
+convnext_a_alpha05_fold2,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=11, run_config=11, meta=11"
+convnext_a_alpha05_fold2,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.616500, json=0.616500"
+convnext_a_alpha05_fold2,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.895301, json=0.895301"
+densenet_a_alpha1_fold2,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=2"
+densenet_a_alpha1_fold2,"config: arquitectura, condición, experimento, semilla",True,densenet121/A/r7_robustez_e2/seed 42
+densenet_a_alpha1_fold2,config: partición,True,configs/splits/cv_folds_e2.csv
+densenet_a_alpha1_fold2,config: pesos de clase (exponente),True,alpha=1.0
+densenet_a_alpha1_fold2,config: hiperparámetros del protocolo,True,
+densenet_a_alpha1_fold2,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+densenet_a_alpha1_fold2,config: early stopping activo,True,
+densenet_a_alpha1_fold2,config: 800 train y 200 validation,True,800/200
+densenet_a_alpha1_fold2,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+densenet_a_alpha1_fold2,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+densenet_a_alpha1_fold2,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.5610098242759705, 4.597701072692871]"
+densenet_a_alpha1_fold2,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+densenet_a_alpha1_fold2,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.63263824, recalculado=0.63263824"
+densenet_a_alpha1_fold2,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.89351379, recalculado=0.89351379"
+densenet_a_alpha1_fold2,historial: longitud = épocas ejecutadas y AP por época presente,True,10 épocas
+densenet_a_alpha1_fold2,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=7, run_config=7, meta=7"
+densenet_a_alpha1_fold2,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.632638, json=0.632638"
+densenet_a_alpha1_fold2,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.893514, json=0.893514"
+convnext_a_alpha1_fold3,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=3"
+convnext_a_alpha1_fold3,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha1_fold3,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha1_fold3,config: pesos de clase (exponente),True,alpha=1.0
+convnext_a_alpha1_fold3,config: hiperparámetros del protocolo,True,
+convnext_a_alpha1_fold3,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha1_fold3,config: early stopping activo,True,
+convnext_a_alpha1_fold3,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha1_fold3,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha1_fold3,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha1_fold3,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.5610098242759705, 4.597701072692871]"
+convnext_a_alpha1_fold3,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha1_fold3,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.50569941, recalculado=0.50569941"
+convnext_a_alpha1_fold3,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.90679265, recalculado=0.90679265"
+convnext_a_alpha1_fold3,historial: longitud = épocas ejecutadas y AP por época presente,True,13 épocas
+convnext_a_alpha1_fold3,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=4, run_config=4, meta=4"
+convnext_a_alpha1_fold3,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.505699, json=0.505699"
+convnext_a_alpha1_fold3,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.906793, json=0.906793"
+convnext_a_alpha05_fold3,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=3"
+convnext_a_alpha05_fold3,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha05_fold3,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha05_fold3,config: pesos de clase (exponente),True,alpha=0.5
+convnext_a_alpha05_fold3,config: hiperparámetros del protocolo,True,
+convnext_a_alpha05_fold3,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha05_fold3,config: early stopping activo,True,
+convnext_a_alpha05_fold3,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha05_fold3,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha05_fold3,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha05_fold3,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.8315487504005432, 2.380525588989258]"
+convnext_a_alpha05_fold3,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha05_fold3,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.60915492, recalculado=0.60915492"
+convnext_a_alpha05_fold3,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.87768131, recalculado=0.87768131"
+convnext_a_alpha05_fold3,historial: longitud = épocas ejecutadas y AP por época presente,True,9 épocas
+convnext_a_alpha05_fold3,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=8, run_config=8, meta=8"
+convnext_a_alpha05_fold3,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.609155, json=0.609155"
+convnext_a_alpha05_fold3,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.877681, json=0.877681"
+densenet_a_alpha1_fold3,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=3"
+densenet_a_alpha1_fold3,"config: arquitectura, condición, experimento, semilla",True,densenet121/A/r7_robustez_e2/seed 42
+densenet_a_alpha1_fold3,config: partición,True,configs/splits/cv_folds_e2.csv
+densenet_a_alpha1_fold3,config: pesos de clase (exponente),True,alpha=1.0
+densenet_a_alpha1_fold3,config: hiperparámetros del protocolo,True,
+densenet_a_alpha1_fold3,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+densenet_a_alpha1_fold3,config: early stopping activo,True,
+densenet_a_alpha1_fold3,config: 800 train y 200 validation,True,800/200
+densenet_a_alpha1_fold3,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+densenet_a_alpha1_fold3,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+densenet_a_alpha1_fold3,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.5610098242759705, 4.597701072692871]"
+densenet_a_alpha1_fold3,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+densenet_a_alpha1_fold3,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.61512602, recalculado=0.61512602"
+densenet_a_alpha1_fold3,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.90423902, recalculado=0.90423902"
+densenet_a_alpha1_fold3,historial: longitud = épocas ejecutadas y AP por época presente,True,9 épocas
+densenet_a_alpha1_fold3,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=4, run_config=4, meta=4"
+densenet_a_alpha1_fold3,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.615126, json=0.615126"
+densenet_a_alpha1_fold3,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.904239, json=0.904239"
+convnext_a_alpha1_fold4,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=4"
+convnext_a_alpha1_fold4,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha1_fold4,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha1_fold4,config: pesos de clase (exponente),True,alpha=1.0
+convnext_a_alpha1_fold4,config: hiperparámetros del protocolo,True,
+convnext_a_alpha1_fold4,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha1_fold4,config: early stopping activo,True,
+convnext_a_alpha1_fold4,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha1_fold4,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha1_fold4,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha1_fold4,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.5617977380752563, 4.545454502105713]"
+convnext_a_alpha1_fold4,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha1_fold4,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.58064263, recalculado=0.58064263"
+convnext_a_alpha1_fold4,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.90449588, recalculado=0.90449588"
+convnext_a_alpha1_fold4,historial: longitud = épocas ejecutadas y AP por época presente,True,19 épocas
+convnext_a_alpha1_fold4,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=14, run_config=14, meta=14"
+convnext_a_alpha1_fold4,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.580643, json=0.580643"
+convnext_a_alpha1_fold4,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.904496, json=0.904496"
+convnext_a_alpha05_fold4,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=4"
+convnext_a_alpha05_fold4,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha05_fold4,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha05_fold4,config: pesos de clase (exponente),True,alpha=0.5
+convnext_a_alpha05_fold4,config: hiperparámetros del protocolo,True,
+convnext_a_alpha05_fold4,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha05_fold4,config: early stopping activo,True,
+convnext_a_alpha05_fold4,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha05_fold4,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha05_fold4,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha05_fold4,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.8313313722610474, 2.36468243598938]"
+convnext_a_alpha05_fold4,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha05_fold4,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.46343378, recalculado=0.46343378"
+convnext_a_alpha05_fold4,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.85182229, recalculado=0.85182229"
+convnext_a_alpha05_fold4,historial: longitud = épocas ejecutadas y AP por época presente,True,9 épocas
+convnext_a_alpha05_fold4,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=9, run_config=9, meta=9"
+convnext_a_alpha05_fold4,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.463434, json=0.463434"
+convnext_a_alpha05_fold4,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.851822, json=0.851822"
+densenet_a_alpha1_fold4,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=4"
+densenet_a_alpha1_fold4,"config: arquitectura, condición, experimento, semilla",True,densenet121/A/r7_robustez_e2/seed 42
+densenet_a_alpha1_fold4,config: partición,True,configs/splits/cv_folds_e2.csv
+densenet_a_alpha1_fold4,config: pesos de clase (exponente),True,alpha=1.0
+densenet_a_alpha1_fold4,config: hiperparámetros del protocolo,True,
+densenet_a_alpha1_fold4,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+densenet_a_alpha1_fold4,config: early stopping activo,True,
+densenet_a_alpha1_fold4,config: 800 train y 200 validation,True,800/200
+densenet_a_alpha1_fold4,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+densenet_a_alpha1_fold4,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+densenet_a_alpha1_fold4,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.5617977380752563, 4.545454502105713]"
+densenet_a_alpha1_fold4,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+densenet_a_alpha1_fold4,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.59567214, recalculado=0.59567214"
+densenet_a_alpha1_fold4,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.88002128, recalculado=0.88002128"
+densenet_a_alpha1_fold4,historial: longitud = épocas ejecutadas y AP por época presente,True,9 épocas
+densenet_a_alpha1_fold4,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=5, run_config=5, meta=5"
+densenet_a_alpha1_fold4,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.595672, json=0.595672"
+densenet_a_alpha1_fold4,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.880021, json=0.880021"
+protocolo,idéntico al del commit 6de5349,True,True
