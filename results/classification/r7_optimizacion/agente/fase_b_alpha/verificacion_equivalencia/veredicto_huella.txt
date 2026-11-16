@@ -1,0 +1,7 @@
+commit 886acce: 886accef0475fd843039a9deea2c013611e2da6d
+commit HEAD: ed10abdb2eb39aea8624275dbae5122ecf459563
+src importado 886acce: /tmp/huella_886acce/src/classification
+src importado HEAD: ~/projects/ovarian-tumor-ultrasound-classification/src/classification
+rutas de src distintas: True
+todos los modulos src desde su arbol src (886acce, HEAD): True True
+huella identica byte a byte: True
