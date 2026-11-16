@@ -1,0 +1,3007 @@
+nohup: ignoring input
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 0 de 5 (configs/splits/cv_folds_e2.csv)
+  --lr-schedule: warmup_cosine
+  --warmup-epochs: 1.0
+  --cosine-epochs: 15.0
+  --lr-min: 1e-06
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_0
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5610, 4.5977], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.7026 | Train Acc: 0.5863 | Val Loss(w): 0.6649 | Val Loss(uw): 0.7024 | Val Acc: 0.4900
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6056 | Train Acc: 0.6937 | Val Loss(w): 0.6648 | Val Loss(uw): 0.3691 | Val Acc: 0.8800
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5212 | Train Acc: 0.7262 | Val Loss(w): 0.5759 | Val Loss(uw): 0.5509 | Val Acc: 0.6750
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3522 | Train Acc: 0.8662 | Val Loss(w): 0.5936 | Val Loss(uw): 0.3467 | Val Acc: 0.8650
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2739 | Train Acc: 0.9200 | Val Loss(w): 0.7258 | Val Loss(uw): 0.3390 | Val Acc: 0.8700
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1506 | Train Acc: 0.9450 | Val Loss(w): 0.7502 | Val Loss(uw): 0.3599 | Val Acc: 0.8750
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1037 | Train Acc: 0.9700 | Val Loss(w): 0.7325 | Val Loss(uw): 0.3303 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1004 | Train Acc: 0.9575 | Val Loss(w): 0.9798 | Val Loss(uw): 0.3495 | Val Acc: 0.8950
+  Early stopping en época 8 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.8900
+    balanced_accuracy: 0.7191
+    precision_malignant: 0.5000
+    recall_malignant: 0.5000
+    specificity: 0.9382
+    f1_malignant: 0.5000
+    roc_auc: 0.8228
+    average_precision: 0.4971
+    confusion_matrix: [[167, 11], [11, 11]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 7
+  Early stopped: True (época 8)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_0/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (2 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 1 de 5 (configs/splits/cv_folds_e2.csv)
+  --lr-schedule: warmup_cosine
+  --warmup-epochs: 1.0
+  --cosine-epochs: 15.0
+  --lr-min: 1e-06
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_1
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5610, 4.5977], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.7050 | Train Acc: 0.6038 | Val Loss(w): 0.6824 | Val Loss(uw): 0.8253 | Val Acc: 0.4000
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6294 | Train Acc: 0.7025 | Val Loss(w): 0.5653 | Val Loss(uw): 0.4283 | Val Acc: 0.7750
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4509 | Train Acc: 0.8450 | Val Loss(w): 0.5772 | Val Loss(uw): 0.6445 | Val Acc: 0.6300
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3672 | Train Acc: 0.8425 | Val Loss(w): 0.5798 | Val Loss(uw): 0.4189 | Val Acc: 0.8350
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2791 | Train Acc: 0.8888 | Val Loss(w): 0.5090 | Val Loss(uw): 0.4480 | Val Acc: 0.7950
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1601 | Train Acc: 0.9600 | Val Loss(w): 0.5056 | Val Loss(uw): 0.3513 | Val Acc: 0.8250
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0840 | Train Acc: 0.9762 | Val Loss(w): 0.6404 | Val Loss(uw): 0.3609 | Val Acc: 0.8550
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0744 | Train Acc: 0.9775 | Val Loss(w): 0.6546 | Val Loss(uw): 0.2662 | Val Acc: 0.9150
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0325 | Train Acc: 0.9950 | Val Loss(w): 0.6659 | Val Loss(uw): 0.2777 | Val Acc: 0.9050
+  Modelo guardado (best_auc)
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0337 | Train Acc: 0.9938 | Val Loss(w): 0.7086 | Val Loss(uw): 0.2511 | Val Acc: 0.9350
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0222 | Train Acc: 0.9950 | Val Loss(w): 0.7955 | Val Loss(uw): 0.2433 | Val Acc: 0.9500
+  Early stopping en época 11 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9050
+    balanced_accuracy: 0.7674
+    precision_malignant: 0.5652
+    recall_malignant: 0.5909
+    specificity: 0.9438
+    f1_malignant: 0.5778
+    roc_auc: 0.8846
+    average_precision: 0.6442
+    confusion_matrix: [[168, 10], [9, 13]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 9
+  Early stopped: True (época 11)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_1/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (3 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 2 de 5 (configs/splits/cv_folds_e2.csv)
+  --lr-schedule: warmup_cosine
+  --warmup-epochs: 1.0
+  --cosine-epochs: 15.0
+  --lr-min: 1e-06
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_2
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5610, 4.5977], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.7055 | Train Acc: 0.6200 | Val Loss(w): 0.6825 | Val Loss(uw): 0.6219 | Val Acc: 0.5900
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6263 | Train Acc: 0.6550 | Val Loss(w): 0.6101 | Val Loss(uw): 0.4055 | Val Acc: 0.8600
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5253 | Train Acc: 0.8225 | Val Loss(w): 0.5775 | Val Loss(uw): 0.5996 | Val Acc: 0.6200
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4248 | Train Acc: 0.8113 | Val Loss(w): 0.4732 | Val Loss(uw): 0.3067 | Val Acc: 0.8750
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2747 | Train Acc: 0.9075 | Val Loss(w): 0.3939 | Val Loss(uw): 0.3020 | Val Acc: 0.8850
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1722 | Train Acc: 0.9400 | Val Loss(w): 0.3814 | Val Loss(uw): 0.2979 | Val Acc: 0.8750
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1173 | Train Acc: 0.9637 | Val Loss(w): 0.3579 | Val Loss(uw): 0.2589 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0833 | Train Acc: 0.9800 | Val Loss(w): 0.3953 | Val Loss(uw): 0.2960 | Val Acc: 0.8650
+  Modelo guardado (best_auc)
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0393 | Train Acc: 0.9912 | Val Loss(w): 0.4716 | Val Loss(uw): 0.2346 | Val Acc: 0.9100
+  Modelo guardado (best_auc)
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0302 | Train Acc: 0.9925 | Val Loss(w): 0.4110 | Val Loss(uw): 0.2377 | Val Acc: 0.9000
+  Modelo guardado (best_auc)
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0301 | Train Acc: 0.9950 | Val Loss(w): 0.5631 | Val Loss(uw): 0.2540 | Val Acc: 0.9300
+Epoch 12/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0271 | Train Acc: 0.9938 | Val Loss(w): 0.5533 | Val Loss(uw): 0.2554 | Val Acc: 0.9250
+  Early stopping en época 12 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9000
+    balanced_accuracy: 0.7646
+    precision_malignant: 0.5417
+    recall_malignant: 0.5909
+    specificity: 0.9382
+    f1_malignant: 0.5652
+    roc_auc: 0.9160
+    average_precision: 0.6197
+    confusion_matrix: [[167, 11], [9, 13]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 10
+  Early stopped: True (época 12)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_2/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (3 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 3 de 5 (configs/splits/cv_folds_e2.csv)
+  --lr-schedule: warmup_cosine
+  --warmup-epochs: 1.0
+  --cosine-epochs: 15.0
+  --lr-min: 1e-06
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_3
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5610, 4.5977], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.7057 | Train Acc: 0.6288 | Val Loss(w): 0.6605 | Val Loss(uw): 0.7316 | Val Acc: 0.4950
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6501 | Train Acc: 0.6312 | Val Loss(w): 0.5949 | Val Loss(uw): 0.3540 | Val Acc: 0.8850
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5037 | Train Acc: 0.7775 | Val Loss(w): 0.6155 | Val Loss(uw): 0.7692 | Val Acc: 0.5650
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4156 | Train Acc: 0.8113 | Val Loss(w): 0.4399 | Val Loss(uw): 0.2794 | Val Acc: 0.8850
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3054 | Train Acc: 0.8950 | Val Loss(w): 0.4874 | Val Loss(uw): 0.2829 | Val Acc: 0.8800
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2342 | Train Acc: 0.9087 | Val Loss(w): 0.4153 | Val Loss(uw): 0.3203 | Val Acc: 0.8800
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1260 | Train Acc: 0.9637 | Val Loss(w): 0.6225 | Val Loss(uw): 0.2513 | Val Acc: 0.9150
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1546 | Train Acc: 0.9375 | Val Loss(w): 0.3962 | Val Loss(uw): 0.2712 | Val Acc: 0.9150
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0503 | Train Acc: 0.9875 | Val Loss(w): 0.4977 | Val Loss(uw): 0.2549 | Val Acc: 0.9050
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0428 | Train Acc: 0.9900 | Val Loss(w): 0.6964 | Val Loss(uw): 0.2593 | Val Acc: 0.9050
+  Modelo guardado (best_auc)
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0246 | Train Acc: 0.9962 | Val Loss(w): 0.7194 | Val Loss(uw): 0.2588 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 12/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0258 | Train Acc: 0.9938 | Val Loss(w): 0.6902 | Val Loss(uw): 0.2527 | Val Acc: 0.9050
+  Modelo guardado (best_auc)
+Epoch 13/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0254 | Train Acc: 0.9962 | Val Loss(w): 0.6838 | Val Loss(uw): 0.2542 | Val Acc: 0.9150
+  Modelo guardado (best_auc)
+  Early stopping en época 13 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9150
+    balanced_accuracy: 0.6933
+    precision_malignant: 0.6923
+    recall_malignant: 0.4091
+    specificity: 0.9775
+    f1_malignant: 0.5143
+    roc_auc: 0.9050
+    average_precision: 0.6508
+    confusion_matrix: [[174, 4], [13, 9]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 13
+  Early stopped: True (época 13)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_3/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (4 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 4 de 5 (configs/splits/cv_folds_e2.csv)
+  --lr-schedule: warmup_cosine
+  --warmup-epochs: 1.0
+  --cosine-epochs: 15.0
+  --lr-min: 1e-06
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_4
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5618, 4.5455], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.7012 | Train Acc: 0.5787 | Val Loss(w): 0.6260 | Val Loss(uw): 0.5649 | Val Acc: 0.7150
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6448 | Train Acc: 0.7050 | Val Loss(w): 0.6150 | Val Loss(uw): 0.5522 | Val Acc: 0.7450
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4862 | Train Acc: 0.8337 | Val Loss(w): 0.5869 | Val Loss(uw): 0.6137 | Val Acc: 0.6800
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3248 | Train Acc: 0.8712 | Val Loss(w): 0.4519 | Val Loss(uw): 0.4123 | Val Acc: 0.8050
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3100 | Train Acc: 0.8950 | Val Loss(w): 0.4978 | Val Loss(uw): 0.5152 | Val Acc: 0.7300
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1705 | Train Acc: 0.9437 | Val Loss(w): 0.6746 | Val Loss(uw): 0.2971 | Val Acc: 0.8750
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0938 | Train Acc: 0.9788 | Val Loss(w): 0.5665 | Val Loss(uw): 0.3060 | Val Acc: 0.8850
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0854 | Train Acc: 0.9788 | Val Loss(w): 0.6509 | Val Loss(uw): 0.3104 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0494 | Train Acc: 0.9888 | Val Loss(w): 0.7959 | Val Loss(uw): 0.3676 | Val Acc: 0.8750
+  Early stopping en época 9 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.8950
+    balanced_accuracy: 0.7522
+    precision_malignant: 0.5000
+    recall_malignant: 0.5714
+    specificity: 0.9330
+    f1_malignant: 0.5333
+    roc_auc: 0.8529
+    average_precision: 0.4991
+    confusion_matrix: [[167, 12], [9, 12]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 8
+  Early stopped: True (época 9)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_4/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (3 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 0 de 5 (configs/splits/cv_folds_e2.csv)
+  --lr-schedule: warmup_cosine
+  --warmup-epochs: 1.0
+  --cosine-epochs: 15.0
+  --lr-min: 1e-06
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_0
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5610, 4.5977], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6836 | Train Acc: 0.5813 | Val Loss(w): 0.7105 | Val Loss(uw): 0.8164 | Val Acc: 0.4450
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5835 | Train Acc: 0.7137 | Val Loss(w): 0.7561 | Val Loss(uw): 0.9462 | Val Acc: 0.3750
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5208 | Train Acc: 0.7462 | Val Loss(w): 0.6057 | Val Loss(uw): 0.4156 | Val Acc: 0.8250
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3369 | Train Acc: 0.8775 | Val Loss(w): 0.7285 | Val Loss(uw): 0.2817 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2822 | Train Acc: 0.9050 | Val Loss(w): 0.6563 | Val Loss(uw): 0.3333 | Val Acc: 0.8750
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1753 | Train Acc: 0.9463 | Val Loss(w): 0.7049 | Val Loss(uw): 0.3099 | Val Acc: 0.8850
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0931 | Train Acc: 0.9738 | Val Loss(w): 1.0995 | Val Loss(uw): 0.3652 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1308 | Train Acc: 0.9537 | Val Loss(w): 0.5835 | Val Loss(uw): 0.2897 | Val Acc: 0.8800
+  Modelo guardado (best_auc)
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0593 | Train Acc: 0.9912 | Val Loss(w): 0.7545 | Val Loss(uw): 0.2723 | Val Acc: 0.9150
+  Modelo guardado (best_auc)
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0270 | Train Acc: 0.9962 | Val Loss(w): 0.7667 | Val Loss(uw): 0.2700 | Val Acc: 0.9150
+  Modelo guardado (best_auc)
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0374 | Train Acc: 0.9925 | Val Loss(w): 1.0012 | Val Loss(uw): 0.3322 | Val Acc: 0.9050
+Epoch 12/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0222 | Train Acc: 0.9988 | Val Loss(w): 0.9784 | Val Loss(uw): 0.3364 | Val Acc: 0.9100
+Epoch 13/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0198 | Train Acc: 0.9950 | Val Loss(w): 0.9641 | Val Loss(uw): 0.3315 | Val Acc: 0.9100
+  Early stopping en época 13 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9150
+    balanced_accuracy: 0.6535
+    precision_malignant: 0.7778
+    recall_malignant: 0.3182
+    specificity: 0.9888
+    f1_malignant: 0.4516
+    roc_auc: 0.8833
+    average_precision: 0.6282
+    confusion_matrix: [[176, 2], [15, 7]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 10
+  Early stopped: True (época 13)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_0/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (4 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 1 de 5 (configs/splits/cv_folds_e2.csv)
+  --lr-schedule: warmup_cosine
+  --warmup-epochs: 1.0
+  --cosine-epochs: 15.0
+  --lr-min: 1e-06
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_1
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5610, 4.5977], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.7139 | Train Acc: 0.7013 | Val Loss(w): 0.6049 | Val Loss(uw): 0.5749 | Val Acc: 0.6750
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6587 | Train Acc: 0.6937 | Val Loss(w): 0.6554 | Val Loss(uw): 0.7534 | Val Acc: 0.4850
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5252 | Train Acc: 0.7175 | Val Loss(w): 0.7647 | Val Loss(uw): 0.2798 | Val Acc: 0.9000
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3774 | Train Acc: 0.8538 | Val Loss(w): 0.5604 | Val Loss(uw): 0.4908 | Val Acc: 0.7850
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2621 | Train Acc: 0.9062 | Val Loss(w): 0.6472 | Val Loss(uw): 0.4792 | Val Acc: 0.8150
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1451 | Train Acc: 0.9537 | Val Loss(w): 0.4846 | Val Loss(uw): 0.3589 | Val Acc: 0.8300
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0994 | Train Acc: 0.9725 | Val Loss(w): 0.8832 | Val Loss(uw): 0.2544 | Val Acc: 0.9350
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0829 | Train Acc: 0.9762 | Val Loss(w): 0.8565 | Val Loss(uw): 0.2621 | Val Acc: 0.9250
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0533 | Train Acc: 0.9838 | Val Loss(w): 0.8074 | Val Loss(uw): 0.2552 | Val Acc: 0.9300
+  Modelo guardado (best_auc)
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0333 | Train Acc: 0.9912 | Val Loss(w): 0.8895 | Val Loss(uw): 0.2794 | Val Acc: 0.9200
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0220 | Train Acc: 0.9962 | Val Loss(w): 0.8410 | Val Loss(uw): 0.2798 | Val Acc: 0.9200
+  Modelo guardado (best_auc)
+  Early stopping en época 11 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9200
+    balanced_accuracy: 0.7559
+    precision_malignant: 0.6667
+    recall_malignant: 0.5455
+    specificity: 0.9663
+    f1_malignant: 0.6000
+    roc_auc: 0.8989
+    average_precision: 0.6537
+    confusion_matrix: [[172, 6], [10, 12]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 11
+  Early stopped: True (época 11)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_1/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (3 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 2 de 5 (configs/splits/cv_folds_e2.csv)
+  --lr-schedule: warmup_cosine
+  --warmup-epochs: 1.0
+  --cosine-epochs: 15.0
+  --lr-min: 1e-06
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_2
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5610, 4.5977], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6979 | Train Acc: 0.6338 | Val Loss(w): 0.6365 | Val Loss(uw): 0.6369 | Val Acc: 0.5800
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6298 | Train Acc: 0.7675 | Val Loss(w): 0.6976 | Val Loss(uw): 0.8180 | Val Acc: 0.4600
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5442 | Train Acc: 0.6813 | Val Loss(w): 0.6199 | Val Loss(uw): 0.3299 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4296 | Train Acc: 0.8400 | Val Loss(w): 0.5354 | Val Loss(uw): 0.6650 | Val Acc: 0.6650
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2593 | Train Acc: 0.9213 | Val Loss(w): 0.4518 | Val Loss(uw): 0.4274 | Val Acc: 0.8000
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1868 | Train Acc: 0.9113 | Val Loss(w): 0.3912 | Val Loss(uw): 0.2687 | Val Acc: 0.8750
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1395 | Train Acc: 0.9613 | Val Loss(w): 0.4307 | Val Loss(uw): 0.2479 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0877 | Train Acc: 0.9762 | Val Loss(w): 0.3779 | Val Loss(uw): 0.3021 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0659 | Train Acc: 0.9838 | Val Loss(w): 0.3174 | Val Loss(uw): 0.2048 | Val Acc: 0.9300
+  Modelo guardado (best_auc)
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0328 | Train Acc: 0.9950 | Val Loss(w): 0.3902 | Val Loss(uw): 0.1884 | Val Acc: 0.9300
+  Modelo guardado (best_auc)
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0296 | Train Acc: 0.9950 | Val Loss(w): 0.4006 | Val Loss(uw): 0.2057 | Val Acc: 0.9250
+Epoch 12/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0262 | Train Acc: 0.9962 | Val Loss(w): 0.3493 | Val Loss(uw): 0.1936 | Val Acc: 0.9250
+Epoch 13/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0238 | Train Acc: 0.9900 | Val Loss(w): 0.4083 | Val Loss(uw): 0.2048 | Val Acc: 0.9300
+Epoch 14/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0178 | Train Acc: 0.9988 | Val Loss(w): 0.4570 | Val Loss(uw): 0.2102 | Val Acc: 0.9250
+  Early stopping en época 14 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9300
+    balanced_accuracy: 0.7615
+    precision_malignant: 0.7500
+    recall_malignant: 0.5455
+    specificity: 0.9775
+    f1_malignant: 0.6316
+    roc_auc: 0.9548
+    average_precision: 0.7206
+    confusion_matrix: [[174, 4], [10, 12]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 10
+  Early stopped: True (época 14)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_2/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (4 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 3 de 5 (configs/splits/cv_folds_e2.csv)
+  --lr-schedule: warmup_cosine
+  --warmup-epochs: 1.0
+  --cosine-epochs: 15.0
+  --lr-min: 1e-06
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_3
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5610, 4.5977], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6817 | Train Acc: 0.6763 | Val Loss(w): 0.6588 | Val Loss(uw): 0.7034 | Val Acc: 0.4550
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6818 | Train Acc: 0.6550 | Val Loss(w): 0.6260 | Val Loss(uw): 0.5651 | Val Acc: 0.6850
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5658 | Train Acc: 0.6162 | Val Loss(w): 0.7294 | Val Loss(uw): 0.3444 | Val Acc: 0.8700
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5196 | Train Acc: 0.8025 | Val Loss(w): 0.5234 | Val Loss(uw): 0.5105 | Val Acc: 0.7450
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3116 | Train Acc: 0.9062 | Val Loss(w): 0.5016 | Val Loss(uw): 0.5519 | Val Acc: 0.7300
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1602 | Train Acc: 0.9325 | Val Loss(w): 0.4334 | Val Loss(uw): 0.2714 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1165 | Train Acc: 0.9613 | Val Loss(w): 0.8230 | Val Loss(uw): 0.2733 | Val Acc: 0.9050
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1015 | Train Acc: 0.9725 | Val Loss(w): 0.7611 | Val Loss(uw): 0.2618 | Val Acc: 0.9100
+  Modelo guardado (best_auc)
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0577 | Train Acc: 0.9875 | Val Loss(w): 0.6101 | Val Loss(uw): 0.2698 | Val Acc: 0.9150
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0405 | Train Acc: 0.9900 | Val Loss(w): 0.8187 | Val Loss(uw): 0.3238 | Val Acc: 0.9050
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0251 | Train Acc: 0.9975 | Val Loss(w): 0.7802 | Val Loss(uw): 0.3168 | Val Acc: 0.9050
+  Early stopping en época 11 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9100
+    balanced_accuracy: 0.6507
+    precision_malignant: 0.7000
+    recall_malignant: 0.3182
+    specificity: 0.9831
+    f1_malignant: 0.4375
+    roc_auc: 0.8948
+    average_precision: 0.6138
+    confusion_matrix: [[175, 3], [15, 7]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 8
+  Early stopped: True (época 11)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_3/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (3 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 4 de 5 (configs/splits/cv_folds_e2.csv)
+  --lr-schedule: warmup_cosine
+  --warmup-epochs: 1.0
+  --cosine-epochs: 15.0
+  --lr-min: 1e-06
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_4
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5618, 4.5455], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6829 | Train Acc: 0.6887 | Val Loss(w): 0.7327 | Val Loss(uw): 0.9053 | Val Acc: 0.3550
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6383 | Train Acc: 0.7325 | Val Loss(w): 0.6544 | Val Loss(uw): 0.4647 | Val Acc: 0.8900
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5649 | Train Acc: 0.6212 | Val Loss(w): 0.5774 | Val Loss(uw): 0.3446 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4237 | Train Acc: 0.8375 | Val Loss(w): 0.5339 | Val Loss(uw): 0.4189 | Val Acc: 0.8000
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2531 | Train Acc: 0.9175 | Val Loss(w): 0.4829 | Val Loss(uw): 0.4867 | Val Acc: 0.7700
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1461 | Train Acc: 0.9537 | Val Loss(w): 0.4944 | Val Loss(uw): 0.2765 | Val Acc: 0.8750
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0943 | Train Acc: 0.9750 | Val Loss(w): 0.4472 | Val Loss(uw): 0.3473 | Val Acc: 0.8500
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0681 | Train Acc: 0.9725 | Val Loss(w): 0.6235 | Val Loss(uw): 0.3276 | Val Acc: 0.8750
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0813 | Train Acc: 0.9712 | Val Loss(w): 0.6393 | Val Loss(uw): 0.2456 | Val Acc: 0.9100
+  Modelo guardado (best_auc)
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0359 | Train Acc: 0.9912 | Val Loss(w): 0.7478 | Val Loss(uw): 0.2889 | Val Acc: 0.9050
+  Modelo guardado (best_auc)
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0301 | Train Acc: 0.9912 | Val Loss(w): 0.6312 | Val Loss(uw): 0.2760 | Val Acc: 0.9150
+Epoch 12/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0244 | Train Acc: 0.9988 | Val Loss(w): 0.7386 | Val Loss(uw): 0.2935 | Val Acc: 0.9150
+  Early stopping en época 12 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9050
+    balanced_accuracy: 0.6107
+    precision_malignant: 0.6250
+    recall_malignant: 0.2381
+    specificity: 0.9832
+    f1_malignant: 0.3448
+    roc_auc: 0.8955
+    average_precision: 0.5261
+    confusion_matrix: [[176, 3], [16, 5]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 10
+  Early stopped: True (época 12)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_4/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (3 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 0 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_0
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5610, 4.5977], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6828 | Train Acc: 0.5863 | Val Loss(w): 0.6730 | Val Loss(uw): 0.4729 | Val Acc: 0.8300
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6177 | Train Acc: 0.6800 | Val Loss(w): 0.6380 | Val Loss(uw): 0.4363 | Val Acc: 0.8150
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5435 | Train Acc: 0.7262 | Val Loss(w): 0.6361 | Val Loss(uw): 0.7162 | Val Acc: 0.4950
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4230 | Train Acc: 0.7750 | Val Loss(w): 0.6889 | Val Loss(uw): 0.3477 | Val Acc: 0.8700
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3373 | Train Acc: 0.8638 | Val Loss(w): 0.9036 | Val Loss(uw): 0.3503 | Val Acc: 0.8800
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2361 | Train Acc: 0.9175 | Val Loss(w): 0.8308 | Val Loss(uw): 0.3414 | Val Acc: 0.8900
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1686 | Train Acc: 0.9487 | Val Loss(w): 0.8491 | Val Loss(uw): 0.3183 | Val Acc: 0.9200
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1243 | Train Acc: 0.9575 | Val Loss(w): 1.0191 | Val Loss(uw): 0.3591 | Val Acc: 0.9200
+  Early stopping en época 8 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9200
+    balanced_accuracy: 0.7360
+    precision_malignant: 0.6875
+    recall_malignant: 0.5000
+    specificity: 0.9719
+    f1_malignant: 0.5789
+    roc_auc: 0.7886
+    average_precision: 0.5345
+    confusion_matrix: [[173, 5], [11, 11]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 7
+  Early stopped: True (época 8)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_0/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (2 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 1 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_1
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5610, 4.5977], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.7008 | Train Acc: 0.6050 | Val Loss(w): 0.6307 | Val Loss(uw): 0.6408 | Val Acc: 0.4800
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6327 | Train Acc: 0.6488 | Val Loss(w): 0.5571 | Val Loss(uw): 0.4465 | Val Acc: 0.8050
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4449 | Train Acc: 0.8738 | Val Loss(w): 0.6170 | Val Loss(uw): 0.7637 | Val Acc: 0.6000
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4165 | Train Acc: 0.8050 | Val Loss(w): 0.5520 | Val Loss(uw): 0.4227 | Val Acc: 0.8200
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3256 | Train Acc: 0.8812 | Val Loss(w): 0.5089 | Val Loss(uw): 0.4783 | Val Acc: 0.7700
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2125 | Train Acc: 0.9137 | Val Loss(w): 0.5634 | Val Loss(uw): 0.5955 | Val Acc: 0.7250
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1151 | Train Acc: 0.9675 | Val Loss(w): 0.5622 | Val Loss(uw): 0.4800 | Val Acc: 0.7850
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1256 | Train Acc: 0.9475 | Val Loss(w): 0.6744 | Val Loss(uw): 0.2741 | Val Acc: 0.9150
+  Modelo guardado (best_auc)
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0951 | Train Acc: 0.9637 | Val Loss(w): 0.7947 | Val Loss(uw): 0.3711 | Val Acc: 0.8600
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1059 | Train Acc: 0.9663 | Val Loss(w): 0.6359 | Val Loss(uw): 0.2657 | Val Acc: 0.9200
+  Modelo guardado (best_auc)
+  Early stopping en época 10 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9200
+    balanced_accuracy: 0.7957
+    precision_malignant: 0.6364
+    recall_malignant: 0.6364
+    specificity: 0.9551
+    f1_malignant: 0.6364
+    roc_auc: 0.8907
+    average_precision: 0.6291
+    confusion_matrix: [[170, 8], [8, 14]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 10
+  Early stopped: True (época 10)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_1/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (3 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 2 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_2
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5610, 4.5977], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.7147 | Train Acc: 0.6238 | Val Loss(w): 0.6454 | Val Loss(uw): 0.4999 | Val Acc: 0.8400
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6295 | Train Acc: 0.6725 | Val Loss(w): 0.5254 | Val Loss(uw): 0.4045 | Val Acc: 0.8500
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5682 | Train Acc: 0.7350 | Val Loss(w): 0.5974 | Val Loss(uw): 0.6986 | Val Acc: 0.5200
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5268 | Train Acc: 0.7025 | Val Loss(w): 0.5021 | Val Loss(uw): 0.3307 | Val Acc: 0.8800
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4287 | Train Acc: 0.8263 | Val Loss(w): 0.4688 | Val Loss(uw): 0.2660 | Val Acc: 0.9100
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3055 | Train Acc: 0.8812 | Val Loss(w): 0.4070 | Val Loss(uw): 0.2637 | Val Acc: 0.9000
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1371 | Train Acc: 0.9525 | Val Loss(w): 0.3351 | Val Loss(uw): 0.2539 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1713 | Train Acc: 0.9537 | Val Loss(w): 0.4090 | Val Loss(uw): 0.2483 | Val Acc: 0.8900
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0624 | Train Acc: 0.9812 | Val Loss(w): 0.2732 | Val Loss(uw): 0.1696 | Val Acc: 0.9350
+  Modelo guardado (best_auc)
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0333 | Train Acc: 0.9875 | Val Loss(w): 0.3267 | Val Loss(uw): 0.2360 | Val Acc: 0.9100
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0657 | Train Acc: 0.9812 | Val Loss(w): 0.4977 | Val Loss(uw): 0.2976 | Val Acc: 0.9050
+Epoch 12/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0825 | Train Acc: 0.9712 | Val Loss(w): 1.0943 | Val Loss(uw): 0.3814 | Val Acc: 0.9250
+Epoch 13/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0411 | Train Acc: 0.9838 | Val Loss(w): 0.4564 | Val Loss(uw): 0.5702 | Val Acc: 0.8350
+Epoch 14/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1515 | Train Acc: 0.9387 | Val Loss(w): 0.7834 | Val Loss(uw): 0.2731 | Val Acc: 0.9200
+  Early stopping en época 14 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9350
+    balanced_accuracy: 0.8041
+    precision_malignant: 0.7368
+    recall_malignant: 0.6364
+    specificity: 0.9719
+    f1_malignant: 0.6829
+    roc_auc: 0.9459
+    average_precision: 0.7543
+    confusion_matrix: [[173, 5], [8, 14]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 9
+  Early stopped: True (época 14)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_2/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (4 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 3 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_3
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5610, 4.5977], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.7199 | Train Acc: 0.5587 | Val Loss(w): 0.6298 | Val Loss(uw): 0.5877 | Val Acc: 0.7150
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6391 | Train Acc: 0.7000 | Val Loss(w): 0.6120 | Val Loss(uw): 0.3720 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5377 | Train Acc: 0.7825 | Val Loss(w): 0.5132 | Val Loss(uw): 0.5399 | Val Acc: 0.7400
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4546 | Train Acc: 0.8462 | Val Loss(w): 0.4532 | Val Loss(uw): 0.3871 | Val Acc: 0.8450
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2829 | Train Acc: 0.9012 | Val Loss(w): 0.4560 | Val Loss(uw): 0.4618 | Val Acc: 0.8050
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2101 | Train Acc: 0.9113 | Val Loss(w): 0.3798 | Val Loss(uw): 0.3517 | Val Acc: 0.8650
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1692 | Train Acc: 0.9613 | Val Loss(w): 0.3712 | Val Loss(uw): 0.2382 | Val Acc: 0.9200
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0817 | Train Acc: 0.9762 | Val Loss(w): 0.6846 | Val Loss(uw): 0.2460 | Val Acc: 0.9150
+  Modelo guardado (best_auc)
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0472 | Train Acc: 0.9888 | Val Loss(w): 0.5869 | Val Loss(uw): 0.2256 | Val Acc: 0.9200
+  Modelo guardado (best_auc)
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0625 | Train Acc: 0.9725 | Val Loss(w): 0.7534 | Val Loss(uw): 0.3797 | Val Acc: 0.8950
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1230 | Train Acc: 0.9688 | Val Loss(w): 0.4663 | Val Loss(uw): 0.3660 | Val Acc: 0.8750
+Epoch 12/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0519 | Train Acc: 0.9775 | Val Loss(w): 1.0342 | Val Loss(uw): 0.3386 | Val Acc: 0.9000
+  Early stopping en época 12 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9200
+    balanced_accuracy: 0.7360
+    precision_malignant: 0.6875
+    recall_malignant: 0.5000
+    specificity: 0.9719
+    f1_malignant: 0.5789
+    roc_auc: 0.9234
+    average_precision: 0.7225
+    confusion_matrix: [[173, 5], [11, 11]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 9
+  Early stopped: True (época 12)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_3/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (3 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 4 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_4
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5618, 4.5455], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.7349 | Train Acc: 0.4725 | Val Loss(w): 0.6555 | Val Loss(uw): 0.5323 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6857 | Train Acc: 0.6388 | Val Loss(w): 0.6409 | Val Loss(uw): 0.5946 | Val Acc: 0.6950
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6436 | Train Acc: 0.7588 | Val Loss(w): 0.6247 | Val Loss(uw): 0.6964 | Val Acc: 0.5650
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5468 | Train Acc: 0.7238 | Val Loss(w): 0.5277 | Val Loss(uw): 0.5057 | Val Acc: 0.7300
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4414 | Train Acc: 0.8375 | Val Loss(w): 0.5540 | Val Loss(uw): 0.4293 | Val Acc: 0.8050
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3306 | Train Acc: 0.8675 | Val Loss(w): 0.5068 | Val Loss(uw): 0.5019 | Val Acc: 0.7750
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2511 | Train Acc: 0.9100 | Val Loss(w): 0.5824 | Val Loss(uw): 0.3535 | Val Acc: 0.8300
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1642 | Train Acc: 0.9375 | Val Loss(w): 0.5559 | Val Loss(uw): 0.3491 | Val Acc: 0.8400
+  Modelo guardado (best_auc)
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2047 | Train Acc: 0.9113 | Val Loss(w): 0.4854 | Val Loss(uw): 0.6132 | Val Acc: 0.7050
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1835 | Train Acc: 0.9275 | Val Loss(w): 0.9910 | Val Loss(uw): 0.3169 | Val Acc: 0.8950
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1467 | Train Acc: 0.9375 | Val Loss(w): 0.5019 | Val Loss(uw): 0.4182 | Val Acc: 0.7750
+Epoch 12/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0861 | Train Acc: 0.9650 | Val Loss(w): 1.0422 | Val Loss(uw): 0.3511 | Val Acc: 0.9050
+  Modelo guardado (best_auc)
+Epoch 13/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0600 | Train Acc: 0.9775 | Val Loss(w): 1.1976 | Val Loss(uw): 0.4132 | Val Acc: 0.9150
+Epoch 14/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0427 | Train Acc: 0.9925 | Val Loss(w): 1.0357 | Val Loss(uw): 0.3771 | Val Acc: 0.9000
+  Modelo guardado (best_auc)
+  Early stopping en época 14 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9000
+    balanced_accuracy: 0.5869
+    precision_malignant: 0.5714
+    recall_malignant: 0.1905
+    specificity: 0.9832
+    f1_malignant: 0.2857
+    roc_auc: 0.8912
+    average_precision: 0.5604
+    confusion_matrix: [[176, 3], [17, 4]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 14
+  Early stopped: True (época 14)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_4/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (3 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 0 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_0
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5610, 4.5977], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.7218 | Train Acc: 0.7362 | Val Loss(w): 0.6800 | Val Loss(uw): 0.6859 | Val Acc: 0.4500
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6545 | Train Acc: 0.6412 | Val Loss(w): 0.7531 | Val Loss(uw): 0.8913 | Val Acc: 0.1600
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6475 | Train Acc: 0.6000 | Val Loss(w): 0.6997 | Val Loss(uw): 0.4201 | Val Acc: 0.8850
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5773 | Train Acc: 0.7262 | Val Loss(w): 0.5932 | Val Loss(uw): 0.5418 | Val Acc: 0.7200
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3983 | Train Acc: 0.8300 | Val Loss(w): 0.6439 | Val Loss(uw): 0.5246 | Val Acc: 0.7200
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2900 | Train Acc: 0.8788 | Val Loss(w): 0.7191 | Val Loss(uw): 0.4709 | Val Acc: 0.8050
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2055 | Train Acc: 0.9263 | Val Loss(w): 0.9614 | Val Loss(uw): 0.3106 | Val Acc: 0.9000
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1563 | Train Acc: 0.9400 | Val Loss(w): 0.9375 | Val Loss(uw): 0.3456 | Val Acc: 0.9200
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1258 | Train Acc: 0.9587 | Val Loss(w): 0.6684 | Val Loss(uw): 0.5037 | Val Acc: 0.8100
+  Early stopping en época 9 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9000
+    balanced_accuracy: 0.5853
+    precision_malignant: 0.6667
+    recall_malignant: 0.1818
+    specificity: 0.9888
+    f1_malignant: 0.2857
+    roc_auc: 0.8378
+    average_precision: 0.5287
+    confusion_matrix: [[176, 2], [18, 4]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 7
+  Early stopped: True (época 9)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_0/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (2 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 1 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_1
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5610, 4.5977], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.7674 | Train Acc: 0.7037 | Val Loss(w): 0.6542 | Val Loss(uw): 0.6754 | Val Acc: 0.5050
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6921 | Train Acc: 0.6913 | Val Loss(w): 0.6238 | Val Loss(uw): 0.5874 | Val Acc: 0.7050
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6174 | Train Acc: 0.5763 | Val Loss(w): 0.6151 | Val Loss(uw): 0.3693 | Val Acc: 0.8700
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5162 | Train Acc: 0.7738 | Val Loss(w): 0.5885 | Val Loss(uw): 0.7143 | Val Acc: 0.5750
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4292 | Train Acc: 0.7887 | Val Loss(w): 0.5305 | Val Loss(uw): 0.6401 | Val Acc: 0.6400
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2410 | Train Acc: 0.9025 | Val Loss(w): 0.9249 | Val Loss(uw): 0.2849 | Val Acc: 0.9050
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2086 | Train Acc: 0.9225 | Val Loss(w): 0.6503 | Val Loss(uw): 0.3365 | Val Acc: 0.8500
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1848 | Train Acc: 0.9350 | Val Loss(w): 0.7579 | Val Loss(uw): 0.2854 | Val Acc: 0.9100
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1035 | Train Acc: 0.9587 | Val Loss(w): 1.0200 | Val Loss(uw): 0.3447 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1174 | Train Acc: 0.9637 | Val Loss(w): 0.6814 | Val Loss(uw): 0.4667 | Val Acc: 0.8250
+  Early stopping en época 10 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.8950
+    balanced_accuracy: 0.6422
+    precision_malignant: 0.5385
+    recall_malignant: 0.3182
+    specificity: 0.9663
+    f1_malignant: 0.4000
+    roc_auc: 0.8769
+    average_precision: 0.5069
+    confusion_matrix: [[172, 6], [15, 7]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 9
+  Early stopped: True (época 10)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_1/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (3 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 2 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_2
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5610, 4.5977], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.7428 | Train Acc: 0.6400 | Val Loss(w): 0.7078 | Val Loss(uw): 0.7828 | Val Acc: 0.3900
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6706 | Train Acc: 0.6438 | Val Loss(w): 0.6056 | Val Loss(uw): 0.5062 | Val Acc: 0.8300
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6350 | Train Acc: 0.5887 | Val Loss(w): 0.5888 | Val Loss(uw): 0.4296 | Val Acc: 0.8450
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6383 | Train Acc: 0.7025 | Val Loss(w): 0.5474 | Val Loss(uw): 0.5775 | Val Acc: 0.6400
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4980 | Train Acc: 0.7775 | Val Loss(w): 0.6648 | Val Loss(uw): 0.8593 | Val Acc: 0.5350
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3881 | Train Acc: 0.8100 | Val Loss(w): 0.4980 | Val Loss(uw): 0.2990 | Val Acc: 0.8600
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2723 | Train Acc: 0.9250 | Val Loss(w): 0.5152 | Val Loss(uw): 0.3046 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2042 | Train Acc: 0.9263 | Val Loss(w): 0.4228 | Val Loss(uw): 0.2911 | Val Acc: 0.8850
+  Modelo guardado (best_auc)
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0898 | Train Acc: 0.9775 | Val Loss(w): 0.3656 | Val Loss(uw): 0.1915 | Val Acc: 0.9300
+  Modelo guardado (best_auc)
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0608 | Train Acc: 0.9725 | Val Loss(w): 0.9265 | Val Loss(uw): 0.3131 | Val Acc: 0.9100
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0571 | Train Acc: 0.9775 | Val Loss(w): 0.4876 | Val Loss(uw): 0.2128 | Val Acc: 0.9300
+Epoch 12/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0498 | Train Acc: 0.9825 | Val Loss(w): 0.7635 | Val Loss(uw): 0.2370 | Val Acc: 0.9150
+Epoch 13/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0884 | Train Acc: 0.9663 | Val Loss(w): 1.1455 | Val Loss(uw): 0.3880 | Val Acc: 0.8900
+Epoch 14/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0777 | Train Acc: 0.9788 | Val Loss(w): 1.1151 | Val Loss(uw): 0.3916 | Val Acc: 0.9150
+  Early stopping en época 14 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9300
+    balanced_accuracy: 0.7416
+    precision_malignant: 0.7857
+    recall_malignant: 0.5000
+    specificity: 0.9831
+    f1_malignant: 0.6111
+    roc_auc: 0.9471
+    average_precision: 0.6953
+    confusion_matrix: [[175, 3], [11, 11]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 9
+  Early stopped: True (época 14)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_2/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (4 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 3 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_3
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5610, 4.5977], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.7245 | Train Acc: 0.5850 | Val Loss(w): 0.6716 | Val Loss(uw): 0.7199 | Val Acc: 0.4050
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6829 | Train Acc: 0.6837 | Val Loss(w): 0.6714 | Val Loss(uw): 0.6921 | Val Acc: 0.4800
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5838 | Train Acc: 0.5763 | Val Loss(w): 0.8305 | Val Loss(uw): 0.3491 | Val Acc: 0.8850
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6190 | Train Acc: 0.7550 | Val Loss(w): 0.5438 | Val Loss(uw): 0.5100 | Val Acc: 0.7850
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4445 | Train Acc: 0.7837 | Val Loss(w): 0.5208 | Val Loss(uw): 0.5418 | Val Acc: 0.7200
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2628 | Train Acc: 0.8988 | Val Loss(w): 0.4540 | Val Loss(uw): 0.3958 | Val Acc: 0.8350
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1913 | Train Acc: 0.9387 | Val Loss(w): 0.4950 | Val Loss(uw): 0.2583 | Val Acc: 0.9000
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2737 | Train Acc: 0.9038 | Val Loss(w): 0.5929 | Val Loss(uw): 0.4073 | Val Acc: 0.8350
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1908 | Train Acc: 0.9413 | Val Loss(w): 0.5405 | Val Loss(uw): 0.2906 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1105 | Train Acc: 0.9613 | Val Loss(w): 0.6637 | Val Loss(uw): 0.2844 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0484 | Train Acc: 0.9875 | Val Loss(w): 1.0405 | Val Loss(uw): 0.3602 | Val Acc: 0.8950
+  Early stopping en época 11 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.8950
+    balanced_accuracy: 0.6622
+    precision_malignant: 0.5333
+    recall_malignant: 0.3636
+    specificity: 0.9607
+    f1_malignant: 0.4324
+    roc_auc: 0.8897
+    average_precision: 0.5058
+    confusion_matrix: [[171, 7], [14, 8]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 10
+  Early stopped: True (época 11)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_3/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (3 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 4 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_4
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.5618, 4.5455], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.7349 | Train Acc: 0.6238 | Val Loss(w): 0.7419 | Val Loss(uw): 0.8911 | Val Acc: 0.3400
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.6339 | Train Acc: 0.6400 | Val Loss(w): 0.6933 | Val Loss(uw): 0.7857 | Val Acc: 0.4250
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5397 | Train Acc: 0.7050 | Val Loss(w): 0.7128 | Val Loss(uw): 0.3026 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5187 | Train Acc: 0.7800 | Val Loss(w): 0.5588 | Val Loss(uw): 0.3901 | Val Acc: 0.8550
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3482 | Train Acc: 0.8850 | Val Loss(w): 0.5427 | Val Loss(uw): 0.3604 | Val Acc: 0.8400
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2219 | Train Acc: 0.9313 | Val Loss(w): 0.5208 | Val Loss(uw): 0.6246 | Val Acc: 0.7000
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2335 | Train Acc: 0.8988 | Val Loss(w): 0.6064 | Val Loss(uw): 0.4131 | Val Acc: 0.8300
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1251 | Train Acc: 0.9587 | Val Loss(w): 0.7514 | Val Loss(uw): 0.3766 | Val Acc: 0.8650
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1803 | Train Acc: 0.9200 | Val Loss(w): 0.7273 | Val Loss(uw): 0.6525 | Val Acc: 0.6900
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2609 | Train Acc: 0.9050 | Val Loss(w): 0.3854 | Val Loss(uw): 0.3788 | Val Acc: 0.8200
+  Modelo guardado (best_auc)
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0910 | Train Acc: 0.9712 | Val Loss(w): 1.1280 | Val Loss(uw): 0.3544 | Val Acc: 0.9250
+Epoch 12/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0478 | Train Acc: 0.9888 | Val Loss(w): 0.6933 | Val Loss(uw): 0.2634 | Val Acc: 0.9350
+  Modelo guardado (best_auc)
+Epoch 13/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0297 | Train Acc: 0.9888 | Val Loss(w): 0.5875 | Val Loss(uw): 0.2868 | Val Acc: 0.9050
+Epoch 14/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0431 | Train Acc: 0.9838 | Val Loss(w): 0.9948 | Val Loss(uw): 0.3217 | Val Acc: 0.9300
+Epoch 15/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0732 | Train Acc: 0.9762 | Val Loss(w): 0.4985 | Val Loss(uw): 0.4179 | Val Acc: 0.8350
+  Modelo guardado (best_auc)
+  Early stopping en época 15 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.8350
+    balanced_accuracy: 0.8027
+    precision_malignant: 0.3636
+    recall_malignant: 0.7619
+    specificity: 0.8436
+    f1_malignant: 0.4923
+    roc_auc: 0.8955
+    average_precision: 0.5702
+    confusion_matrix: [[151, 28], [5, 16]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 15
+  Early stopped: True (época 15)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_4/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (4 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 0 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_0
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.8315, 2.3805], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5617 | Train Acc: 0.8325 | Val Loss(w): 0.5047 | Val Loss(uw): 0.3631 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5081 | Train Acc: 0.8650 | Val Loss(w): 0.5235 | Val Loss(uw): 0.3598 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4264 | Train Acc: 0.8788 | Val Loss(w): 0.4748 | Val Loss(uw): 0.3977 | Val Acc: 0.8450
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3176 | Train Acc: 0.9250 | Val Loss(w): 0.4831 | Val Loss(uw): 0.2906 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2262 | Train Acc: 0.9387 | Val Loss(w): 0.4754 | Val Loss(uw): 0.2948 | Val Acc: 0.9100
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1368 | Train Acc: 0.9637 | Val Loss(w): 0.4871 | Val Loss(uw): 0.3590 | Val Acc: 0.8800
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0934 | Train Acc: 0.9738 | Val Loss(w): 0.5180 | Val Loss(uw): 0.3227 | Val Acc: 0.9100
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1307 | Train Acc: 0.9663 | Val Loss(w): 0.6299 | Val Loss(uw): 0.3651 | Val Acc: 0.8950
+  Early stopping en época 8 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9100
+    balanced_accuracy: 0.7503
+    precision_malignant: 0.6000
+    recall_malignant: 0.5455
+    specificity: 0.9551
+    f1_malignant: 0.5714
+    roc_auc: 0.8233
+    average_precision: 0.5842
+    confusion_matrix: [[170, 8], [10, 12]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 7
+  Early stopped: True (época 8)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_0/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (2 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 1 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_1
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.8315, 2.3805], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5771 | Train Acc: 0.8812 | Val Loss(w): 0.5103 | Val Loss(uw): 0.4111 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4954 | Train Acc: 0.8788 | Val Loss(w): 0.4822 | Val Loss(uw): 0.3227 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3700 | Train Acc: 0.9150 | Val Loss(w): 0.4855 | Val Loss(uw): 0.4592 | Val Acc: 0.7150
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3301 | Train Acc: 0.8812 | Val Loss(w): 0.4239 | Val Loss(uw): 0.3577 | Val Acc: 0.8100
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2578 | Train Acc: 0.9313 | Val Loss(w): 0.3732 | Val Loss(uw): 0.2786 | Val Acc: 0.8700
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1659 | Train Acc: 0.9663 | Val Loss(w): 0.4062 | Val Loss(uw): 0.3668 | Val Acc: 0.8350
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0695 | Train Acc: 0.9875 | Val Loss(w): 0.4799 | Val Loss(uw): 0.4083 | Val Acc: 0.8450
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0755 | Train Acc: 0.9800 | Val Loss(w): 0.4665 | Val Loss(uw): 0.3026 | Val Acc: 0.9150
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0516 | Train Acc: 0.9838 | Val Loss(w): 0.5217 | Val Loss(uw): 0.2597 | Val Acc: 0.9300
+  Modelo guardado (best_auc)
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0477 | Train Acc: 0.9900 | Val Loss(w): 0.5115 | Val Loss(uw): 0.2636 | Val Acc: 0.9050
+  Early stopping en época 10 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9300
+    balanced_accuracy: 0.7017
+    precision_malignant: 0.9000
+    recall_malignant: 0.4091
+    specificity: 0.9944
+    f1_malignant: 0.5625
+    roc_auc: 0.9119
+    average_precision: 0.6877
+    confusion_matrix: [[177, 1], [13, 9]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 9
+  Early stopped: True (época 10)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_1/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (3 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 2 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_2
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.8315, 2.3805], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5807 | Train Acc: 0.8612 | Val Loss(w): 0.5080 | Val Loss(uw): 0.3744 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5080 | Train Acc: 0.8788 | Val Loss(w): 0.4685 | Val Loss(uw): 0.3213 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4854 | Train Acc: 0.8875 | Val Loss(w): 0.4872 | Val Loss(uw): 0.3754 | Val Acc: 0.8800
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4198 | Train Acc: 0.8800 | Val Loss(w): 0.3910 | Val Loss(uw): 0.2695 | Val Acc: 0.9050
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3391 | Train Acc: 0.9125 | Val Loss(w): 0.3550 | Val Loss(uw): 0.2748 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2051 | Train Acc: 0.9475 | Val Loss(w): 0.2998 | Val Loss(uw): 0.2609 | Val Acc: 0.8850
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0960 | Train Acc: 0.9800 | Val Loss(w): 0.3181 | Val Loss(uw): 0.2946 | Val Acc: 0.8700
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1087 | Train Acc: 0.9750 | Val Loss(w): 0.3567 | Val Loss(uw): 0.3067 | Val Acc: 0.8750
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0788 | Train Acc: 0.9825 | Val Loss(w): 0.2953 | Val Loss(uw): 0.2438 | Val Acc: 0.9050
+  Modelo guardado (best_auc)
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0506 | Train Acc: 0.9875 | Val Loss(w): 0.4227 | Val Loss(uw): 0.4156 | Val Acc: 0.8300
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0571 | Train Acc: 0.9862 | Val Loss(w): 0.4450 | Val Loss(uw): 0.3818 | Val Acc: 0.8550
+Epoch 12/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0499 | Train Acc: 0.9850 | Val Loss(w): 0.5888 | Val Loss(uw): 0.3425 | Val Acc: 0.9300
+Epoch 13/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0427 | Train Acc: 0.9938 | Val Loss(w): 0.3405 | Val Loss(uw): 0.3156 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 14/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0437 | Train Acc: 0.9838 | Val Loss(w): 0.3516 | Val Loss(uw): 0.2310 | Val Acc: 0.9400
+  Modelo guardado (best_auc)
+  Early stopping en época 14 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9400
+    balanced_accuracy: 0.7472
+    precision_malignant: 0.9167
+    recall_malignant: 0.5000
+    specificity: 0.9944
+    f1_malignant: 0.6471
+    roc_auc: 0.9323
+    average_precision: 0.7100
+    confusion_matrix: [[177, 1], [11, 11]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 14
+  Early stopped: True (época 14)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_2/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (3 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 3 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_3
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.8315, 2.3805], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5663 | Train Acc: 0.8712 | Val Loss(w): 0.4751 | Val Loss(uw): 0.3324 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5358 | Train Acc: 0.8775 | Val Loss(w): 0.4695 | Val Loss(uw): 0.3526 | Val Acc: 0.8850
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4336 | Train Acc: 0.8912 | Val Loss(w): 0.4102 | Val Loss(uw): 0.3177 | Val Acc: 0.8450
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3624 | Train Acc: 0.9012 | Val Loss(w): 0.4015 | Val Loss(uw): 0.2578 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2276 | Train Acc: 0.9537 | Val Loss(w): 0.4512 | Val Loss(uw): 0.3078 | Val Acc: 0.8600
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1507 | Train Acc: 0.9650 | Val Loss(w): 0.4509 | Val Loss(uw): 0.3774 | Val Acc: 0.8500
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0962 | Train Acc: 0.9700 | Val Loss(w): 0.3865 | Val Loss(uw): 0.2861 | Val Acc: 0.8850
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0863 | Train Acc: 0.9775 | Val Loss(w): 0.5203 | Val Loss(uw): 0.3011 | Val Acc: 0.9250
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0303 | Train Acc: 0.9950 | Val Loss(w): 0.5162 | Val Loss(uw): 0.3946 | Val Acc: 0.9000
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0736 | Train Acc: 0.9812 | Val Loss(w): 0.5675 | Val Loss(uw): 0.3258 | Val Acc: 0.8950
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0370 | Train Acc: 0.9925 | Val Loss(w): 0.6336 | Val Loss(uw): 0.3551 | Val Acc: 0.9150
+Epoch 12/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0230 | Train Acc: 0.9938 | Val Loss(w): 0.6472 | Val Loss(uw): 0.3758 | Val Acc: 0.9150
+  Early stopping en época 12 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.8850
+    balanced_accuracy: 0.7561
+    precision_malignant: 0.4815
+    recall_malignant: 0.5909
+    specificity: 0.9213
+    f1_malignant: 0.5306
+    roc_auc: 0.8892
+    average_precision: 0.5286
+    confusion_matrix: [[164, 14], [9, 13]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 7
+  Early stopped: True (época 12)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_3/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (3 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 4 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_4
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.8313, 2.3647], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5648 | Train Acc: 0.8812 | Val Loss(w): 0.4652 | Val Loss(uw): 0.3485 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4763 | Train Acc: 0.8762 | Val Loss(w): 0.4411 | Val Loss(uw): 0.2924 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3690 | Train Acc: 0.9337 | Val Loss(w): 0.3656 | Val Loss(uw): 0.3080 | Val Acc: 0.8700
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2060 | Train Acc: 0.9437 | Val Loss(w): 0.3965 | Val Loss(uw): 0.3542 | Val Acc: 0.8500
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2055 | Train Acc: 0.9575 | Val Loss(w): 0.2979 | Val Loss(uw): 0.2626 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1099 | Train Acc: 0.9688 | Val Loss(w): 0.3133 | Val Loss(uw): 0.2412 | Val Acc: 0.9100
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0836 | Train Acc: 0.9825 | Val Loss(w): 0.5322 | Val Loss(uw): 0.3029 | Val Acc: 0.9100
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0455 | Train Acc: 0.9888 | Val Loss(w): 0.5680 | Val Loss(uw): 0.3496 | Val Acc: 0.9150
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0325 | Train Acc: 0.9925 | Val Loss(w): 0.4853 | Val Loss(uw): 0.4045 | Val Acc: 0.8700
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0528 | Train Acc: 0.9838 | Val Loss(w): 0.6456 | Val Loss(uw): 0.3789 | Val Acc: 0.9100
+  Early stopping en época 10 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.8900
+    balanced_accuracy: 0.7914
+    precision_malignant: 0.4828
+    recall_malignant: 0.6667
+    specificity: 0.9162
+    f1_malignant: 0.5600
+    roc_auc: 0.8912
+    average_precision: 0.6064
+    confusion_matrix: [[164, 15], [7, 14]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 5
+  Early stopped: True (época 10)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_4/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (3 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 0 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_0
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.8315, 2.3805], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5600 | Train Acc: 0.8762 | Val Loss(w): 0.4877 | Val Loss(uw): 0.3955 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4631 | Train Acc: 0.8725 | Val Loss(w): 0.5851 | Val Loss(uw): 0.5605 | Val Acc: 0.6650
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3918 | Train Acc: 0.8962 | Val Loss(w): 0.5194 | Val Loss(uw): 0.3403 | Val Acc: 0.9050
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2478 | Train Acc: 0.9425 | Val Loss(w): 0.5468 | Val Loss(uw): 0.3304 | Val Acc: 0.8850
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2002 | Train Acc: 0.9475 | Val Loss(w): 0.5594 | Val Loss(uw): 0.3337 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1193 | Train Acc: 0.9675 | Val Loss(w): 0.7170 | Val Loss(uw): 0.4069 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+  Early stopping en época 6 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.8900
+    balanced_accuracy: 0.5398
+    precision_malignant: 0.5000
+    recall_malignant: 0.0909
+    specificity: 0.9888
+    f1_malignant: 0.1538
+    roc_auc: 0.8095
+    average_precision: 0.4198
+    confusion_matrix: [[176, 2], [20, 2]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 6
+  Early stopped: True (época 6)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_0/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (2 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 1 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_1
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.8315, 2.3805], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5982 | Train Acc: 0.8538 | Val Loss(w): 0.5040 | Val Loss(uw): 0.4008 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5600 | Train Acc: 0.8900 | Val Loss(w): 0.5245 | Val Loss(uw): 0.4461 | Val Acc: 0.8850
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4999 | Train Acc: 0.8850 | Val Loss(w): 0.4816 | Val Loss(uw): 0.3165 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4479 | Train Acc: 0.8900 | Val Loss(w): 0.5031 | Val Loss(uw): 0.4560 | Val Acc: 0.8100
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3539 | Train Acc: 0.8950 | Val Loss(w): 0.4247 | Val Loss(uw): 0.2814 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2564 | Train Acc: 0.9237 | Val Loss(w): 0.4905 | Val Loss(uw): 0.2503 | Val Acc: 0.9150
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1383 | Train Acc: 0.9712 | Val Loss(w): 0.4209 | Val Loss(uw): 0.2359 | Val Acc: 0.9200
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1113 | Train Acc: 0.9675 | Val Loss(w): 0.4847 | Val Loss(uw): 0.2880 | Val Acc: 0.9050
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0745 | Train Acc: 0.9788 | Val Loss(w): 0.5597 | Val Loss(uw): 0.3018 | Val Acc: 0.9100
+  Modelo guardado (best_auc)
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0607 | Train Acc: 0.9862 | Val Loss(w): 0.5830 | Val Loss(uw): 0.3367 | Val Acc: 0.8850
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0383 | Train Acc: 0.9925 | Val Loss(w): 0.5485 | Val Loss(uw): 0.2862 | Val Acc: 0.9350
+Epoch 12/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0185 | Train Acc: 0.9975 | Val Loss(w): 0.7419 | Val Loss(uw): 0.3578 | Val Acc: 0.9150
+  Early stopping en época 12 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.9100
+    balanced_accuracy: 0.6905
+    precision_malignant: 0.6429
+    recall_malignant: 0.4091
+    specificity: 0.9719
+    f1_malignant: 0.5000
+    roc_auc: 0.9160
+    average_precision: 0.5554
+    confusion_matrix: [[173, 5], [13, 9]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 9
+  Early stopped: True (época 12)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_1/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (3 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 2 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_2
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.8315, 2.3805], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5988 | Train Acc: 0.8800 | Val Loss(w): 0.5105 | Val Loss(uw): 0.3911 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5389 | Train Acc: 0.8912 | Val Loss(w): 0.4963 | Val Loss(uw): 0.3771 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5152 | Train Acc: 0.8950 | Val Loss(w): 0.4394 | Val Loss(uw): 0.3271 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4504 | Train Acc: 0.8750 | Val Loss(w): 0.4970 | Val Loss(uw): 0.4856 | Val Acc: 0.7800
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3555 | Train Acc: 0.9125 | Val Loss(w): 0.3934 | Val Loss(uw): 0.3268 | Val Acc: 0.8650
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2731 | Train Acc: 0.9313 | Val Loss(w): 0.3321 | Val Loss(uw): 0.2336 | Val Acc: 0.9000
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1876 | Train Acc: 0.9563 | Val Loss(w): 0.3334 | Val Loss(uw): 0.2548 | Val Acc: 0.9000
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1379 | Train Acc: 0.9637 | Val Loss(w): 0.3846 | Val Loss(uw): 0.3074 | Val Acc: 0.8800
+  Modelo guardado (best_auc)
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1159 | Train Acc: 0.9663 | Val Loss(w): 0.3279 | Val Loss(uw): 0.3156 | Val Acc: 0.8500
+  Modelo guardado (best_auc)
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0709 | Train Acc: 0.9812 | Val Loss(w): 0.6029 | Val Loss(uw): 0.3520 | Val Acc: 0.9150
+  Modelo guardado (best_auc)
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0515 | Train Acc: 0.9875 | Val Loss(w): 0.2856 | Val Loss(uw): 0.2488 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 12/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0274 | Train Acc: 0.9950 | Val Loss(w): 0.3927 | Val Loss(uw): 0.2559 | Val Acc: 0.9150
+Epoch 13/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0235 | Train Acc: 0.9950 | Val Loss(w): 0.4648 | Val Loss(uw): 0.2857 | Val Acc: 0.9250
+Epoch 14/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0248 | Train Acc: 0.9900 | Val Loss(w): 0.6931 | Val Loss(uw): 0.3984 | Val Acc: 0.9200
+Epoch 15/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0263 | Train Acc: 0.9925 | Val Loss(w): 0.5397 | Val Loss(uw): 0.3182 | Val Acc: 0.9350
+Epoch 16/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0169 | Train Acc: 0.9950 | Val Loss(w): 0.3330 | Val Loss(uw): 0.2717 | Val Acc: 0.9150
+  Early stopping en época 16 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.8950
+    balanced_accuracy: 0.8613
+    precision_malignant: 0.5143
+    recall_malignant: 0.8182
+    specificity: 0.9045
+    f1_malignant: 0.6316
+    roc_auc: 0.9405
+    average_precision: 0.6937
+    confusion_matrix: [[161, 17], [4, 18]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 11
+  Early stopped: True (época 16)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_2/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (4 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 3 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_3
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.8315, 2.3805], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5753 | Train Acc: 0.8788 | Val Loss(w): 0.5415 | Val Loss(uw): 0.4629 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5445 | Train Acc: 0.8900 | Val Loss(w): 0.4979 | Val Loss(uw): 0.3838 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4564 | Train Acc: 0.8962 | Val Loss(w): 0.5666 | Val Loss(uw): 0.3390 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4084 | Train Acc: 0.9050 | Val Loss(w): 0.5035 | Val Loss(uw): 0.4403 | Val Acc: 0.8000
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2576 | Train Acc: 0.9300 | Val Loss(w): 0.5266 | Val Loss(uw): 0.4338 | Val Acc: 0.8100
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1369 | Train Acc: 0.9675 | Val Loss(w): 0.4037 | Val Loss(uw): 0.2636 | Val Acc: 0.8900
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0834 | Train Acc: 0.9812 | Val Loss(w): 0.6288 | Val Loss(uw): 0.3466 | Val Acc: 0.9050
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0825 | Train Acc: 0.9850 | Val Loss(w): 0.4289 | Val Loss(uw): 0.3128 | Val Acc: 0.9000
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0636 | Train Acc: 0.9812 | Val Loss(w): 0.5957 | Val Loss(uw): 0.3296 | Val Acc: 0.9150
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0441 | Train Acc: 0.9875 | Val Loss(w): 0.5456 | Val Loss(uw): 0.3413 | Val Acc: 0.8950
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0348 | Train Acc: 0.9912 | Val Loss(w): 1.2984 | Val Loss(uw): 0.6489 | Val Acc: 0.9000
+  Early stopping en época 11 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.8900
+    balanced_accuracy: 0.6394
+    precision_malignant: 0.5000
+    recall_malignant: 0.3182
+    specificity: 0.9607
+    f1_malignant: 0.3889
+    roc_auc: 0.8657
+    average_precision: 0.5467
+    confusion_matrix: [[171, 7], [15, 7]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 6
+  Early stopped: True (época 11)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_3/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (3 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:280: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler() if _use_amp else None
+============================================================
+ENTRENAMIENTO FORMAL
+  Arquitectura: convnext_tiny
+  Condición:    A
+  Experimento:  r7_agente
+  Learning rate: 0.0001 (yaml)
+  Esquema E2:   fold 4 de 5 (configs/splits/cv_folds_e2.csv)
+  Device:       cuda
+  Output:       /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_4
+============================================================
+  Train: 800 | Validation: 200
+  Class weights: tensor([0.8313, 2.3647], device='cuda:0')
+Epoch 1/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.5860 | Train Acc: 0.8725 | Val Loss(w): 0.5057 | Val Loss(uw): 0.4521 | Val Acc: 0.8550
+  Modelo guardado (best_auc)
+Epoch 2/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.4709 | Train Acc: 0.8750 | Val Loss(w): 0.5368 | Val Loss(uw): 0.5058 | Val Acc: 0.7250
+  Modelo guardado (best_auc)
+Epoch 3/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.3639 | Train Acc: 0.8988 | Val Loss(w): 0.6431 | Val Loss(uw): 0.3687 | Val Acc: 0.8950
+  Modelo guardado (best_auc)
+Epoch 4/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.2916 | Train Acc: 0.9150 | Val Loss(w): 0.4122 | Val Loss(uw): 0.2889 | Val Acc: 0.9100
+  Modelo guardado (best_auc)
+Epoch 5/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1757 | Train Acc: 0.9600 | Val Loss(w): 0.3940 | Val Loss(uw): 0.3250 | Val Acc: 0.8700
+  Modelo guardado (best_auc)
+Epoch 6/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0905 | Train Acc: 0.9775 | Val Loss(w): 0.3817 | Val Loss(uw): 0.3430 | Val Acc: 0.8450
+  Modelo guardado (best_auc)
+Epoch 7/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0853 | Train Acc: 0.9738 | Val Loss(w): 0.6137 | Val Loss(uw): 0.3592 | Val Acc: 0.9050
+  Modelo guardado (best_auc)
+Epoch 8/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.1189 | Train Acc: 0.9537 | Val Loss(w): 0.7419 | Val Loss(uw): 0.4523 | Val Acc: 0.8900
+Epoch 9/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0713 | Train Acc: 0.9800 | Val Loss(w): 0.4394 | Val Loss(uw): 0.3247 | Val Acc: 0.8650
+  Modelo guardado (best_auc)
+Epoch 10/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0599 | Train Acc: 0.9850 | Val Loss(w): 0.8782 | Val Loss(uw): 0.4903 | Val Acc: 0.9050
+Epoch 11/30
+/home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/src/classification/train.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+  Train Loss: 0.0502 | Train Acc: 0.9850 | Val Loss(w): 0.5623 | Val Loss(uw): 0.3510 | Val Acc: 0.9200
+  Early stopping en época 11 (patience=5)
+
+Recargando best_auc.pth para evaluación formal en validation...
+
+  Métricas de validation (best):
+    accuracy: 0.8650
+    balanced_accuracy: 0.6724
+    precision_malignant: 0.3750
+    recall_malignant: 0.4286
+    specificity: 0.9162
+    f1_malignant: 0.4000
+    roc_auc: 0.8949
+    average_precision: 0.5200
+    confusion_matrix: [[164, 15], [12, 9]]
+
+  Verificación del checkpoint por AUC: OK
+
+  Época del mejor checkpoint: 9
+  Early stopped: True (época 11)
+
+Artefactos guardados en /home/jvillanueva/projects/ovarian-tumor-ultrasound-classification/results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_4/:
+  best_auc.pth (108743 KB)
+  best_auc_meta.json (0 KB)
+  fold_manifest.csv (45 KB)
+  run_config.json (2 KB)
+  training_history.json (3 KB)
+  val_predictions_best_auc.csv (6 KB)
+  validation_metrics.json (0 KB)
+
+============================================================
+COMPLETADO: convnext_tiny — Condición A
+============================================================
