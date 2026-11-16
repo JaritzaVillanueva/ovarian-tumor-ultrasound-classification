@@ -1,0 +1,873 @@
+{
+  "etapa": "R7 - brazo del agente de optimización, fase B: estudio descriptivo de la atenuación de los pesos de clase (α)",
+  "estado": "redactado el 2026-11-16 y aprobado con tres cambios por el autor; pendiente de commit del autor; ninguna corrida de la fase B ejecutada; huella de equivalencia aún no producida",
+  "version": "v1",
+  "fecha_redaccion": "2026-11-16",
+  "redaccion": "sesión principal de Claude Code (modelo claude-opus-5-5) siguiendo .claude/agents/agente-optimizacion.md; el subagente no se invocó como tal",
+  "relacion_con_la_fase_a": {
+    "fase_a": "results/classification/r7_optimizacion/agente/protocolo_agente.json (v1, commit f646cd0, enmienda E1 en 7d48f86); cerrada sin ganadora (agente/confirmacion/analisis/veredicto_confirmacion.json, veredicto_mecanico = sin_ganadora)",
+    "este_archivo_no_es_una_enmienda": "la fase B tiene protocolo propio; no modifica ninguna regla, comando, resultado ni conclusión de la fase A",
+    "r8": "no modifica results/classification/r7_optimizacion/cierre_seleccion/protocolo_r8_congelado.json; R8 sigue con B0 y B2 (6 modelos)"
+  },
+  "motivacion": {
+    "e1": "B2 (α = 0.5) supera a B0 (α = 1.0) en AP de validation E1 por +0.0701 de media (DE del Δ 0.0528; por semilla 42/43/44: +0.0153, +0.1205, +0.0744). Fuente: results/classification/r7_optimizacion/class_weights/analysis/b0_vs_b2_resumen.csv y b0_vs_b2_por_semilla.csv",
+    "e2": "en E2 no se confirma: ΔAP(B2 - B0) = -0.0431 con semilla 42 (2/5 folds), -0.0155 con el promedio de 43 y 44 (1/5, peor_consistente) y -0.0247 con el promedio de las tres semillas (1/5, peor_consistente). Fuente: agente/confirmacion/analisis/contraste_b2_vs_b0_resumen.csv",
+    "fase_a": "a03_cosine: ΔAP +0.0452 frente a B0 en la etapa 1 (4/5; agente/analisis_etapa1/resumen_delta.csv) y +0.0046 en la confirmación (3/5, no_consistente; agente/confirmacion/analisis/veredicto_confirmacion.json)",
+    "objetivo": "describir AP(α) y ROC-AUC(α) en E2 con tres semillas para entender si la mejora de B2 en E1 refleja un efecto de α o el ruido entre semillas y particiones. No es un estudio de selección."
+  },
+  "implementacion_de_alpha": {
+    "codigo": "src/classification/utils.py:5-44 (compute_class_weights): w_c ∝ n_c^(-α), normalizado para que el peso medio por muestra sea 1; α = 1.0 usa la rama original total/(K·n_c); α = 0 da [1, 1]; α fuera de [0, 1] se rechaza (también en run_experiment.py:281-283)",
+    "por_fold": "los pesos se calculan con las etiquetas de train de cada fold (run_experiment.py:471-473)",
+    "pruebas_existentes": "tests/test_classification_protocol.py:875-888 (parametrizada con α ∈ {0, 0.25, 0.5, 1}; α = 0 → [1, 1])",
+    "argumento": "--class-weight-alpha ya existe; la fase B no requiere código nuevo de entrenamiento"
+  },
+  "declaraciones_sobre_early_stopping_y_checkpoint": [
+    "El criterio de checkpoint (máximo val_roc_auc, primera época en caso de empate) no cambia.",
+    "α CAMBIA la entrada del early stopping: val_loss se calcula con el mismo criterion ponderado con los pesos de α (train.py: validation_criterion = criterion cuando val_criterion es None). Con α = 0 el early stopping se hace sobre la pérdida sin ponderar. Es lo mismo que ocurrió en B2 (α = 0.5), cuyas corridas se reutilizan; separar ambos efectos requeriría código nuevo y queda fuera de esta fase.",
+    "α desplaza la calibración de las probabilidades; AP y ROC-AUC dependen solo del orden, por eso no se comparan métricas que dependen del umbral 0.5."
+  ],
+  "espacio_de_busqueda": {
+    "tipo": "rejilla fija de 5 valores; sin refinamiento, ampliación ni búsqueda adaptativa después de ver resultados",
+    "alpha": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "justificacion": {
+      "extremos": "α = 0: entropía cruzada sin ponderar (responde si ponderar sirve para métricas de ranking); α = 1.0: B0; α = 0.5: B2. El continuo entre no reponderar y frecuencia inversa es análogo al parámetro β de Cui et al. 2019 [CITA POR VERIFICAR: el pasaje sobre β no se leyó en esta sesión]; desbalance en CNN: Buda et al. 2018",
+      "paso_0_25": "decisión del agente, sin fuente: la DE del AP entre semillas por fold es [0.0219, 0.0935, 0.0849, 0.1251, 0.0101] en B0 (media 0.0671) y [0.1211, 0.0668, 0.0499, 0.0423, 0.0720] en B2 (media 0.0704); un paso más fino no sería distinguible de ese ruido (cálculo propio con robustez_e2/analisis/metricas_por_configuracion_y_fold.csv y agente/confirmacion/analisis/metricas_por_corrida.csv)",
+      "sin_alpha_mayor_que_1": "el código lo rechaza y la señal de E1 apuntaba a atenuar, no a reforzar",
+      "rejilla_frente_a_busqueda_aleatoria": "una sola dimensión acotada y de bajo costo; la ventaja de la búsqueda aleatoria aparece con muchas dimensiones (Bergstra y Bengio 2012); refinar con estos datos ajustaría ruido"
+    }
+  },
+  "fijos": {
+    "arquitectura": "convnext_tiny",
+    "condicion": "A (imagen completa)",
+    "preentrenamiento": "pesos DEFAULT de torchvision",
+    "particion": "configs/splits/cv_folds_e2.csv (5 folds; no se crean otras)",
+    "sha256_particion_generada_localmente": "5ccf322817e8e73c3c25363f3104a4549f00ba21a2b70d8374d62af543ebea6d",
+    "semillas": [
+      42,
+      43,
+      44
+    ],
+    "optimizador": "AdamW, learning rate 1e-4 (yaml), weight decay 1e-4",
+    "lote": 32,
+    "amp": true,
+    "epocas_max": 30,
+    "early_stopping": "val_weighted_loss (ponderada con los pesos de α), patience 5, min_delta 0.001, activo",
+    "criterio_de_checkpoint": "máximo val_roc_auc del fold, primera época en caso de empate (--checkpoint-metric val_roc_auc)",
+    "umbral": 0.5,
+    "experimento": "r7_agente",
+    "sin_flags_de_la_fase_a": "ningún argumento de lr-schedule, layer-decay, drop-path, label-smoothing, augmentation, image-size ni EMA",
+    "test": "excluido por completo; ninguna corrida lo lee"
+  },
+  "reutilizacion": {
+    "alpha_1_0": {
+      "es": "B0",
+      "semilla_42": "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_{0..4}",
+      "semillas_43_44": "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_{43,44}/fold_{0..4}"
+    },
+    "alpha_0_5": {
+      "es": "B2",
+      "semilla_42": "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_{0..4}",
+      "semillas_43_44": "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_{43,44}/fold_{0..4}"
+    },
+    "corridas_reutilizadas": 30,
+    "verificacion_argumento_por_argumento": {
+      "metodo": "comparación clave por clave de los 30 run_config.json (solo lectura, 2026-11-16)",
+      "iguales_en_las_30": [
+        "architecture = convnext_tiny",
+        "condition = A",
+        "csv_path = configs/splits/cv_folds_e2.csv",
+        "image_dir = data/processed/MMOTU_OTU_2D_experimental",
+        "batch_size = 32",
+        "epochs_max = 30",
+        "learning_rate = 0.0001",
+        "learning_rate_source = yaml",
+        "weight_decay = 0.0001",
+        "optimizer = AdamW",
+        "use_amp = true",
+        "patience = 5",
+        "min_delta = 0.001",
+        "threshold = 0.5",
+        "scheduler = null",
+        "pretrained = true",
+        "freeze_backbone = false",
+        "num_classes = 2",
+        "checkpoint_criterion = max val_roc_auc (first epoch among ties)",
+        "checkpoint_file = best_auc.pth",
+        "early_stopping_criterion = val_weighted_loss (patience=5, min_delta=0.001)",
+        "evaluation_scheme = E2",
+        "fold_manifest = fold_manifest.csv",
+        "seed_source = cli_override",
+        "train_samples = 800",
+        "validation_samples = 200",
+        "history_metrics (misma lista)",
+        "val_predictions = val_predictions_best_auc.csv"
+      ],
+      "sin_claves_de_la_fase_a": "ninguna de las 30 corridas registra lr_schedule, layer_decay, drop_path_rate, label_smoothing, augmentation, image_size ni ema_decay",
+      "diferencias_esperadas": {
+        "class_weight_alpha": "ausente en B0 (α = 1.0 por defecto) y 0.5 en B2",
+        "seed": "42, 43 y 44",
+        "class_weights": "iguales entre semillas dentro de cada fold: B0 [0.5610098, 4.5977011] en los folds 0 a 3 y [0.5617977, 4.5454545] en el fold 4; B2 [0.8315488, 2.3805256] y [0.8313314, 2.3646824]. El log agente/evidencia_falcon/agente_confirmacion.log imprime 'Class weights: tensor([0.5610, 4.5977])'",
+        "campos_de_resultado": "epochs_run, epoch_best, early_stopped_at_epoch, val_*_at_best_checkpoint, val_roc_auc_best"
+      },
+      "unica_diferencia_de_configuracion": "experiment = r7_robustez_e2 (semilla 42) frente a r7_agente (43 y 44). En run_experiment.py, args.experiment solo se valida, se imprime, se registra y define la carpeta por defecto (líneas 266-363, 426 y 638); con --output-dir no afecta al entrenamiento",
+      "fold_manifest": "SHA-256 de fold_manifest.csv idéntico en las 6 corridas (B0 y B2 × 3 semillas) de cada fold, en los 5 folds",
+      "comandos": "semilla 42: robustez_e2/protocolo_robustez_e2.json (comandos_para_falcon); 43 y 44: agente/evidencia_falcon/agente_confirmacion.sh (B0 sin flags; B2 con --class-weight-alpha 0.5)"
+    },
+    "semilla_42_anterior_a_af23dc9": {
+      "hecho": "las corridas de semilla 42 de B0 y B2 se versionaron en 886acce (2026-11-11), antes de af23dc9 (2026-11-16, argumentos del agente); se toma el estado de src/ en 886acce como el código que las produjo (el run_config.json no registra el hash del código)",
+      "evidencia_estatica_verificada": [
+        "git diff --stat 886acce HEAD sobre src/classification/utils.py, dataset.py, dataloader.py, evaluate.py y configs/: vacío",
+        "git log af23dc9..HEAD sobre run_experiment.py, train.py, losses.py, models.py, transforms.py, training_options.py, utils.py, dataset.py, dataloader.py y configs/: vacío",
+        "en git diff 886acce af23dc9 cada rama nueva depende de un argumento en None o 0: build_criterion(..., label_smoothing=0.0) devuelve nn.CrossEntropyLoss(weight=...); val_criterion=None usa criterion; model_kwargs = {}; AdamW sobre model.parameters(); lr_fn = None; ema = None deja eval_model = model; get_train_transforms('standard', 224) y get_val_transforms(224) reproducen los literales anteriores (degrees 10, brillo/contraste 0.1, 224); no se consume ningún número aleatorio adicional"
+      ],
+      "huella_de_equivalencia": {
+        "estado": "pendiente; la identidad de la huella frente a 441f6c9 es una afirmación previa del autor sin archivo de respaldo (registro de trazabilidad, D-015)",
+        "condicion": "obligatoria antes de correr la fase B",
+        "como_importa_src_el_script": "tests/fingerprint_default_behavior.py ejecuta sys.path.insert(0, os.getcwd()) antes de importar src.classification: el directorio de trabajo tiene prioridad sobre PYTHONPATH. Por eso cada huella se ejecuta con cwd = PYTHONPATH = la carpeta del código a probar. src no tiene __init__.py (paquete de espacio de nombres) ni en 886acce ni en HEAD; src/classification sí lo tiene. El script solo usa API que ya existía en 886acce (build_criterion de 3 argumentos, get_train_transforms() sin argumentos, train_model con checkpoint_metric), verificado con git show 886acce",
+        "envoltorio": "un python -c ejecuta el script con runpy.run_path(run_name='__main__'), captura su salida literal y escribe un JSON con commit (git rev-parse), cwd, pythonpath, src_importado (carpeta de src.classification), modulos_src (ruta de cada módulo src.* cargado) y huella_texto (salida literal del script). Las rutas sustituyen el directorio personal por '~' para no exponer el nombre de usuario",
+        "salidas": [
+          "results/classification/r7_optimizacion/agente/fase_b_alpha/verificacion_equivalencia/huella_886acce.json",
+          "results/classification/r7_optimizacion/agente/fase_b_alpha/verificacion_equivalencia/huella_head.json",
+          "results/classification/r7_optimizacion/agente/fase_b_alpha/verificacion_equivalencia/veredicto_huella.txt"
+        ],
+        "veredicto": "se acepta la equivalencia solo si (1) src_importado difiere entre las dos salidas (~/... /tmp/huella_886acce/src/classification frente a la del repositorio), (2) todos los modulos_src de cada salida están bajo la carpeta src que contiene su src_importado y (3) huella_texto es idéntico byte a byte",
+        "alcance": "la huella es en CPU, con pretrained=False, sin AMP y no ejercita run_experiment.py; ese hueco lo cubre la evidencia estática. No se propone volver a correr B0 con semilla 42 para comparar: set_seed no fija cudnn.deterministic y una diferencia en GPU no sería interpretable"
+      },
+      "regla": "si el veredicto de la huella se cumple, se reutilizan las 30 corridas. Si no se cumple o no se aporta, se repiten B0 y B2 con semilla 42 (10 corridas de comandos.condicionales) y son esas las que entran al análisis; las corridas de semilla 42 originales no se tocan. Las corridas de 43 y 44 se generaron con el código actual (posteriores a af23dc9) y se reutilizan siempre"
+    }
+  },
+  "presupuesto": {
+    "corridas_nuevas": 45,
+    "calculo": "α ∈ {0, 0.25, 0.75} × 3 semillas × 5 folds",
+    "corridas_reutilizadas": 30,
+    "corridas_condicionales": "10 (B0 y B2, semilla 42), solo si falla la huella",
+    "maximo": 55,
+    "nada_mas": "ninguna corrida fuera de estas entra en la fase B",
+    "tiempo": {
+      "fuente": "results/classification/r7_optimizacion/agente/evidencia_falcon/fechas_originales.txt (marcas de modificación de archivo en Falcon) y conteo de épocas en los logs",
+      "confirmacion_fase_a": "de agente_confirmacion.sh (13:40:53) a agente_confirmacion.log (14:27:05) = 46.2 min para 30 corridas y 341 épocas (grep -c '^Epoch ' = 341 = suma de epocas_ejecutadas de metricas_por_corrida.csv): 1.54 min por corrida, 8.1 s por época",
+      "etapa_1_fase_a": "de agente_etapa1.sh (11:34:04) a agente_etapa1.log (12:57:56) = 83.9 min para 45 corridas y 625 épocas: 8.05 s por época (incluye a09 a 288 px)",
+      "advertencia": "son marcas de modificación de archivo, no de inicio de ejecución: el intervalo es una cota superior",
+      "estimacion_45_corridas": "≈ 70 min con la mediana de épocas de B0/B2 (11.5); ≈ 116 min con el máximo observado (19); ≈ 183 min con la cota dura de 30 épocas (8.125 s por época)",
+      "condicionales": "≈ 16 a 26 min",
+      "huella": "dos ejecuciones en CPU, del orden de minutos (no medido)"
+    },
+    "fallos": "una corrida que falla por infraestructura se repite una vez con el mismo comando; si vuelve a fallar se registra como descartada y ese α se informa como incompleto, sin imputar valores"
+  },
+  "metricas": {
+    "primaria": "average_precision (AP) en el fold de validation, en el checkpoint seleccionado",
+    "secundaria": "roc_auc en el mismo checkpoint",
+    "descriptivas": "época elegida y épocas ejecutadas"
+  },
+  "analisis_descriptivo": {
+    "unidad": "AP y ROC-AUC por (α, semilla, fold): 5 × 3 × 5 = 75 corridas",
+    "p_valor": "no se reporta p-valor, intervalo de confianza ni prueba de hipótesis, igual que en la fase A (5 folds no independientes; Bengio y Grandvalet 2004)",
+    "1_curva": "por α: tabla por fold y semilla, media de las 3 semillas por fold, media global, mínimo, máximo y DE entre semillas por fold. La forma de AP(α) y ROC-AUC(α) se describe como monótona o no monótona, sin ajustar ningún modelo. Figura 1: AP y ROC-AUC frente a α (dos paneles), media y líneas por fold",
+    "2_delta_pareado_frente_a_b0": {
+      "definicion": "Δ = métrica(α) - métrica(B0, α = 1.0), mismo fold y misma semilla, para α ∈ {0, 0.25, 0.5, 0.75}",
+      "lectura_a_por_semilla": "por semilla: media, mínimo, máximo y signos sobre los 5 folds",
+      "lectura_b_principal": "promedio de las 3 semillas por fold; Δ_k = media_s AP(α, s, k) - media_s AP(B0, s, k); regla 4/5 en ambas direcciones: mejor_consistente (Δ > 0 en al menos 4 de 5 folds), peor_consistente (Δ < 0 en al menos 4 de 5), no_consistente en otro caso; Δ = 0 no cuenta en ningún signo",
+      "lectura_c_pares": "conteo de signos sobre los 15 pares (semilla, fold)",
+      "metrica_secundaria": "ROC-AUC con los mismos estadísticos, solo descriptiva",
+      "figura": "Figura 2: ΔAP por fold y por α (lectura b)",
+      "nota": "las tres lecturas se fijan aquí porque en la fase A la combinación de semillas para B2 frente a B0 quedó como punto pendiente (veredicto_confirmacion.json, puntos_pendientes_de_decision)"
+    },
+    "3_piso_de_ruido": {
+      "definicion": "variación de una misma configuración entre semillas, en los mismos folds, agrupando B0 y B2",
+      "de_entre_semillas_por_fold": "AP: B0 [0.0219, 0.0935, 0.0849, 0.1251, 0.0101] (media 0.0671), B2 [0.1211, 0.0668, 0.0499, 0.0423, 0.0720] (media 0.0704); ROC-AUC: media 0.0220 (B0) y 0.0218 (B2)",
+      "delta_medio_entre_pares_de_semillas_AP": {
+        "B0_42_a_43": {
+          "delta_medio": 0.0686,
+          "folds_pos": 3,
+          "folds_neg": 2
+        },
+        "B0_42_a_44": {
+          "delta_medio": -0.0102,
+          "folds_pos": 3,
+          "folds_neg": 2
+        },
+        "B0_43_a_44": {
+          "delta_medio": -0.0788,
+          "folds_pos": 1,
+          "folds_neg": 4
+        },
+        "B2_42_a_43": {
+          "delta_medio": 0.0949,
+          "folds_pos": 4,
+          "folds_neg": 1
+        },
+        "B2_42_a_44": {
+          "delta_medio": 0.0186,
+          "folds_pos": 3,
+          "folds_neg": 2
+        },
+        "B2_43_a_44": {
+          "delta_medio": -0.0763,
+          "folds_pos": 1,
+          "folds_neg": 4
+        }
+      },
+      "delta_medio_entre_pares_de_semillas_ROC_AUC": "B0: -0.0090, -0.0075, +0.0015; B2: +0.0354, +0.0311, -0.0043",
+      "piso_ap": 0.0949,
+      "calculo_del_piso": "piso_ap = máximo de |media sobre los 5 folds de [AP(c, s2, k) - AP(c, s1, k)]| para c ∈ {B0, B2} y (s1, s2) ∈ {(42, 43), (42, 44), (43, 44)}: 6 pares; el máximo es B2 42→43 = +0.0949 (≈ 0.095). Cálculo propio en solo lectura sobre robustez_e2/analisis/metricas_por_configuracion_y_fold.csv (semilla 42) y agente/confirmacion/analisis/metricas_por_corrida.csv (semillas 43 y 44); el script de análisis lo recalcula y, si las 10 corridas condicionales sustituyen a las de semilla 42, el piso se recalcula con ellas",
+      "observacion": "la regla 4/5 se cumple en 3 de los 6 pares de una misma configuración (B0 43→44 y B2 43→44 con 4/5 negativos; B2 42→43 con 4/5 positivos): la regla de signo por sí sola no separa un efecto del ruido entre semillas",
+      "salida": "tabla piso_ruido.csv (sin figura propia)"
+    },
+    "4_etiqueta_de_lectura": {
+      "por_encima_del_piso": "solo si se cumplen a la vez: (i) la lectura b es mejor_consistente o peor_consistente; (ii) el Δ medio sobre folds tiene el mismo signo en cada una de las 3 semillas por separado (lectura a); (iii) |ΔAP medio| de la lectura b > piso_ap (0.0949)",
+      "dentro_del_piso_de_ruido": "cualquier otro caso",
+      "declaracion": "criterio descriptivo, no inferencial; conservador porque compara un promedio de 3 semillas con un piso calculado entre semillas individuales"
+    },
+    "5_descriptivas_de_entrenamiento": "épocas ejecutadas y época elegida frente a α (α cambia el early stopping); no se comparan sensibilidad, especificidad ni otras métricas al umbral 0.5",
+    "6_multiplicidad": "4 comparaciones frente a B0 (α = 0, 0.25, 0.5, 0.75); con hipótesis nula de que ninguna difiere de B0 y folds independientes, P(al menos una cumple 4/5 por azar) = 1 - 0.8125^4 ≈ 0.56. Aproximación gruesa: los folds no son independientes"
+  },
+  "mejor_alpha_observado": {
+    "definicion": "el α con mayor AP medio sobre 3 semillas × 5 folds entre los 5 valores de la rejilla",
+    "desempate": "si la diferencia con el máximo es < 0.005: mayor ROC-AUC medio; después, el α más cercano a 1.0",
+    "rotulo_obligatorio": "exploratorio; definido después de ver E1 y E2; no confirmado; sin datos independientes; no entra a R8",
+    "sesgo": "es el máximo de 5 estimaciones ruidosas (sesgo al alza; Cawley y Talbot 2010; Varma y Simon 2006); las 200 imágenes de validation de E1, con las que se eligió B2, están dentro de E2",
+    "no_es": "no es una ganadora, no hay regla de elección, no se reentrena en E1 y no se propone para R8"
+  },
+  "no_se_hace": [
+    "usar test",
+    "cambiar protocolo_agente.json, sus resultados o su conclusión (fase A)",
+    "cambiar protocolo_r8_congelado.json",
+    "cambiar estas reglas después de ver los resultados",
+    "refinar o ampliar la rejilla",
+    "reentrenar en E1",
+    "combinar α con a03 u otros factores",
+    "presentar el AP medio entre folds como estimación final del desempeño"
+  ],
+  "comandos": {
+    "nota": "No ejecutar hasta que este protocolo esté commiteado y el veredicto de la huella esté versionado. Raíz del repositorio en Falcon, entorno ovarian_cnn_env. Una línea por corrida; cada una escribe en su carpeta y no sobrescribe si ya contiene artefactos (sin --overwrite). Orden por semilla (42 → 43 → 44) para que una interrupción deje semillas completas.",
+    "plantilla": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed {s} --checkpoint-metric val_roc_auc --class-weight-alpha {alpha} --split-csv configs/splits/cv_folds_e2.csv --fold {k} --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/{id}/seed_{s}/fold_{k}",
+    "sustituciones": {
+      "seed": [
+        42,
+        43,
+        44
+      ],
+      "id_y_alpha": [
+        {
+          "id": "alpha_000",
+          "alpha": "0.0"
+        },
+        {
+          "id": "alpha_025",
+          "alpha": "0.25"
+        },
+        {
+          "id": "alpha_075",
+          "alpha": "0.75"
+        }
+      ],
+      "k": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "previos": [
+      "python -m src.classification.cv_folds_e2 --verify   # debe imprimir 'Coincide con la regeneración (semilla 42): sí'"
+    ],
+    "huella_de_equivalencia": [
+      "REPO=\"$(pwd)\"",
+      "OUT=\"results/classification/r7_optimizacion/agente/fase_b_alpha/verificacion_equivalencia\"",
+      "mkdir -p \"$OUT\"",
+      "rm -rf /tmp/huella_886acce && mkdir -p /tmp/huella_886acce && git archive 886acce src | tar -x -C /tmp/huella_886acce",
+      "HUELLA_PY='import io, json, os, runpy, sys, contextlib\nscript, commit = sys.argv[1], sys.argv[2]\nhome = os.path.expanduser(\"~\")\nanon = lambda p: None if p is None else p.replace(home, \"~\")\nbuf = io.StringIO()\nwith contextlib.redirect_stdout(buf):\n    runpy.run_path(script, run_name=\"__main__\")\nimport src.classification\nmods = sorted({anon(os.path.abspath(m.__file__)) for n, m in list(sys.modules.items()) if (n == \"src\" or n.startswith(\"src.\")) and getattr(m, \"__file__\", None)})\nprint(json.dumps({\"commit\": commit, \"cwd\": anon(os.getcwd()), \"pythonpath\": anon(os.environ.get(\"PYTHONPATH\")), \"src_importado\": anon(os.path.dirname(os.path.abspath(src.classification.__file__))), \"modulos_src\": mods, \"huella_texto\": buf.getvalue()}, indent=1, ensure_ascii=False))'",
+      "(cd /tmp/huella_886acce && PYTHONPATH=/tmp/huella_886acce python -c \"$HUELLA_PY\" \"$REPO/tests/fingerprint_default_behavior.py\" \"$(git -C \"$REPO\" rev-parse 886acce)\") > \"$OUT/huella_886acce.json\"",
+      "(cd \"$REPO\" && PYTHONPATH=\"$REPO\" python -c \"$HUELLA_PY\" \"$REPO/tests/fingerprint_default_behavior.py\" \"$(git -C \"$REPO\" rev-parse HEAD)\") > \"$OUT/huella_head.json\"",
+      "VEREDICTO_PY='import json, os, sys\na, b = (json.load(open(p, encoding=\"utf-8\")) for p in sys.argv[1:3])\nra, rb = a[\"src_importado\"], b[\"src_importado\"]\nprint(\"commit 886acce:\", a[\"commit\"])\nprint(\"commit HEAD:\", b[\"commit\"])\nprint(\"src importado 886acce:\", ra)\nprint(\"src importado HEAD:\", rb)\nprint(\"rutas de src distintas:\", ra != rb)\nprint(\"todos los modulos src desde su arbol src (886acce, HEAD):\", all(p.startswith(os.path.dirname(ra) + \"/\") for p in a[\"modulos_src\"]), all(p.startswith(os.path.dirname(rb) + \"/\") for p in b[\"modulos_src\"]))\nprint(\"huella identica byte a byte:\", a[\"huella_texto\"] == b[\"huella_texto\"])'",
+      "python -c \"$VEREDICTO_PY\" \"$OUT/huella_886acce.json\" \"$OUT/huella_head.json\" | tee \"$OUT/veredicto_huella.txt\""
+    ],
+    "huella_resultado_esperado": "veredicto_huella.txt: 'rutas de src distintas: True', 'todos los modulos src desde su arbol src (886acce, HEAD): True True', 'huella identica byte a byte: True'",
+    "corridas": [
+      {
+        "id": "alpha_000_seed42_fold0",
+        "config_id": "alpha_000",
+        "alpha": 0.0,
+        "seed": 42,
+        "fold": 0,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.0 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_000/seed_42/fold_0"
+      },
+      {
+        "id": "alpha_000_seed42_fold1",
+        "config_id": "alpha_000",
+        "alpha": 0.0,
+        "seed": 42,
+        "fold": 1,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.0 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_000/seed_42/fold_1"
+      },
+      {
+        "id": "alpha_000_seed42_fold2",
+        "config_id": "alpha_000",
+        "alpha": 0.0,
+        "seed": 42,
+        "fold": 2,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.0 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_000/seed_42/fold_2"
+      },
+      {
+        "id": "alpha_000_seed42_fold3",
+        "config_id": "alpha_000",
+        "alpha": 0.0,
+        "seed": 42,
+        "fold": 3,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.0 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_000/seed_42/fold_3"
+      },
+      {
+        "id": "alpha_000_seed42_fold4",
+        "config_id": "alpha_000",
+        "alpha": 0.0,
+        "seed": 42,
+        "fold": 4,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.0 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_000/seed_42/fold_4"
+      },
+      {
+        "id": "alpha_025_seed42_fold0",
+        "config_id": "alpha_025",
+        "alpha": 0.25,
+        "seed": 42,
+        "fold": 0,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.25 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_025/seed_42/fold_0"
+      },
+      {
+        "id": "alpha_025_seed42_fold1",
+        "config_id": "alpha_025",
+        "alpha": 0.25,
+        "seed": 42,
+        "fold": 1,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.25 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_025/seed_42/fold_1"
+      },
+      {
+        "id": "alpha_025_seed42_fold2",
+        "config_id": "alpha_025",
+        "alpha": 0.25,
+        "seed": 42,
+        "fold": 2,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.25 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_025/seed_42/fold_2"
+      },
+      {
+        "id": "alpha_025_seed42_fold3",
+        "config_id": "alpha_025",
+        "alpha": 0.25,
+        "seed": 42,
+        "fold": 3,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.25 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_025/seed_42/fold_3"
+      },
+      {
+        "id": "alpha_025_seed42_fold4",
+        "config_id": "alpha_025",
+        "alpha": 0.25,
+        "seed": 42,
+        "fold": 4,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.25 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_025/seed_42/fold_4"
+      },
+      {
+        "id": "alpha_075_seed42_fold0",
+        "config_id": "alpha_075",
+        "alpha": 0.75,
+        "seed": 42,
+        "fold": 0,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.75 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_075/seed_42/fold_0"
+      },
+      {
+        "id": "alpha_075_seed42_fold1",
+        "config_id": "alpha_075",
+        "alpha": 0.75,
+        "seed": 42,
+        "fold": 1,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.75 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_075/seed_42/fold_1"
+      },
+      {
+        "id": "alpha_075_seed42_fold2",
+        "config_id": "alpha_075",
+        "alpha": 0.75,
+        "seed": 42,
+        "fold": 2,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.75 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_075/seed_42/fold_2"
+      },
+      {
+        "id": "alpha_075_seed42_fold3",
+        "config_id": "alpha_075",
+        "alpha": 0.75,
+        "seed": 42,
+        "fold": 3,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.75 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_075/seed_42/fold_3"
+      },
+      {
+        "id": "alpha_075_seed42_fold4",
+        "config_id": "alpha_075",
+        "alpha": 0.75,
+        "seed": 42,
+        "fold": 4,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.75 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_075/seed_42/fold_4"
+      },
+      {
+        "id": "alpha_000_seed43_fold0",
+        "config_id": "alpha_000",
+        "alpha": 0.0,
+        "seed": 43,
+        "fold": 0,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.0 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_000/seed_43/fold_0"
+      },
+      {
+        "id": "alpha_000_seed43_fold1",
+        "config_id": "alpha_000",
+        "alpha": 0.0,
+        "seed": 43,
+        "fold": 1,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.0 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_000/seed_43/fold_1"
+      },
+      {
+        "id": "alpha_000_seed43_fold2",
+        "config_id": "alpha_000",
+        "alpha": 0.0,
+        "seed": 43,
+        "fold": 2,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.0 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_000/seed_43/fold_2"
+      },
+      {
+        "id": "alpha_000_seed43_fold3",
+        "config_id": "alpha_000",
+        "alpha": 0.0,
+        "seed": 43,
+        "fold": 3,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.0 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_000/seed_43/fold_3"
+      },
+      {
+        "id": "alpha_000_seed43_fold4",
+        "config_id": "alpha_000",
+        "alpha": 0.0,
+        "seed": 43,
+        "fold": 4,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.0 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_000/seed_43/fold_4"
+      },
+      {
+        "id": "alpha_025_seed43_fold0",
+        "config_id": "alpha_025",
+        "alpha": 0.25,
+        "seed": 43,
+        "fold": 0,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.25 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_025/seed_43/fold_0"
+      },
+      {
+        "id": "alpha_025_seed43_fold1",
+        "config_id": "alpha_025",
+        "alpha": 0.25,
+        "seed": 43,
+        "fold": 1,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.25 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_025/seed_43/fold_1"
+      },
+      {
+        "id": "alpha_025_seed43_fold2",
+        "config_id": "alpha_025",
+        "alpha": 0.25,
+        "seed": 43,
+        "fold": 2,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.25 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_025/seed_43/fold_2"
+      },
+      {
+        "id": "alpha_025_seed43_fold3",
+        "config_id": "alpha_025",
+        "alpha": 0.25,
+        "seed": 43,
+        "fold": 3,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.25 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_025/seed_43/fold_3"
+      },
+      {
+        "id": "alpha_025_seed43_fold4",
+        "config_id": "alpha_025",
+        "alpha": 0.25,
+        "seed": 43,
+        "fold": 4,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.25 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_025/seed_43/fold_4"
+      },
+      {
+        "id": "alpha_075_seed43_fold0",
+        "config_id": "alpha_075",
+        "alpha": 0.75,
+        "seed": 43,
+        "fold": 0,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.75 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_075/seed_43/fold_0"
+      },
+      {
+        "id": "alpha_075_seed43_fold1",
+        "config_id": "alpha_075",
+        "alpha": 0.75,
+        "seed": 43,
+        "fold": 1,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.75 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_075/seed_43/fold_1"
+      },
+      {
+        "id": "alpha_075_seed43_fold2",
+        "config_id": "alpha_075",
+        "alpha": 0.75,
+        "seed": 43,
+        "fold": 2,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.75 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_075/seed_43/fold_2"
+      },
+      {
+        "id": "alpha_075_seed43_fold3",
+        "config_id": "alpha_075",
+        "alpha": 0.75,
+        "seed": 43,
+        "fold": 3,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.75 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_075/seed_43/fold_3"
+      },
+      {
+        "id": "alpha_075_seed43_fold4",
+        "config_id": "alpha_075",
+        "alpha": 0.75,
+        "seed": 43,
+        "fold": 4,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.75 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_075/seed_43/fold_4"
+      },
+      {
+        "id": "alpha_000_seed44_fold0",
+        "config_id": "alpha_000",
+        "alpha": 0.0,
+        "seed": 44,
+        "fold": 0,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.0 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_000/seed_44/fold_0"
+      },
+      {
+        "id": "alpha_000_seed44_fold1",
+        "config_id": "alpha_000",
+        "alpha": 0.0,
+        "seed": 44,
+        "fold": 1,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.0 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_000/seed_44/fold_1"
+      },
+      {
+        "id": "alpha_000_seed44_fold2",
+        "config_id": "alpha_000",
+        "alpha": 0.0,
+        "seed": 44,
+        "fold": 2,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.0 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_000/seed_44/fold_2"
+      },
+      {
+        "id": "alpha_000_seed44_fold3",
+        "config_id": "alpha_000",
+        "alpha": 0.0,
+        "seed": 44,
+        "fold": 3,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.0 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_000/seed_44/fold_3"
+      },
+      {
+        "id": "alpha_000_seed44_fold4",
+        "config_id": "alpha_000",
+        "alpha": 0.0,
+        "seed": 44,
+        "fold": 4,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.0 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_000/seed_44/fold_4"
+      },
+      {
+        "id": "alpha_025_seed44_fold0",
+        "config_id": "alpha_025",
+        "alpha": 0.25,
+        "seed": 44,
+        "fold": 0,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.25 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_025/seed_44/fold_0"
+      },
+      {
+        "id": "alpha_025_seed44_fold1",
+        "config_id": "alpha_025",
+        "alpha": 0.25,
+        "seed": 44,
+        "fold": 1,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.25 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_025/seed_44/fold_1"
+      },
+      {
+        "id": "alpha_025_seed44_fold2",
+        "config_id": "alpha_025",
+        "alpha": 0.25,
+        "seed": 44,
+        "fold": 2,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.25 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_025/seed_44/fold_2"
+      },
+      {
+        "id": "alpha_025_seed44_fold3",
+        "config_id": "alpha_025",
+        "alpha": 0.25,
+        "seed": 44,
+        "fold": 3,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.25 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_025/seed_44/fold_3"
+      },
+      {
+        "id": "alpha_025_seed44_fold4",
+        "config_id": "alpha_025",
+        "alpha": 0.25,
+        "seed": 44,
+        "fold": 4,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.25 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_025/seed_44/fold_4"
+      },
+      {
+        "id": "alpha_075_seed44_fold0",
+        "config_id": "alpha_075",
+        "alpha": 0.75,
+        "seed": 44,
+        "fold": 0,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.75 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_075/seed_44/fold_0"
+      },
+      {
+        "id": "alpha_075_seed44_fold1",
+        "config_id": "alpha_075",
+        "alpha": 0.75,
+        "seed": 44,
+        "fold": 1,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.75 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_075/seed_44/fold_1"
+      },
+      {
+        "id": "alpha_075_seed44_fold2",
+        "config_id": "alpha_075",
+        "alpha": 0.75,
+        "seed": 44,
+        "fold": 2,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.75 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_075/seed_44/fold_2"
+      },
+      {
+        "id": "alpha_075_seed44_fold3",
+        "config_id": "alpha_075",
+        "alpha": 0.75,
+        "seed": 44,
+        "fold": 3,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.75 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_075/seed_44/fold_3"
+      },
+      {
+        "id": "alpha_075_seed44_fold4",
+        "config_id": "alpha_075",
+        "alpha": 0.75,
+        "seed": 44,
+        "fold": 4,
+        "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.75 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_075/seed_44/fold_4"
+      }
+    ],
+    "condicionales": {
+      "aplica_solo_si": "el veredicto de la huella no se cumple o no se aporta",
+      "corridas": [
+        {
+          "id": "alpha_100_seed42_fold0",
+          "config_id": "alpha_100",
+          "alpha": 1.0,
+          "seed": 42,
+          "fold": 0,
+          "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_100/seed_42/fold_0"
+        },
+        {
+          "id": "alpha_100_seed42_fold1",
+          "config_id": "alpha_100",
+          "alpha": 1.0,
+          "seed": 42,
+          "fold": 1,
+          "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_100/seed_42/fold_1"
+        },
+        {
+          "id": "alpha_100_seed42_fold2",
+          "config_id": "alpha_100",
+          "alpha": 1.0,
+          "seed": 42,
+          "fold": 2,
+          "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_100/seed_42/fold_2"
+        },
+        {
+          "id": "alpha_100_seed42_fold3",
+          "config_id": "alpha_100",
+          "alpha": 1.0,
+          "seed": 42,
+          "fold": 3,
+          "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_100/seed_42/fold_3"
+        },
+        {
+          "id": "alpha_100_seed42_fold4",
+          "config_id": "alpha_100",
+          "alpha": 1.0,
+          "seed": 42,
+          "fold": 4,
+          "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_100/seed_42/fold_4"
+        },
+        {
+          "id": "alpha_050_seed42_fold0",
+          "config_id": "alpha_050",
+          "alpha": 0.5,
+          "seed": 42,
+          "fold": 0,
+          "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_050/seed_42/fold_0"
+        },
+        {
+          "id": "alpha_050_seed42_fold1",
+          "config_id": "alpha_050",
+          "alpha": 0.5,
+          "seed": 42,
+          "fold": 1,
+          "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_050/seed_42/fold_1"
+        },
+        {
+          "id": "alpha_050_seed42_fold2",
+          "config_id": "alpha_050",
+          "alpha": 0.5,
+          "seed": 42,
+          "fold": 2,
+          "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_050/seed_42/fold_2"
+        },
+        {
+          "id": "alpha_050_seed42_fold3",
+          "config_id": "alpha_050",
+          "alpha": 0.5,
+          "seed": 42,
+          "fold": 3,
+          "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_050/seed_42/fold_3"
+        },
+        {
+          "id": "alpha_050_seed42_fold4",
+          "config_id": "alpha_050",
+          "alpha": 0.5,
+          "seed": 42,
+          "fold": 4,
+          "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 42 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/alpha_050/seed_42/fold_4"
+        }
+      ]
+    }
+  },
+  "salida_de_cada_corrida": {
+    "carpeta": "results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/<id>/seed_<s>/fold_<k>/",
+    "archivos": "los mismos que las corridas E2 (fold_manifest.csv, run_config.json con class_weight_alpha, training_history.json, best_auc_meta.json, validation_metrics.json, val_predictions_best_auc.csv; best_auc.pth no va a git)",
+    "analisis": "results/classification/r7_optimizacion/agente/fase_b_alpha/analisis/: metricas_por_corrida.csv, metricas_por_fold.csv, delta_por_fold_y_semilla.csv, resumen_delta.csv, piso_ruido.csv, mejor_alpha_observado.json, verificacion_corridas.csv, registro_intentos_fase_b.csv, fig1_ap_auc_vs_alpha.png, fig2_delta_ap_vs_b0.png",
+    "verificacion_por_corrida": "class_weight_alpha registrado e igual al del comando; class_weights recalculados con las etiquetas de train del fold (expected_class_weights de robustez_e2_analysis.py); fold_manifest.csv idéntico al de B0 en el mismo fold; claves de configuración iguales a B0 salvo class_weight_alpha, seed y experiment"
+  },
+  "registro": {
+    "archivo": "results/classification/r7_optimizacion/agente/fase_b_alpha/analisis/registro_intentos_fase_b.csv",
+    "regla": "una fila por (α, semilla, fold), incluidas las reutilizadas, las fallidas y las descartadas; no se borran filas",
+    "columnas": [
+      "etapa",
+      "config_id",
+      "alpha",
+      "fold",
+      "seed",
+      "flags",
+      "ap",
+      "roc_auc",
+      "epoca_elegida",
+      "epocas_ejecutadas",
+      "estado",
+      "origen",
+      "ruta",
+      "nota"
+    ],
+    "origen": "nueva | reutilizada:<ruta>"
+  },
+  "especificacion_del_agente": {
+    "regla": "no se reescribe el texto de la fase A de .claude/agents/agente-optimizacion.md; se añade al final una sección fechada",
+    "seccion_a_anadir": {
+      "titulo": "## Fase B (2026-11-16): estudio descriptivo de α",
+      "contenido": [
+        "Autorizada por el autor después del cierre de la fase A sin ganadora.",
+        "Protocolo propio: results/classification/r7_optimizacion/agente/fase_b_alpha/protocolo_fase_b.json (no es una enmienda de protocolo_agente.json).",
+        "Rejilla fija α ∈ {0, 0.25, 0.5, 0.75, 1.0}; ConvNeXt-Tiny, representación A, E2, semillas 42, 43 y 44; todo lo demás como B0.",
+        "Presupuesto: 45 corridas nuevas y 30 reutilizadas (B0 y B2); 10 condicionales si falla la huella de equivalencia.",
+        "Descriptiva: sin regla de elección, sin p-valores; el «mejor α observado» es exploratorio y no entra a R8. No se usa test.",
+        "Diseño redactado el 2026-11-16 con claude-opus-5-5."
+      ]
+    },
+    "memoria": "tras el análisis, una lección con evidencia: la regla 4/5 se cumple entre semillas de una misma configuración (3 de 6 pares de B0 y B2)",
+    "especificacion_versionada": "results/classification/r7_optimizacion/agente/especificacion_agente/ contiene hoy agente-optimizacion.md y memoria/; según la regla 11 faltan CLAUDE.md, settings.json (revisar que no contenga datos personales) y un archivo de modelos y fechas (modelos_y_fechas.json) con: propuesta y protocolo v1 (2026-11-11/12), implementación y enmienda E1 (2026-11-16), etapa 1 y confirmación (2026-11-16), diseño de la fase B (2026-11-16, claude-opus-5-5, sesión principal siguiendo la especificación). El modelo de las fases anteriores no consta en el repositorio y lo completa el autor."
+  },
+  "integracion_en_el_informe": {
+    "seccion": "capítulo R7, «Brazo del agente»",
+    "diseno": "fase A (9 candidatas, un factor cada una, base B0) y fase B (curva de α); total de configuraciones 9 + 3 α nuevos + 2 referencias; total de corridas 75 + 45 (+10 condicionales)",
+    "favorables": "a03 +0.045 (4/5), a09 +0.028 (4/5) y a01 +0.022 (4/5, con ROC-AUC -0.014) en la etapa 1 con una semilla; B2 +0.070 en E1; lo que la fase B muestre «por encima del piso»",
+    "negativos": "a03 no se confirma (+0.005, 3/5); a08 peor_consistente; a02, a08 y a10 fuera por ROC-AUC; B2 frente a B0 en E2 negativo en las tres lecturas; el resultado de α, sea cual sea. Redacción: «no se encontró evidencia de mejora», no «la técnica no funciona»",
+    "argumento_central": "tabla del piso de ruido: diferencias de 0.07 a 0.095 en AP medio y la regla 4/5 aparecen entre semillas de una misma configuración, del mismo orden que las mejoras de a03 en la etapa 1 y de B2 en E1",
+    "limitaciones": [
+      "E2 estratificada, no agrupada por paciente; folds no independientes",
+      "21 o 22 positivas por fold de validation",
+      "E2 contiene las 200 imágenes de validation de E1 con las que se eligió B2",
+      "α cambia el early stopping (pérdida de validación ponderada con α)",
+      "la fase B se diseñó después de ver E1, E2 y la fase A",
+      "multiplicidad (≈ 0.56 con 4 comparaciones)",
+      "alcance limitado de la huella de equivalencia (CPU, sin preentrenamiento ni AMP)",
+      "categorías 6 y 7 agrupadas en la clase positiva operacional"
+    ],
+    "cierre": "R8 sigue con B0 y B2 (6 modelos); en el anexo van ambos protocolos, la especificación del agente y el archivo de modelos y fechas"
+  },
+  "orden_de_commits": [
+    {
+      "n": 1,
+      "mensaje": "docs(r7): add optimizer agent phase b alpha protocol",
+      "contenido": "este archivo"
+    },
+    {
+      "n": 2,
+      "mensaje": "feat(r7): add agent phase b alpha analysis script and notebook",
+      "contenido": "src/classification/agente_fase_b_analysis.py, tests/test_agente_fase_b_analysis.py, notebooks/R7_optimizacion/10_fase_b_alpha.ipynb"
+    },
+    {
+      "n": 3,
+      "mensaje": "docs(r7): add phase b fingerprint equivalence evidence",
+      "contenido": "results/classification/r7_optimizacion/agente/fase_b_alpha/verificacion_equivalencia/ (desde Falcon, antes de las corridas)"
+    },
+    {
+      "n": 4,
+      "mensaje": "feat(r7): add agent phase b alpha runs (45 runs, 5 folds)",
+      "contenido": "results/classification/r7_optimizacion/agente/fase_b_alpha/corridas/ (más las 10 condicionales si aplican)"
+    },
+    {
+      "n": 5,
+      "mensaje": "feat(r7): add agent phase b alpha analysis results",
+      "contenido": "results/classification/r7_optimizacion/agente/fase_b_alpha/analisis/"
+    },
+    {
+      "n": 6,
+      "mensaje": "docs(r7): update optimizer agent specification for phase b",
+      "contenido": "especificacion_agente/ (copia del .md con la sección fechada, memoria, CLAUDE.md, settings.json, modelos_y_fechas.json)"
+    }
+  ],
+  "fuentes": [
+    {
+      "ref": "Cui et al., Class-Balanced Loss Based on Effective Number of Samples, CVPR 2019",
+      "id": "doi:10.1109/CVPR.2019.00949",
+      "estado": "DOI listado en protocolo_agente.json como verificado; el pasaje sobre β no se leyó en esta sesión [CITA POR VERIFICAR]"
+    },
+    {
+      "ref": "Buda, Maki y Mazurowski, Neural Networks 106:249-259, 2018",
+      "id": "doi:10.1016/j.neunet.2018.07.011",
+      "estado": "existencia y DOI verificados según protocolo_agente.json"
+    },
+    {
+      "ref": "Bergstra y Bengio, Random Search for Hyper-Parameter Optimization, JMLR 13:281-305, 2012",
+      "id": "https://jmlr.org/papers/v13/bergstra12a.html",
+      "estado": "existencia verificada según protocolo_agente.json"
+    },
+    {
+      "ref": "Bengio y Grandvalet, JMLR 5:1089-1105, 2004",
+      "id": "https://www.jmlr.org/papers/v5/grandvalet04a.html",
+      "estado": "existencia verificada según protocolo_agente.json"
+    },
+    {
+      "ref": "Cawley y Talbot, JMLR 11:2079-2107, 2010",
+      "id": "https://www.jmlr.org/papers/v11/cawley10a.html",
+      "estado": "existencia verificada según protocolo_agente.json; contenido leído en resumen"
+    },
+    {
+      "ref": "Varma y Simon, BMC Bioinformatics 7:91, 2006",
+      "id": "doi:10.1186/1471-2105-7-91",
+      "estado": "existencia y DOI verificados según protocolo_agente.json"
+    }
+  ],
+  "no_verificado": [
+    "identidad de la huella entre 886acce y HEAD (pendiente; condición previa)",
+    "comando exacto de activación de ovarian_cnn_env en Falcon (no consta en el repositorio)",
+    "tiempo real por corrida (las marcas son de modificación de archivo: cota superior)",
+    "épocas que ejecutarán α = 0, 0.25 y 0.75",
+    "pasaje de Cui et al. 2019 sobre β"
+  ]
+}
