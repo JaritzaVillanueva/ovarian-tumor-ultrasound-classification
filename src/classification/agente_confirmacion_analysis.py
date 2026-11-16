@@ -148,19 +148,23 @@ def _finite(values):
     return all(isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v) for v in values)
 
 
-def verify_confirmation_run(run, folds_rows, design):
-    """Comprobaciones de una corrida completada de la confirmación. Filas (corrida, comprobacion, ok, detalle)."""
+def verify_confirmation_run(run, folds_rows, design, expected_dir=None):
+    """
+    Comprobaciones de una corrida completada de la confirmación. Filas (corrida, comprobacion, ok, detalle).
+    `expected_dir`: carpeta esperada de la corrida; por defecto, la de la confirmación (la fase B pasa la suya).
+    """
     cfg, args, fold, seed, config_id = run["config"], run["args"], run["fold"], run["seed"], run["config_id"]
     rows = []
 
     def add(name, ok, detail=""):
         rows.append({"corrida": run["id"], "comprobacion": name, "ok": bool(ok), "detalle": detail})
 
-    expected_dir = f"{CONFIRMATION_REL.as_posix()}/{config_id}/seed_{seed}/fold_{fold}"
+    if expected_dir is None:
+        expected_dir = f"{CONFIRMATION_REL.as_posix()}/{config_id}/seed_{seed}/fold_{fold}"
     add("comando: semilla, fold y carpeta de salida coinciden con el id y con la carpeta leída",
         int(args["--seed"]) == seed and int(args["--fold"]) == fold and args["--output-dir"] == run["dir_rel"] == expected_dir,
         f"seed={args.get('--seed')}, fold={args.get('--fold')}, salida={args.get('--output-dir')}")
-    add("semilla en {43, 44} y fold en 0..4 (según el protocolo)", seed in design["seeds"] and fold in design["folds"], f"seed={seed}, fold={fold}")
+    add("semilla en {" + ", ".join(map(str, design["seeds"])) + "} y fold en 0..4 (según el protocolo)", seed in design["seeds"] and fold in design["folds"], f"seed={seed}, fold={fold}")
     add("comando = flags de la configuración", (f"--checkpoint-metric val_roc_auc {run['flags']} --split-csv" if run["flags"]
                                                 else "--checkpoint-metric val_roc_auc --split-csv") in run["command"], run["flags"])
     add("config: esquema E2 y fold", cfg.get("evaluation_scheme") == "E2" and cfg.get("fold") == fold,
