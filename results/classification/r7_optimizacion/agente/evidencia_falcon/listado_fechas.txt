@@ -1,0 +1,6 @@
+total 528
+-rw-rw-r-- 1 jvillanueva jvillanueva 186370 2026-11-16 17:03:36.464888537 -0500 agente_confirmacion.log
+-rw-rw-r-- 1 jvillanueva jvillanueva   9700 2026-11-16 17:03:36.464888537 -0500 agente_confirmacion.sh
+-rw-rw-r-- 1 jvillanueva jvillanueva 320620 2026-11-16 17:03:36.464888537 -0500 agente_etapa1.log
+-rw-rw-r-- 1 jvillanueva jvillanueva  13860 2026-11-16 17:03:36.464888537 -0500 agente_etapa1.sh
+-rw-rw-r-- 1 jvillanueva jvillanueva      0 2026-11-16 17:03:47.465886210 -0500 listado_fechas.txt
