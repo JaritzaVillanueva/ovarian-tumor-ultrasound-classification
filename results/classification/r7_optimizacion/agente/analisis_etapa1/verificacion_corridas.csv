@@ -1,0 +1,1410 @@
+corrida,comprobacion,ok,detalle
+protocolo,incluye la enmienda E1,True,['E1']
+protocolo,"45 corridas = 9 candidatas x 5 folds, ids únicos",True,45
+protocolo,idéntico al del commit 7d48f86,True,True
+a01_lr5e5_fold0,comando = flags de la candidata,True,--learning-rate 5e-5
+a01_lr5e5_fold0,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=0"
+a01_lr5e5_fold0,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a01_lr5e5_fold0,config: partición,True,configs/splits/cv_folds_e2.csv
+a01_lr5e5_fold0,config: pesos de clase con α = 1.0 (no se busca),True,None
+a01_lr5e5_fold0,config: hiperparámetros fijos del protocolo,True,
+a01_lr5e5_fold0,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a01_lr5e5_fold0,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a01_lr5e5_fold0,config: 800 train y 200 validation,True,800/200
+a01_lr5e5_fold0,flag: learning rate efectivo,True,"lr=5e-05 (cli_override), esperado 5e-05"
+a01_lr5e5_fold0,flag: sin calendario,True,
+a01_lr5e5_fold0,flag: sin layer decay,True,
+a01_lr5e5_fold0,flag: sin drop path,True,
+a01_lr5e5_fold0,flag: sin label smoothing,True,
+a01_lr5e5_fold0,flag: sin aumento moderado,True,
+a01_lr5e5_fold0,flag: sin cambio de tamaño,True,
+a01_lr5e5_fold0,flag: sin EMA,True,
+a01_lr5e5_fold0,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a01_lr5e5_fold0,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a01_lr5e5_fold0,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a01_lr5e5_fold0,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a01_lr5e5_fold0,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.59749763, recalculado=0.59749763"
+a01_lr5e5_fold0,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.87436159, recalculado=0.87436159"
+a01_lr5e5_fold0,historial: longitud = épocas ejecutadas y AP por época presente,True,11 épocas
+a01_lr5e5_fold0,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=11, run_config=11, meta=11"
+a01_lr5e5_fold0,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.597498, json=0.597498"
+a01_lr5e5_fold0,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.874362, json=0.874362"
+a01_lr5e5_fold1,comando = flags de la candidata,True,--learning-rate 5e-5
+a01_lr5e5_fold1,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=1"
+a01_lr5e5_fold1,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a01_lr5e5_fold1,config: partición,True,configs/splits/cv_folds_e2.csv
+a01_lr5e5_fold1,config: pesos de clase con α = 1.0 (no se busca),True,None
+a01_lr5e5_fold1,config: hiperparámetros fijos del protocolo,True,
+a01_lr5e5_fold1,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a01_lr5e5_fold1,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a01_lr5e5_fold1,config: 800 train y 200 validation,True,800/200
+a01_lr5e5_fold1,flag: learning rate efectivo,True,"lr=5e-05 (cli_override), esperado 5e-05"
+a01_lr5e5_fold1,flag: sin calendario,True,
+a01_lr5e5_fold1,flag: sin layer decay,True,
+a01_lr5e5_fold1,flag: sin drop path,True,
+a01_lr5e5_fold1,flag: sin label smoothing,True,
+a01_lr5e5_fold1,flag: sin aumento moderado,True,
+a01_lr5e5_fold1,flag: sin cambio de tamaño,True,
+a01_lr5e5_fold1,flag: sin EMA,True,
+a01_lr5e5_fold1,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a01_lr5e5_fold1,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a01_lr5e5_fold1,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a01_lr5e5_fold1,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a01_lr5e5_fold1,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.70272199, recalculado=0.70272199"
+a01_lr5e5_fold1,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.89759959, recalculado=0.89759959"
+a01_lr5e5_fold1,historial: longitud = épocas ejecutadas y AP por época presente,True,12 épocas
+a01_lr5e5_fold1,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=11, run_config=11, meta=11"
+a01_lr5e5_fold1,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.702722, json=0.702722"
+a01_lr5e5_fold1,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.897600, json=0.897600"
+a01_lr5e5_fold2,comando = flags de la candidata,True,--learning-rate 5e-5
+a01_lr5e5_fold2,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=2"
+a01_lr5e5_fold2,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a01_lr5e5_fold2,config: partición,True,configs/splits/cv_folds_e2.csv
+a01_lr5e5_fold2,config: pesos de clase con α = 1.0 (no se busca),True,None
+a01_lr5e5_fold2,config: hiperparámetros fijos del protocolo,True,
+a01_lr5e5_fold2,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a01_lr5e5_fold2,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a01_lr5e5_fold2,config: 800 train y 200 validation,True,800/200
+a01_lr5e5_fold2,flag: learning rate efectivo,True,"lr=5e-05 (cli_override), esperado 5e-05"
+a01_lr5e5_fold2,flag: sin calendario,True,
+a01_lr5e5_fold2,flag: sin layer decay,True,
+a01_lr5e5_fold2,flag: sin drop path,True,
+a01_lr5e5_fold2,flag: sin label smoothing,True,
+a01_lr5e5_fold2,flag: sin aumento moderado,True,
+a01_lr5e5_fold2,flag: sin cambio de tamaño,True,
+a01_lr5e5_fold2,flag: sin EMA,True,
+a01_lr5e5_fold2,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a01_lr5e5_fold2,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a01_lr5e5_fold2,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a01_lr5e5_fold2,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a01_lr5e5_fold2,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.65054405, recalculado=0.65054405"
+a01_lr5e5_fold2,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.91266599, recalculado=0.91266599"
+a01_lr5e5_fold2,historial: longitud = épocas ejecutadas y AP por época presente,True,13 épocas
+a01_lr5e5_fold2,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=13, run_config=13, meta=13"
+a01_lr5e5_fold2,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.650544, json=0.650544"
+a01_lr5e5_fold2,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.912666, json=0.912666"
+a01_lr5e5_fold3,comando = flags de la candidata,True,--learning-rate 5e-5
+a01_lr5e5_fold3,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=3"
+a01_lr5e5_fold3,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a01_lr5e5_fold3,config: partición,True,configs/splits/cv_folds_e2.csv
+a01_lr5e5_fold3,config: pesos de clase con α = 1.0 (no se busca),True,None
+a01_lr5e5_fold3,config: hiperparámetros fijos del protocolo,True,
+a01_lr5e5_fold3,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a01_lr5e5_fold3,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a01_lr5e5_fold3,config: 800 train y 200 validation,True,800/200
+a01_lr5e5_fold3,flag: learning rate efectivo,True,"lr=5e-05 (cli_override), esperado 5e-05"
+a01_lr5e5_fold3,flag: sin calendario,True,
+a01_lr5e5_fold3,flag: sin layer decay,True,
+a01_lr5e5_fold3,flag: sin drop path,True,
+a01_lr5e5_fold3,flag: sin label smoothing,True,
+a01_lr5e5_fold3,flag: sin aumento moderado,True,
+a01_lr5e5_fold3,flag: sin cambio de tamaño,True,
+a01_lr5e5_fold3,flag: sin EMA,True,
+a01_lr5e5_fold3,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a01_lr5e5_fold3,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a01_lr5e5_fold3,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a01_lr5e5_fold3,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a01_lr5e5_fold3,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.57565837, recalculado=0.57565837"
+a01_lr5e5_fold3,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.89530133, recalculado=0.89530133"
+a01_lr5e5_fold3,historial: longitud = épocas ejecutadas y AP por época presente,True,17 épocas
+a01_lr5e5_fold3,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=11, run_config=11, meta=11"
+a01_lr5e5_fold3,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.575658, json=0.575658"
+a01_lr5e5_fold3,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.895301, json=0.895301"
+a01_lr5e5_fold4,comando = flags de la candidata,True,--learning-rate 5e-5
+a01_lr5e5_fold4,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=4"
+a01_lr5e5_fold4,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a01_lr5e5_fold4,config: partición,True,configs/splits/cv_folds_e2.csv
+a01_lr5e5_fold4,config: pesos de clase con α = 1.0 (no se busca),True,None
+a01_lr5e5_fold4,config: hiperparámetros fijos del protocolo,True,
+a01_lr5e5_fold4,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a01_lr5e5_fold4,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a01_lr5e5_fold4,config: 800 train y 200 validation,True,800/200
+a01_lr5e5_fold4,flag: learning rate efectivo,True,"lr=5e-05 (cli_override), esperado 5e-05"
+a01_lr5e5_fold4,flag: sin calendario,True,
+a01_lr5e5_fold4,flag: sin layer decay,True,
+a01_lr5e5_fold4,flag: sin drop path,True,
+a01_lr5e5_fold4,flag: sin label smoothing,True,
+a01_lr5e5_fold4,flag: sin aumento moderado,True,
+a01_lr5e5_fold4,flag: sin cambio de tamaño,True,
+a01_lr5e5_fold4,flag: sin EMA,True,
+a01_lr5e5_fold4,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a01_lr5e5_fold4,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a01_lr5e5_fold4,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5617977380752563, 4.545454502105713]"
+a01_lr5e5_fold4,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a01_lr5e5_fold4,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.43997908, recalculado=0.43997908"
+a01_lr5e5_fold4,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.83373238, recalculado=0.83373238"
+a01_lr5e5_fold4,historial: longitud = épocas ejecutadas y AP por época presente,True,10 épocas
+a01_lr5e5_fold4,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=5, run_config=5, meta=5"
+a01_lr5e5_fold4,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.439979, json=0.439979"
+a01_lr5e5_fold4,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.833732, json=0.833732"
+a02_lr2e4_fold0,comando = flags de la candidata,True,--learning-rate 2e-4
+a02_lr2e4_fold0,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=0"
+a02_lr2e4_fold0,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a02_lr2e4_fold0,config: partición,True,configs/splits/cv_folds_e2.csv
+a02_lr2e4_fold0,config: pesos de clase con α = 1.0 (no se busca),True,None
+a02_lr2e4_fold0,config: hiperparámetros fijos del protocolo,True,
+a02_lr2e4_fold0,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a02_lr2e4_fold0,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a02_lr2e4_fold0,config: 800 train y 200 validation,True,800/200
+a02_lr2e4_fold0,flag: learning rate efectivo,True,"lr=0.0002 (cli_override), esperado 0.0002"
+a02_lr2e4_fold0,flag: sin calendario,True,
+a02_lr2e4_fold0,flag: sin layer decay,True,
+a02_lr2e4_fold0,flag: sin drop path,True,
+a02_lr2e4_fold0,flag: sin label smoothing,True,
+a02_lr2e4_fold0,flag: sin aumento moderado,True,
+a02_lr2e4_fold0,flag: sin cambio de tamaño,True,
+a02_lr2e4_fold0,flag: sin EMA,True,
+a02_lr2e4_fold0,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a02_lr2e4_fold0,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a02_lr2e4_fold0,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a02_lr2e4_fold0,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a02_lr2e4_fold0,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.52551451, recalculado=0.52551451"
+a02_lr2e4_fold0,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.81996936, recalculado=0.81996936"
+a02_lr2e4_fold0,historial: longitud = épocas ejecutadas y AP por época presente,True,17 épocas
+a02_lr2e4_fold0,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=16, run_config=16, meta=16"
+a02_lr2e4_fold0,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.525515, json=0.525515"
+a02_lr2e4_fold0,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.819969, json=0.819969"
+a02_lr2e4_fold1,comando = flags de la candidata,True,--learning-rate 2e-4
+a02_lr2e4_fold1,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=1"
+a02_lr2e4_fold1,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a02_lr2e4_fold1,config: partición,True,configs/splits/cv_folds_e2.csv
+a02_lr2e4_fold1,config: pesos de clase con α = 1.0 (no se busca),True,None
+a02_lr2e4_fold1,config: hiperparámetros fijos del protocolo,True,
+a02_lr2e4_fold1,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a02_lr2e4_fold1,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a02_lr2e4_fold1,config: 800 train y 200 validation,True,800/200
+a02_lr2e4_fold1,flag: learning rate efectivo,True,"lr=0.0002 (cli_override), esperado 0.0002"
+a02_lr2e4_fold1,flag: sin calendario,True,
+a02_lr2e4_fold1,flag: sin layer decay,True,
+a02_lr2e4_fold1,flag: sin drop path,True,
+a02_lr2e4_fold1,flag: sin label smoothing,True,
+a02_lr2e4_fold1,flag: sin aumento moderado,True,
+a02_lr2e4_fold1,flag: sin cambio de tamaño,True,
+a02_lr2e4_fold1,flag: sin EMA,True,
+a02_lr2e4_fold1,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a02_lr2e4_fold1,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a02_lr2e4_fold1,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a02_lr2e4_fold1,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a02_lr2e4_fold1,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.59629128, recalculado=0.59629128"
+a02_lr2e4_fold1,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.88942799, recalculado=0.88942799"
+a02_lr2e4_fold1,historial: longitud = épocas ejecutadas y AP por época presente,True,16 épocas
+a02_lr2e4_fold1,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=13, run_config=13, meta=13"
+a02_lr2e4_fold1,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.596291, json=0.596291"
+a02_lr2e4_fold1,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.889428, json=0.889428"
+a02_lr2e4_fold2,comando = flags de la candidata,True,--learning-rate 2e-4
+a02_lr2e4_fold2,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=2"
+a02_lr2e4_fold2,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a02_lr2e4_fold2,config: partición,True,configs/splits/cv_folds_e2.csv
+a02_lr2e4_fold2,config: pesos de clase con α = 1.0 (no se busca),True,None
+a02_lr2e4_fold2,config: hiperparámetros fijos del protocolo,True,
+a02_lr2e4_fold2,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a02_lr2e4_fold2,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a02_lr2e4_fold2,config: 800 train y 200 validation,True,800/200
+a02_lr2e4_fold2,flag: learning rate efectivo,True,"lr=0.0002 (cli_override), esperado 0.0002"
+a02_lr2e4_fold2,flag: sin calendario,True,
+a02_lr2e4_fold2,flag: sin layer decay,True,
+a02_lr2e4_fold2,flag: sin drop path,True,
+a02_lr2e4_fold2,flag: sin label smoothing,True,
+a02_lr2e4_fold2,flag: sin aumento moderado,True,
+a02_lr2e4_fold2,flag: sin cambio de tamaño,True,
+a02_lr2e4_fold2,flag: sin EMA,True,
+a02_lr2e4_fold2,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a02_lr2e4_fold2,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a02_lr2e4_fold2,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a02_lr2e4_fold2,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a02_lr2e4_fold2,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.57225403, recalculado=0.57225403"
+a02_lr2e4_fold2,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.89274770, recalculado=0.89274770"
+a02_lr2e4_fold2,historial: longitud = épocas ejecutadas y AP por época presente,True,19 épocas
+a02_lr2e4_fold2,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=18, run_config=18, meta=18"
+a02_lr2e4_fold2,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.572254, json=0.572254"
+a02_lr2e4_fold2,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.892748, json=0.892748"
+a02_lr2e4_fold3,comando = flags de la candidata,True,--learning-rate 2e-4
+a02_lr2e4_fold3,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=3"
+a02_lr2e4_fold3,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a02_lr2e4_fold3,config: partición,True,configs/splits/cv_folds_e2.csv
+a02_lr2e4_fold3,config: pesos de clase con α = 1.0 (no se busca),True,None
+a02_lr2e4_fold3,config: hiperparámetros fijos del protocolo,True,
+a02_lr2e4_fold3,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a02_lr2e4_fold3,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a02_lr2e4_fold3,config: 800 train y 200 validation,True,800/200
+a02_lr2e4_fold3,flag: learning rate efectivo,True,"lr=0.0002 (cli_override), esperado 0.0002"
+a02_lr2e4_fold3,flag: sin calendario,True,
+a02_lr2e4_fold3,flag: sin layer decay,True,
+a02_lr2e4_fold3,flag: sin drop path,True,
+a02_lr2e4_fold3,flag: sin label smoothing,True,
+a02_lr2e4_fold3,flag: sin aumento moderado,True,
+a02_lr2e4_fold3,flag: sin cambio de tamaño,True,
+a02_lr2e4_fold3,flag: sin EMA,True,
+a02_lr2e4_fold3,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a02_lr2e4_fold3,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a02_lr2e4_fold3,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a02_lr2e4_fold3,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a02_lr2e4_fold3,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.25483557, recalculado=0.25483557"
+a02_lr2e4_fold3,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.78677222, recalculado=0.78677222"
+a02_lr2e4_fold3,historial: longitud = épocas ejecutadas y AP por época presente,True,9 épocas
+a02_lr2e4_fold3,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=4, run_config=4, meta=4"
+a02_lr2e4_fold3,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.254836, json=0.254836"
+a02_lr2e4_fold3,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.786772, json=0.786772"
+a02_lr2e4_fold4,comando = flags de la candidata,True,--learning-rate 2e-4
+a02_lr2e4_fold4,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=4"
+a02_lr2e4_fold4,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a02_lr2e4_fold4,config: partición,True,configs/splits/cv_folds_e2.csv
+a02_lr2e4_fold4,config: pesos de clase con α = 1.0 (no se busca),True,None
+a02_lr2e4_fold4,config: hiperparámetros fijos del protocolo,True,
+a02_lr2e4_fold4,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a02_lr2e4_fold4,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a02_lr2e4_fold4,config: 800 train y 200 validation,True,800/200
+a02_lr2e4_fold4,flag: learning rate efectivo,True,"lr=0.0002 (cli_override), esperado 0.0002"
+a02_lr2e4_fold4,flag: sin calendario,True,
+a02_lr2e4_fold4,flag: sin layer decay,True,
+a02_lr2e4_fold4,flag: sin drop path,True,
+a02_lr2e4_fold4,flag: sin label smoothing,True,
+a02_lr2e4_fold4,flag: sin aumento moderado,True,
+a02_lr2e4_fold4,flag: sin cambio de tamaño,True,
+a02_lr2e4_fold4,flag: sin EMA,True,
+a02_lr2e4_fold4,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a02_lr2e4_fold4,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a02_lr2e4_fold4,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5617977380752563, 4.545454502105713]"
+a02_lr2e4_fold4,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a02_lr2e4_fold4,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.61968374, recalculado=0.61968374"
+a02_lr2e4_fold4,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.86592179, recalculado=0.86592179"
+a02_lr2e4_fold4,historial: longitud = épocas ejecutadas y AP por época presente,True,19 épocas
+a02_lr2e4_fold4,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=19, run_config=19, meta=19"
+a02_lr2e4_fold4,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.619684, json=0.619684"
+a02_lr2e4_fold4,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.865922, json=0.865922"
+a03_cosine_fold0,comando = flags de la candidata,True,--lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6
+a03_cosine_fold0,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=0"
+a03_cosine_fold0,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a03_cosine_fold0,config: partición,True,configs/splits/cv_folds_e2.csv
+a03_cosine_fold0,config: pesos de clase con α = 1.0 (no se busca),True,None
+a03_cosine_fold0,config: hiperparámetros fijos del protocolo,True,
+a03_cosine_fold0,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a03_cosine_fold0,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a03_cosine_fold0,config: 800 train y 200 validation,True,800/200
+a03_cosine_fold0,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a03_cosine_fold0,flag: calendario del learning rate,True,"{'type': 'warmup_cosine', 'update': 'per_iteration (global step)', 'peak_lr': 0.0001, 'warmup_epochs': 1.0, 'cosine_epochs': 15.0, 'lr_min': 1e-06, 'steps_per_epoch': 25, 'after_cosine': 'lr_min constant'}"
+a03_cosine_fold0,flag: sin layer decay,True,
+a03_cosine_fold0,flag: sin drop path,True,
+a03_cosine_fold0,flag: sin label smoothing,True,
+a03_cosine_fold0,flag: sin aumento moderado,True,
+a03_cosine_fold0,flag: sin cambio de tamaño,True,
+a03_cosine_fold0,flag: sin EMA,True,
+a03_cosine_fold0,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a03_cosine_fold0,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a03_cosine_fold0,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a03_cosine_fold0,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a03_cosine_fold0,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.49844913, recalculado=0.49844913"
+a03_cosine_fold0,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.88227783, recalculado=0.88227783"
+a03_cosine_fold0,historial: longitud = épocas ejecutadas y AP por época presente,True,9 épocas
+a03_cosine_fold0,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=8, run_config=8, meta=8"
+a03_cosine_fold0,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.498449, json=0.498449"
+a03_cosine_fold0,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.882278, json=0.882278"
+a03_cosine_fold1,comando = flags de la candidata,True,--lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6
+a03_cosine_fold1,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=1"
+a03_cosine_fold1,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a03_cosine_fold1,config: partición,True,configs/splits/cv_folds_e2.csv
+a03_cosine_fold1,config: pesos de clase con α = 1.0 (no se busca),True,None
+a03_cosine_fold1,config: hiperparámetros fijos del protocolo,True,
+a03_cosine_fold1,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a03_cosine_fold1,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a03_cosine_fold1,config: 800 train y 200 validation,True,800/200
+a03_cosine_fold1,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a03_cosine_fold1,flag: calendario del learning rate,True,"{'type': 'warmup_cosine', 'update': 'per_iteration (global step)', 'peak_lr': 0.0001, 'warmup_epochs': 1.0, 'cosine_epochs': 15.0, 'lr_min': 1e-06, 'steps_per_epoch': 25, 'after_cosine': 'lr_min constant'}"
+a03_cosine_fold1,flag: sin layer decay,True,
+a03_cosine_fold1,flag: sin drop path,True,
+a03_cosine_fold1,flag: sin label smoothing,True,
+a03_cosine_fold1,flag: sin aumento moderado,True,
+a03_cosine_fold1,flag: sin cambio de tamaño,True,
+a03_cosine_fold1,flag: sin EMA,True,
+a03_cosine_fold1,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a03_cosine_fold1,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a03_cosine_fold1,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a03_cosine_fold1,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a03_cosine_fold1,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.74823187, recalculado=0.74823187"
+a03_cosine_fold1,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.91189990, recalculado=0.91189990"
+a03_cosine_fold1,historial: longitud = épocas ejecutadas y AP por época presente,True,12 épocas
+a03_cosine_fold1,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=9, run_config=9, meta=9"
+a03_cosine_fold1,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.748232, json=0.748232"
+a03_cosine_fold1,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.911900, json=0.911900"
+a03_cosine_fold2,comando = flags de la candidata,True,--lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6
+a03_cosine_fold2,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=2"
+a03_cosine_fold2,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a03_cosine_fold2,config: partición,True,configs/splits/cv_folds_e2.csv
+a03_cosine_fold2,config: pesos de clase con α = 1.0 (no se busca),True,None
+a03_cosine_fold2,config: hiperparámetros fijos del protocolo,True,
+a03_cosine_fold2,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a03_cosine_fold2,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a03_cosine_fold2,config: 800 train y 200 validation,True,800/200
+a03_cosine_fold2,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a03_cosine_fold2,flag: calendario del learning rate,True,"{'type': 'warmup_cosine', 'update': 'per_iteration (global step)', 'peak_lr': 0.0001, 'warmup_epochs': 1.0, 'cosine_epochs': 15.0, 'lr_min': 1e-06, 'steps_per_epoch': 25, 'after_cosine': 'lr_min constant'}"
+a03_cosine_fold2,flag: sin layer decay,True,
+a03_cosine_fold2,flag: sin drop path,True,
+a03_cosine_fold2,flag: sin label smoothing,True,
+a03_cosine_fold2,flag: sin aumento moderado,True,
+a03_cosine_fold2,flag: sin cambio de tamaño,True,
+a03_cosine_fold2,flag: sin EMA,True,
+a03_cosine_fold2,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a03_cosine_fold2,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a03_cosine_fold2,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a03_cosine_fold2,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a03_cosine_fold2,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.69482857, recalculado=0.69482857"
+a03_cosine_fold2,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.92134831, recalculado=0.92134831"
+a03_cosine_fold2,historial: longitud = épocas ejecutadas y AP por época presente,True,13 épocas
+a03_cosine_fold2,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=12, run_config=12, meta=12"
+a03_cosine_fold2,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.694829, json=0.694829"
+a03_cosine_fold2,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.921348, json=0.921348"
+a03_cosine_fold3,comando = flags de la candidata,True,--lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6
+a03_cosine_fold3,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=3"
+a03_cosine_fold3,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a03_cosine_fold3,config: partición,True,configs/splits/cv_folds_e2.csv
+a03_cosine_fold3,config: pesos de clase con α = 1.0 (no se busca),True,None
+a03_cosine_fold3,config: hiperparámetros fijos del protocolo,True,
+a03_cosine_fold3,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a03_cosine_fold3,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a03_cosine_fold3,config: 800 train y 200 validation,True,800/200
+a03_cosine_fold3,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a03_cosine_fold3,flag: calendario del learning rate,True,"{'type': 'warmup_cosine', 'update': 'per_iteration (global step)', 'peak_lr': 0.0001, 'warmup_epochs': 1.0, 'cosine_epochs': 15.0, 'lr_min': 1e-06, 'steps_per_epoch': 25, 'after_cosine': 'lr_min constant'}"
+a03_cosine_fold3,flag: sin layer decay,True,
+a03_cosine_fold3,flag: sin drop path,True,
+a03_cosine_fold3,flag: sin label smoothing,True,
+a03_cosine_fold3,flag: sin aumento moderado,True,
+a03_cosine_fold3,flag: sin cambio de tamaño,True,
+a03_cosine_fold3,flag: sin EMA,True,
+a03_cosine_fold3,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a03_cosine_fold3,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a03_cosine_fold3,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a03_cosine_fold3,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a03_cosine_fold3,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.63294682, recalculado=0.63294682"
+a03_cosine_fold3,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.91215526, recalculado=0.91215526"
+a03_cosine_fold3,historial: longitud = épocas ejecutadas y AP por época presente,True,13 épocas
+a03_cosine_fold3,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=13, run_config=13, meta=13"
+a03_cosine_fold3,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.632947, json=0.632947"
+a03_cosine_fold3,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.912155, json=0.912155"
+a03_cosine_fold4,comando = flags de la candidata,True,--lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6
+a03_cosine_fold4,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=4"
+a03_cosine_fold4,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a03_cosine_fold4,config: partición,True,configs/splits/cv_folds_e2.csv
+a03_cosine_fold4,config: pesos de clase con α = 1.0 (no se busca),True,None
+a03_cosine_fold4,config: hiperparámetros fijos del protocolo,True,
+a03_cosine_fold4,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a03_cosine_fold4,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a03_cosine_fold4,config: 800 train y 200 validation,True,800/200
+a03_cosine_fold4,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a03_cosine_fold4,flag: calendario del learning rate,True,"{'type': 'warmup_cosine', 'update': 'per_iteration (global step)', 'peak_lr': 0.0001, 'warmup_epochs': 1.0, 'cosine_epochs': 15.0, 'lr_min': 1e-06, 'steps_per_epoch': 25, 'after_cosine': 'lr_min constant'}"
+a03_cosine_fold4,flag: sin layer decay,True,
+a03_cosine_fold4,flag: sin drop path,True,
+a03_cosine_fold4,flag: sin label smoothing,True,
+a03_cosine_fold4,flag: sin aumento moderado,True,
+a03_cosine_fold4,flag: sin cambio de tamaño,True,
+a03_cosine_fold4,flag: sin EMA,True,
+a03_cosine_fold4,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a03_cosine_fold4,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a03_cosine_fold4,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5617977380752563, 4.545454502105713]"
+a03_cosine_fold4,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a03_cosine_fold4,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.50935084, recalculado=0.50935084"
+a03_cosine_fold4,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.84330939, recalculado=0.84330939"
+a03_cosine_fold4,historial: longitud = épocas ejecutadas y AP por época presente,True,10 épocas
+a03_cosine_fold4,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=9, run_config=9, meta=9"
+a03_cosine_fold4,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.509351, json=0.509351"
+a03_cosine_fold4,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.843309, json=0.843309"
+a04_llrd08_fold0,comando = flags de la candidata,True,--layer-decay 0.8
+a04_llrd08_fold0,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=0"
+a04_llrd08_fold0,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a04_llrd08_fold0,config: partición,True,configs/splits/cv_folds_e2.csv
+a04_llrd08_fold0,config: pesos de clase con α = 1.0 (no se busca),True,None
+a04_llrd08_fold0,config: hiperparámetros fijos del protocolo,True,
+a04_llrd08_fold0,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a04_llrd08_fold0,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a04_llrd08_fold0,config: 800 train y 200 validation,True,800/200
+a04_llrd08_fold0,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a04_llrd08_fold0,flag: sin calendario,True,
+a04_llrd08_fold0,flag: layer decay,True,"{'decay': 0.8, 'groups': {'features.0': 0.1677721600000001, 'features.1': 0.20971520000000007, 'features.2': 0.2621440000000001, 'features.3': 0.3276800000000001, 'features.4': 0.4096000000000001, 'features.5': 0.5120000000000001, 'features.6': 0.6400000000000001, 'features.7': 0.8, 'classifier': 1.0}, 'weight_decay': 'same in all groups'}"
+a04_llrd08_fold0,flag: sin drop path,True,
+a04_llrd08_fold0,flag: sin label smoothing,True,
+a04_llrd08_fold0,flag: sin aumento moderado,True,
+a04_llrd08_fold0,flag: sin cambio de tamaño,True,
+a04_llrd08_fold0,flag: sin EMA,True,
+a04_llrd08_fold0,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a04_llrd08_fold0,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a04_llrd08_fold0,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a04_llrd08_fold0,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a04_llrd08_fold0,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.48948953, recalculado=0.48948953"
+a04_llrd08_fold0,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.85597549, recalculado=0.85597549"
+a04_llrd08_fold0,historial: longitud = épocas ejecutadas y AP por época presente,True,11 épocas
+a04_llrd08_fold0,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=11, run_config=11, meta=11"
+a04_llrd08_fold0,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.489490, json=0.489490"
+a04_llrd08_fold0,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.855975, json=0.855975"
+a04_llrd08_fold1,comando = flags de la candidata,True,--layer-decay 0.8
+a04_llrd08_fold1,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=1"
+a04_llrd08_fold1,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a04_llrd08_fold1,config: partición,True,configs/splits/cv_folds_e2.csv
+a04_llrd08_fold1,config: pesos de clase con α = 1.0 (no se busca),True,None
+a04_llrd08_fold1,config: hiperparámetros fijos del protocolo,True,
+a04_llrd08_fold1,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a04_llrd08_fold1,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a04_llrd08_fold1,config: 800 train y 200 validation,True,800/200
+a04_llrd08_fold1,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a04_llrd08_fold1,flag: sin calendario,True,
+a04_llrd08_fold1,flag: layer decay,True,"{'decay': 0.8, 'groups': {'features.0': 0.1677721600000001, 'features.1': 0.20971520000000007, 'features.2': 0.2621440000000001, 'features.3': 0.3276800000000001, 'features.4': 0.4096000000000001, 'features.5': 0.5120000000000001, 'features.6': 0.6400000000000001, 'features.7': 0.8, 'classifier': 1.0}, 'weight_decay': 'same in all groups'}"
+a04_llrd08_fold1,flag: sin drop path,True,
+a04_llrd08_fold1,flag: sin label smoothing,True,
+a04_llrd08_fold1,flag: sin aumento moderado,True,
+a04_llrd08_fold1,flag: sin cambio de tamaño,True,
+a04_llrd08_fold1,flag: sin EMA,True,
+a04_llrd08_fold1,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a04_llrd08_fold1,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a04_llrd08_fold1,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a04_llrd08_fold1,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a04_llrd08_fold1,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.67750030, recalculado=0.67750030"
+a04_llrd08_fold1,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.88738509, recalculado=0.88738509"
+a04_llrd08_fold1,historial: longitud = épocas ejecutadas y AP por época presente,True,10 épocas
+a04_llrd08_fold1,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=9, run_config=9, meta=9"
+a04_llrd08_fold1,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.677500, json=0.677500"
+a04_llrd08_fold1,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.887385, json=0.887385"
+a04_llrd08_fold2,comando = flags de la candidata,True,--layer-decay 0.8
+a04_llrd08_fold2,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=2"
+a04_llrd08_fold2,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a04_llrd08_fold2,config: partición,True,configs/splits/cv_folds_e2.csv
+a04_llrd08_fold2,config: pesos de clase con α = 1.0 (no se busca),True,None
+a04_llrd08_fold2,config: hiperparámetros fijos del protocolo,True,
+a04_llrd08_fold2,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a04_llrd08_fold2,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a04_llrd08_fold2,config: 800 train y 200 validation,True,800/200
+a04_llrd08_fold2,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a04_llrd08_fold2,flag: sin calendario,True,
+a04_llrd08_fold2,flag: layer decay,True,"{'decay': 0.8, 'groups': {'features.0': 0.1677721600000001, 'features.1': 0.20971520000000007, 'features.2': 0.2621440000000001, 'features.3': 0.3276800000000001, 'features.4': 0.4096000000000001, 'features.5': 0.5120000000000001, 'features.6': 0.6400000000000001, 'features.7': 0.8, 'classifier': 1.0}, 'weight_decay': 'same in all groups'}"
+a04_llrd08_fold2,flag: sin drop path,True,
+a04_llrd08_fold2,flag: sin label smoothing,True,
+a04_llrd08_fold2,flag: sin aumento moderado,True,
+a04_llrd08_fold2,flag: sin cambio de tamaño,True,
+a04_llrd08_fold2,flag: sin EMA,True,
+a04_llrd08_fold2,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a04_llrd08_fold2,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a04_llrd08_fold2,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a04_llrd08_fold2,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a04_llrd08_fold2,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.63745738, recalculado=0.63745738"
+a04_llrd08_fold2,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.92849847, recalculado=0.92849847"
+a04_llrd08_fold2,historial: longitud = épocas ejecutadas y AP por época presente,True,11 épocas
+a04_llrd08_fold2,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=8, run_config=8, meta=8"
+a04_llrd08_fold2,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.637457, json=0.637457"
+a04_llrd08_fold2,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.928498, json=0.928498"
+a04_llrd08_fold3,comando = flags de la candidata,True,--layer-decay 0.8
+a04_llrd08_fold3,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=3"
+a04_llrd08_fold3,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a04_llrd08_fold3,config: partición,True,configs/splits/cv_folds_e2.csv
+a04_llrd08_fold3,config: pesos de clase con α = 1.0 (no se busca),True,None
+a04_llrd08_fold3,config: hiperparámetros fijos del protocolo,True,
+a04_llrd08_fold3,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a04_llrd08_fold3,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a04_llrd08_fold3,config: 800 train y 200 validation,True,800/200
+a04_llrd08_fold3,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a04_llrd08_fold3,flag: sin calendario,True,
+a04_llrd08_fold3,flag: layer decay,True,"{'decay': 0.8, 'groups': {'features.0': 0.1677721600000001, 'features.1': 0.20971520000000007, 'features.2': 0.2621440000000001, 'features.3': 0.3276800000000001, 'features.4': 0.4096000000000001, 'features.5': 0.5120000000000001, 'features.6': 0.6400000000000001, 'features.7': 0.8, 'classifier': 1.0}, 'weight_decay': 'same in all groups'}"
+a04_llrd08_fold3,flag: sin drop path,True,
+a04_llrd08_fold3,flag: sin label smoothing,True,
+a04_llrd08_fold3,flag: sin aumento moderado,True,
+a04_llrd08_fold3,flag: sin cambio de tamaño,True,
+a04_llrd08_fold3,flag: sin EMA,True,
+a04_llrd08_fold3,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a04_llrd08_fold3,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a04_llrd08_fold3,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a04_llrd08_fold3,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a04_llrd08_fold3,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.60662510, recalculado=0.60662510"
+a04_llrd08_fold3,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.89759959, recalculado=0.89759959"
+a04_llrd08_fold3,historial: longitud = épocas ejecutadas y AP por época presente,True,9 épocas
+a04_llrd08_fold3,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=9, run_config=9, meta=9"
+a04_llrd08_fold3,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.606625, json=0.606625"
+a04_llrd08_fold3,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.897600, json=0.897600"
+a04_llrd08_fold4,comando = flags de la candidata,True,--layer-decay 0.8
+a04_llrd08_fold4,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=4"
+a04_llrd08_fold4,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a04_llrd08_fold4,config: partición,True,configs/splits/cv_folds_e2.csv
+a04_llrd08_fold4,config: pesos de clase con α = 1.0 (no se busca),True,None
+a04_llrd08_fold4,config: hiperparámetros fijos del protocolo,True,
+a04_llrd08_fold4,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a04_llrd08_fold4,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a04_llrd08_fold4,config: 800 train y 200 validation,True,800/200
+a04_llrd08_fold4,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a04_llrd08_fold4,flag: sin calendario,True,
+a04_llrd08_fold4,flag: layer decay,True,"{'decay': 0.8, 'groups': {'features.0': 0.1677721600000001, 'features.1': 0.20971520000000007, 'features.2': 0.2621440000000001, 'features.3': 0.3276800000000001, 'features.4': 0.4096000000000001, 'features.5': 0.5120000000000001, 'features.6': 0.6400000000000001, 'features.7': 0.8, 'classifier': 1.0}, 'weight_decay': 'same in all groups'}"
+a04_llrd08_fold4,flag: sin drop path,True,
+a04_llrd08_fold4,flag: sin label smoothing,True,
+a04_llrd08_fold4,flag: sin aumento moderado,True,
+a04_llrd08_fold4,flag: sin cambio de tamaño,True,
+a04_llrd08_fold4,flag: sin EMA,True,
+a04_llrd08_fold4,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a04_llrd08_fold4,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a04_llrd08_fold4,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5617977380752563, 4.545454502105713]"
+a04_llrd08_fold4,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a04_llrd08_fold4,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.42081148, recalculado=0.42081148"
+a04_llrd08_fold4,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.82787976, recalculado=0.82787976"
+a04_llrd08_fold4,historial: longitud = épocas ejecutadas y AP por época presente,True,10 épocas
+a04_llrd08_fold4,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=8, run_config=8, meta=8"
+a04_llrd08_fold4,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.420811, json=0.420811"
+a04_llrd08_fold4,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.827880, json=0.827880"
+a05_dp03_fold0,comando = flags de la candidata,True,--drop-path-rate 0.3
+a05_dp03_fold0,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=0"
+a05_dp03_fold0,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a05_dp03_fold0,config: partición,True,configs/splits/cv_folds_e2.csv
+a05_dp03_fold0,config: pesos de clase con α = 1.0 (no se busca),True,None
+a05_dp03_fold0,config: hiperparámetros fijos del protocolo,True,
+a05_dp03_fold0,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a05_dp03_fold0,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a05_dp03_fold0,config: 800 train y 200 validation,True,800/200
+a05_dp03_fold0,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a05_dp03_fold0,flag: sin calendario,True,
+a05_dp03_fold0,flag: sin layer decay,True,
+a05_dp03_fold0,flag: drop path,True,0.3
+a05_dp03_fold0,flag: sin label smoothing,True,
+a05_dp03_fold0,flag: sin aumento moderado,True,
+a05_dp03_fold0,flag: sin cambio de tamaño,True,
+a05_dp03_fold0,flag: sin EMA,True,
+a05_dp03_fold0,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a05_dp03_fold0,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a05_dp03_fold0,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a05_dp03_fold0,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a05_dp03_fold0,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.49838192, recalculado=0.49838192"
+a05_dp03_fold0,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.83656793, recalculado=0.83656793"
+a05_dp03_fold0,historial: longitud = épocas ejecutadas y AP por época presente,True,14 épocas
+a05_dp03_fold0,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=14, run_config=14, meta=14"
+a05_dp03_fold0,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.498382, json=0.498382"
+a05_dp03_fold0,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.836568, json=0.836568"
+a05_dp03_fold1,comando = flags de la candidata,True,--drop-path-rate 0.3
+a05_dp03_fold1,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=1"
+a05_dp03_fold1,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a05_dp03_fold1,config: partición,True,configs/splits/cv_folds_e2.csv
+a05_dp03_fold1,config: pesos de clase con α = 1.0 (no se busca),True,None
+a05_dp03_fold1,config: hiperparámetros fijos del protocolo,True,
+a05_dp03_fold1,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a05_dp03_fold1,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a05_dp03_fold1,config: 800 train y 200 validation,True,800/200
+a05_dp03_fold1,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a05_dp03_fold1,flag: sin calendario,True,
+a05_dp03_fold1,flag: sin layer decay,True,
+a05_dp03_fold1,flag: drop path,True,0.3
+a05_dp03_fold1,flag: sin label smoothing,True,
+a05_dp03_fold1,flag: sin aumento moderado,True,
+a05_dp03_fold1,flag: sin cambio de tamaño,True,
+a05_dp03_fold1,flag: sin EMA,True,
+a05_dp03_fold1,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a05_dp03_fold1,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a05_dp03_fold1,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a05_dp03_fold1,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a05_dp03_fold1,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.48131566, recalculado=0.48131566"
+a05_dp03_fold1,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.86567926, recalculado=0.86567926"
+a05_dp03_fold1,historial: longitud = épocas ejecutadas y AP por época presente,True,11 épocas
+a05_dp03_fold1,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=9, run_config=9, meta=9"
+a05_dp03_fold1,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.481316, json=0.481316"
+a05_dp03_fold1,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.865679, json=0.865679"
+a05_dp03_fold2,comando = flags de la candidata,True,--drop-path-rate 0.3
+a05_dp03_fold2,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=2"
+a05_dp03_fold2,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a05_dp03_fold2,config: partición,True,configs/splits/cv_folds_e2.csv
+a05_dp03_fold2,config: pesos de clase con α = 1.0 (no se busca),True,None
+a05_dp03_fold2,config: hiperparámetros fijos del protocolo,True,
+a05_dp03_fold2,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a05_dp03_fold2,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a05_dp03_fold2,config: 800 train y 200 validation,True,800/200
+a05_dp03_fold2,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a05_dp03_fold2,flag: sin calendario,True,
+a05_dp03_fold2,flag: sin layer decay,True,
+a05_dp03_fold2,flag: drop path,True,0.3
+a05_dp03_fold2,flag: sin label smoothing,True,
+a05_dp03_fold2,flag: sin aumento moderado,True,
+a05_dp03_fold2,flag: sin cambio de tamaño,True,
+a05_dp03_fold2,flag: sin EMA,True,
+a05_dp03_fold2,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a05_dp03_fold2,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a05_dp03_fold2,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a05_dp03_fold2,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a05_dp03_fold2,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.59769871, recalculado=0.59769871"
+a05_dp03_fold2,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.92364658, recalculado=0.92364658"
+a05_dp03_fold2,historial: longitud = épocas ejecutadas y AP por época presente,True,20 épocas
+a05_dp03_fold2,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=15, run_config=15, meta=15"
+a05_dp03_fold2,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.597699, json=0.597699"
+a05_dp03_fold2,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.923647, json=0.923647"
+a05_dp03_fold3,comando = flags de la candidata,True,--drop-path-rate 0.3
+a05_dp03_fold3,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=3"
+a05_dp03_fold3,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a05_dp03_fold3,config: partición,True,configs/splits/cv_folds_e2.csv
+a05_dp03_fold3,config: pesos de clase con α = 1.0 (no se busca),True,None
+a05_dp03_fold3,config: hiperparámetros fijos del protocolo,True,
+a05_dp03_fold3,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a05_dp03_fold3,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a05_dp03_fold3,config: 800 train y 200 validation,True,800/200
+a05_dp03_fold3,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a05_dp03_fold3,flag: sin calendario,True,
+a05_dp03_fold3,flag: sin layer decay,True,
+a05_dp03_fold3,flag: drop path,True,0.3
+a05_dp03_fold3,flag: sin label smoothing,True,
+a05_dp03_fold3,flag: sin aumento moderado,True,
+a05_dp03_fold3,flag: sin cambio de tamaño,True,
+a05_dp03_fold3,flag: sin EMA,True,
+a05_dp03_fold3,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a05_dp03_fold3,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a05_dp03_fold3,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a05_dp03_fold3,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a05_dp03_fold3,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.62376326, recalculado=0.62376326"
+a05_dp03_fold3,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.90143003, recalculado=0.90143003"
+a05_dp03_fold3,historial: longitud = épocas ejecutadas y AP por época presente,True,16 épocas
+a05_dp03_fold3,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=16, run_config=16, meta=16"
+a05_dp03_fold3,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.623763, json=0.623763"
+a05_dp03_fold3,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.901430, json=0.901430"
+a05_dp03_fold4,comando = flags de la candidata,True,--drop-path-rate 0.3
+a05_dp03_fold4,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=4"
+a05_dp03_fold4,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a05_dp03_fold4,config: partición,True,configs/splits/cv_folds_e2.csv
+a05_dp03_fold4,config: pesos de clase con α = 1.0 (no se busca),True,None
+a05_dp03_fold4,config: hiperparámetros fijos del protocolo,True,
+a05_dp03_fold4,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a05_dp03_fold4,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a05_dp03_fold4,config: 800 train y 200 validation,True,800/200
+a05_dp03_fold4,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a05_dp03_fold4,flag: sin calendario,True,
+a05_dp03_fold4,flag: sin layer decay,True,
+a05_dp03_fold4,flag: drop path,True,0.3
+a05_dp03_fold4,flag: sin label smoothing,True,
+a05_dp03_fold4,flag: sin aumento moderado,True,
+a05_dp03_fold4,flag: sin cambio de tamaño,True,
+a05_dp03_fold4,flag: sin EMA,True,
+a05_dp03_fold4,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a05_dp03_fold4,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a05_dp03_fold4,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5617977380752563, 4.545454502105713]"
+a05_dp03_fold4,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a05_dp03_fold4,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.51941060, recalculado=0.51941060"
+a05_dp03_fold4,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.86459165, recalculado=0.86459165"
+a05_dp03_fold4,historial: longitud = épocas ejecutadas y AP por época presente,True,15 épocas
+a05_dp03_fold4,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=14, run_config=14, meta=14"
+a05_dp03_fold4,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.519411, json=0.519411"
+a05_dp03_fold4,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.864592, json=0.864592"
+a06_ls01_fold0,comando = flags de la candidata,True,--label-smoothing 0.1
+a06_ls01_fold0,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=0"
+a06_ls01_fold0,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a06_ls01_fold0,config: partición,True,configs/splits/cv_folds_e2.csv
+a06_ls01_fold0,config: pesos de clase con α = 1.0 (no se busca),True,None
+a06_ls01_fold0,config: hiperparámetros fijos del protocolo,True,
+a06_ls01_fold0,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a06_ls01_fold0,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a06_ls01_fold0,config: 800 train y 200 validation,True,800/200
+a06_ls01_fold0,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a06_ls01_fold0,flag: sin calendario,True,
+a06_ls01_fold0,flag: sin layer decay,True,
+a06_ls01_fold0,flag: sin drop path,True,
+a06_ls01_fold0,"flag: label smoothing uniforme (enmienda E1), validación sin suavizado",True,"uniform (1-e+e/C on the true class, e/C elsewhere); class weights as per-sample weight by true class (protocol amendment E1)"
+a06_ls01_fold0,flag: sin aumento moderado,True,
+a06_ls01_fold0,flag: sin cambio de tamaño,True,
+a06_ls01_fold0,flag: sin EMA,True,
+a06_ls01_fold0,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a06_ls01_fold0,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a06_ls01_fold0,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a06_ls01_fold0,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a06_ls01_fold0,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.39205253, recalculado=0.39205253"
+a06_ls01_fold0,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.84882533, recalculado=0.84882533"
+a06_ls01_fold0,historial: longitud = épocas ejecutadas y AP por época presente,True,10 épocas
+a06_ls01_fold0,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=6, run_config=6, meta=6"
+a06_ls01_fold0,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.392053, json=0.392053"
+a06_ls01_fold0,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.848825, json=0.848825"
+a06_ls01_fold1,comando = flags de la candidata,True,--label-smoothing 0.1
+a06_ls01_fold1,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=1"
+a06_ls01_fold1,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a06_ls01_fold1,config: partición,True,configs/splits/cv_folds_e2.csv
+a06_ls01_fold1,config: pesos de clase con α = 1.0 (no se busca),True,None
+a06_ls01_fold1,config: hiperparámetros fijos del protocolo,True,
+a06_ls01_fold1,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a06_ls01_fold1,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a06_ls01_fold1,config: 800 train y 200 validation,True,800/200
+a06_ls01_fold1,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a06_ls01_fold1,flag: sin calendario,True,
+a06_ls01_fold1,flag: sin layer decay,True,
+a06_ls01_fold1,flag: sin drop path,True,
+a06_ls01_fold1,"flag: label smoothing uniforme (enmienda E1), validación sin suavizado",True,"uniform (1-e+e/C on the true class, e/C elsewhere); class weights as per-sample weight by true class (protocol amendment E1)"
+a06_ls01_fold1,flag: sin aumento moderado,True,
+a06_ls01_fold1,flag: sin cambio de tamaño,True,
+a06_ls01_fold1,flag: sin EMA,True,
+a06_ls01_fold1,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a06_ls01_fold1,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a06_ls01_fold1,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a06_ls01_fold1,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a06_ls01_fold1,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.61821444, recalculado=0.61821444"
+a06_ls01_fold1,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.87640449, recalculado=0.87640449"
+a06_ls01_fold1,historial: longitud = épocas ejecutadas y AP por época presente,True,13 épocas
+a06_ls01_fold1,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=8, run_config=8, meta=8"
+a06_ls01_fold1,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.618214, json=0.618214"
+a06_ls01_fold1,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.876404, json=0.876404"
+a06_ls01_fold2,comando = flags de la candidata,True,--label-smoothing 0.1
+a06_ls01_fold2,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=2"
+a06_ls01_fold2,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a06_ls01_fold2,config: partición,True,configs/splits/cv_folds_e2.csv
+a06_ls01_fold2,config: pesos de clase con α = 1.0 (no se busca),True,None
+a06_ls01_fold2,config: hiperparámetros fijos del protocolo,True,
+a06_ls01_fold2,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a06_ls01_fold2,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a06_ls01_fold2,config: 800 train y 200 validation,True,800/200
+a06_ls01_fold2,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a06_ls01_fold2,flag: sin calendario,True,
+a06_ls01_fold2,flag: sin layer decay,True,
+a06_ls01_fold2,flag: sin drop path,True,
+a06_ls01_fold2,"flag: label smoothing uniforme (enmienda E1), validación sin suavizado",True,"uniform (1-e+e/C on the true class, e/C elsewhere); class weights as per-sample weight by true class (protocol amendment E1)"
+a06_ls01_fold2,flag: sin aumento moderado,True,
+a06_ls01_fold2,flag: sin cambio de tamaño,True,
+a06_ls01_fold2,flag: sin EMA,True,
+a06_ls01_fold2,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a06_ls01_fold2,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a06_ls01_fold2,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a06_ls01_fold2,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a06_ls01_fold2,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.59934893, recalculado=0.59934893"
+a06_ls01_fold2,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.89555669, recalculado=0.89555669"
+a06_ls01_fold2,historial: longitud = épocas ejecutadas y AP por época presente,True,21 épocas
+a06_ls01_fold2,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=16, run_config=16, meta=16"
+a06_ls01_fold2,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.599349, json=0.599349"
+a06_ls01_fold2,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.895557, json=0.895557"
+a06_ls01_fold3,comando = flags de la candidata,True,--label-smoothing 0.1
+a06_ls01_fold3,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=3"
+a06_ls01_fold3,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a06_ls01_fold3,config: partición,True,configs/splits/cv_folds_e2.csv
+a06_ls01_fold3,config: pesos de clase con α = 1.0 (no se busca),True,None
+a06_ls01_fold3,config: hiperparámetros fijos del protocolo,True,
+a06_ls01_fold3,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a06_ls01_fold3,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a06_ls01_fold3,config: 800 train y 200 validation,True,800/200
+a06_ls01_fold3,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a06_ls01_fold3,flag: sin calendario,True,
+a06_ls01_fold3,flag: sin layer decay,True,
+a06_ls01_fold3,flag: sin drop path,True,
+a06_ls01_fold3,"flag: label smoothing uniforme (enmienda E1), validación sin suavizado",True,"uniform (1-e+e/C on the true class, e/C elsewhere); class weights as per-sample weight by true class (protocol amendment E1)"
+a06_ls01_fold3,flag: sin aumento moderado,True,
+a06_ls01_fold3,flag: sin cambio de tamaño,True,
+a06_ls01_fold3,flag: sin EMA,True,
+a06_ls01_fold3,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a06_ls01_fold3,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a06_ls01_fold3,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a06_ls01_fold3,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a06_ls01_fold3,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.59374365, recalculado=0.59374365"
+a06_ls01_fold3,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.90296221, recalculado=0.90296221"
+a06_ls01_fold3,historial: longitud = épocas ejecutadas y AP por época presente,True,13 épocas
+a06_ls01_fold3,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=10, run_config=10, meta=10"
+a06_ls01_fold3,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.593744, json=0.593744"
+a06_ls01_fold3,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.902962, json=0.902962"
+a06_ls01_fold4,comando = flags de la candidata,True,--label-smoothing 0.1
+a06_ls01_fold4,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=4"
+a06_ls01_fold4,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a06_ls01_fold4,config: partición,True,configs/splits/cv_folds_e2.csv
+a06_ls01_fold4,config: pesos de clase con α = 1.0 (no se busca),True,None
+a06_ls01_fold4,config: hiperparámetros fijos del protocolo,True,
+a06_ls01_fold4,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a06_ls01_fold4,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a06_ls01_fold4,config: 800 train y 200 validation,True,800/200
+a06_ls01_fold4,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a06_ls01_fold4,flag: sin calendario,True,
+a06_ls01_fold4,flag: sin layer decay,True,
+a06_ls01_fold4,flag: sin drop path,True,
+a06_ls01_fold4,"flag: label smoothing uniforme (enmienda E1), validación sin suavizado",True,"uniform (1-e+e/C on the true class, e/C elsewhere); class weights as per-sample weight by true class (protocol amendment E1)"
+a06_ls01_fold4,flag: sin aumento moderado,True,
+a06_ls01_fold4,flag: sin cambio de tamaño,True,
+a06_ls01_fold4,flag: sin EMA,True,
+a06_ls01_fold4,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a06_ls01_fold4,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a06_ls01_fold4,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5617977380752563, 4.545454502105713]"
+a06_ls01_fold4,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a06_ls01_fold4,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.56568022, recalculado=0.56568022"
+a06_ls01_fold4,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.89013035, recalculado=0.89013035"
+a06_ls01_fold4,historial: longitud = épocas ejecutadas y AP por época presente,True,17 épocas
+a06_ls01_fold4,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=15, run_config=15, meta=15"
+a06_ls01_fold4,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.565680, json=0.565680"
+a06_ls01_fold4,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.890130, json=0.890130"
+a08_augmod_fold0,comando = flags de la candidata,True,--augmentation moderate
+a08_augmod_fold0,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=0"
+a08_augmod_fold0,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a08_augmod_fold0,config: partición,True,configs/splits/cv_folds_e2.csv
+a08_augmod_fold0,config: pesos de clase con α = 1.0 (no se busca),True,None
+a08_augmod_fold0,config: hiperparámetros fijos del protocolo,True,
+a08_augmod_fold0,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a08_augmod_fold0,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a08_augmod_fold0,config: 800 train y 200 validation,True,800/200
+a08_augmod_fold0,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a08_augmod_fold0,flag: sin calendario,True,
+a08_augmod_fold0,flag: sin layer decay,True,
+a08_augmod_fold0,flag: sin drop path,True,
+a08_augmod_fold0,flag: sin label smoothing,True,
+a08_augmod_fold0,flag: aumento,True,"{'name': 'moderate', 'degrees': 30, 'brightness': 0.2, 'contrast': 0.2}"
+a08_augmod_fold0,flag: sin cambio de tamaño,True,
+a08_augmod_fold0,flag: sin EMA,True,
+a08_augmod_fold0,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a08_augmod_fold0,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a08_augmod_fold0,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a08_augmod_fold0,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a08_augmod_fold0,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.54643341, recalculado=0.54643341"
+a08_augmod_fold0,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.88151175, recalculado=0.88151175"
+a08_augmod_fold0,historial: longitud = épocas ejecutadas y AP por época presente,True,11 épocas
+a08_augmod_fold0,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=11, run_config=11, meta=11"
+a08_augmod_fold0,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.546433, json=0.546433"
+a08_augmod_fold0,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.881512, json=0.881512"
+a08_augmod_fold1,comando = flags de la candidata,True,--augmentation moderate
+a08_augmod_fold1,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=1"
+a08_augmod_fold1,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a08_augmod_fold1,config: partición,True,configs/splits/cv_folds_e2.csv
+a08_augmod_fold1,config: pesos de clase con α = 1.0 (no se busca),True,None
+a08_augmod_fold1,config: hiperparámetros fijos del protocolo,True,
+a08_augmod_fold1,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a08_augmod_fold1,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a08_augmod_fold1,config: 800 train y 200 validation,True,800/200
+a08_augmod_fold1,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a08_augmod_fold1,flag: sin calendario,True,
+a08_augmod_fold1,flag: sin layer decay,True,
+a08_augmod_fold1,flag: sin drop path,True,
+a08_augmod_fold1,flag: sin label smoothing,True,
+a08_augmod_fold1,flag: aumento,True,"{'name': 'moderate', 'degrees': 30, 'brightness': 0.2, 'contrast': 0.2}"
+a08_augmod_fold1,flag: sin cambio de tamaño,True,
+a08_augmod_fold1,flag: sin EMA,True,
+a08_augmod_fold1,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a08_augmod_fold1,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a08_augmod_fold1,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a08_augmod_fold1,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a08_augmod_fold1,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.54144032, recalculado=0.54144032"
+a08_augmod_fold1,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.86542390, recalculado=0.86542390"
+a08_augmod_fold1,historial: longitud = épocas ejecutadas y AP por época presente,True,11 épocas
+a08_augmod_fold1,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=11, run_config=11, meta=11"
+a08_augmod_fold1,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.541440, json=0.541440"
+a08_augmod_fold1,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.865424, json=0.865424"
+a08_augmod_fold2,comando = flags de la candidata,True,--augmentation moderate
+a08_augmod_fold2,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=2"
+a08_augmod_fold2,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a08_augmod_fold2,config: partición,True,configs/splits/cv_folds_e2.csv
+a08_augmod_fold2,config: pesos de clase con α = 1.0 (no se busca),True,None
+a08_augmod_fold2,config: hiperparámetros fijos del protocolo,True,
+a08_augmod_fold2,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a08_augmod_fold2,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a08_augmod_fold2,config: 800 train y 200 validation,True,800/200
+a08_augmod_fold2,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a08_augmod_fold2,flag: sin calendario,True,
+a08_augmod_fold2,flag: sin layer decay,True,
+a08_augmod_fold2,flag: sin drop path,True,
+a08_augmod_fold2,flag: sin label smoothing,True,
+a08_augmod_fold2,flag: aumento,True,"{'name': 'moderate', 'degrees': 30, 'brightness': 0.2, 'contrast': 0.2}"
+a08_augmod_fold2,flag: sin cambio de tamaño,True,
+a08_augmod_fold2,flag: sin EMA,True,
+a08_augmod_fold2,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a08_augmod_fold2,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a08_augmod_fold2,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a08_augmod_fold2,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a08_augmod_fold2,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.57973571, recalculado=0.57973571"
+a08_augmod_fold2,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.89402451, recalculado=0.89402451"
+a08_augmod_fold2,historial: longitud = épocas ejecutadas y AP por época presente,True,13 épocas
+a08_augmod_fold2,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=13, run_config=13, meta=13"
+a08_augmod_fold2,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.579736, json=0.579736"
+a08_augmod_fold2,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.894025, json=0.894025"
+a08_augmod_fold3,comando = flags de la candidata,True,--augmentation moderate
+a08_augmod_fold3,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=3"
+a08_augmod_fold3,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a08_augmod_fold3,config: partición,True,configs/splits/cv_folds_e2.csv
+a08_augmod_fold3,config: pesos de clase con α = 1.0 (no se busca),True,None
+a08_augmod_fold3,config: hiperparámetros fijos del protocolo,True,
+a08_augmod_fold3,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a08_augmod_fold3,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a08_augmod_fold3,config: 800 train y 200 validation,True,800/200
+a08_augmod_fold3,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a08_augmod_fold3,flag: sin calendario,True,
+a08_augmod_fold3,flag: sin layer decay,True,
+a08_augmod_fold3,flag: sin drop path,True,
+a08_augmod_fold3,flag: sin label smoothing,True,
+a08_augmod_fold3,flag: aumento,True,"{'name': 'moderate', 'degrees': 30, 'brightness': 0.2, 'contrast': 0.2}"
+a08_augmod_fold3,flag: sin cambio de tamaño,True,
+a08_augmod_fold3,flag: sin EMA,True,
+a08_augmod_fold3,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a08_augmod_fold3,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a08_augmod_fold3,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a08_augmod_fold3,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a08_augmod_fold3,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.50378711, recalculado=0.50378711"
+a08_augmod_fold3,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.89070480, recalculado=0.89070480"
+a08_augmod_fold3,historial: longitud = épocas ejecutadas y AP por época presente,True,14 épocas
+a08_augmod_fold3,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=14, run_config=14, meta=14"
+a08_augmod_fold3,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.503787, json=0.503787"
+a08_augmod_fold3,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.890705, json=0.890705"
+a08_augmod_fold4,comando = flags de la candidata,True,--augmentation moderate
+a08_augmod_fold4,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=4"
+a08_augmod_fold4,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a08_augmod_fold4,config: partición,True,configs/splits/cv_folds_e2.csv
+a08_augmod_fold4,config: pesos de clase con α = 1.0 (no se busca),True,None
+a08_augmod_fold4,config: hiperparámetros fijos del protocolo,True,
+a08_augmod_fold4,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a08_augmod_fold4,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a08_augmod_fold4,config: 800 train y 200 validation,True,800/200
+a08_augmod_fold4,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a08_augmod_fold4,flag: sin calendario,True,
+a08_augmod_fold4,flag: sin layer decay,True,
+a08_augmod_fold4,flag: sin drop path,True,
+a08_augmod_fold4,flag: sin label smoothing,True,
+a08_augmod_fold4,flag: aumento,True,"{'name': 'moderate', 'degrees': 30, 'brightness': 0.2, 'contrast': 0.2}"
+a08_augmod_fold4,flag: sin cambio de tamaño,True,
+a08_augmod_fold4,flag: sin EMA,True,
+a08_augmod_fold4,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a08_augmod_fold4,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a08_augmod_fold4,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5617977380752563, 4.545454502105713]"
+a08_augmod_fold4,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a08_augmod_fold4,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.41389789, recalculado=0.41389789"
+a08_augmod_fold4,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.82282522, recalculado=0.82282522"
+a08_augmod_fold4,historial: longitud = épocas ejecutadas y AP por época presente,True,15 épocas
+a08_augmod_fold4,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=12, run_config=12, meta=12"
+a08_augmod_fold4,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.413898, json=0.413898"
+a08_augmod_fold4,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.822825, json=0.822825"
+a09_res288_fold0,comando = flags de la candidata,True,--image-size 288
+a09_res288_fold0,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=0"
+a09_res288_fold0,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a09_res288_fold0,config: partición,True,configs/splits/cv_folds_e2.csv
+a09_res288_fold0,config: pesos de clase con α = 1.0 (no se busca),True,None
+a09_res288_fold0,config: hiperparámetros fijos del protocolo,True,
+a09_res288_fold0,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a09_res288_fold0,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a09_res288_fold0,config: 800 train y 200 validation,True,800/200
+a09_res288_fold0,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a09_res288_fold0,flag: sin calendario,True,
+a09_res288_fold0,flag: sin layer decay,True,
+a09_res288_fold0,flag: sin drop path,True,
+a09_res288_fold0,flag: sin label smoothing,True,
+a09_res288_fold0,flag: sin aumento moderado,True,
+a09_res288_fold0,flag: tamaño de imagen,True,288
+a09_res288_fold0,flag: sin EMA,True,
+a09_res288_fold0,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a09_res288_fold0,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a09_res288_fold0,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a09_res288_fold0,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a09_res288_fold0,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.55056474, recalculado=0.55056474"
+a09_res288_fold0,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.86874362, recalculado=0.86874362"
+a09_res288_fold0,historial: longitud = épocas ejecutadas y AP por época presente,True,15 épocas
+a09_res288_fold0,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=10, run_config=10, meta=10"
+a09_res288_fold0,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.550565, json=0.550565"
+a09_res288_fold0,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.868744, json=0.868744"
+a09_res288_fold1,comando = flags de la candidata,True,--image-size 288
+a09_res288_fold1,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=1"
+a09_res288_fold1,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a09_res288_fold1,config: partición,True,configs/splits/cv_folds_e2.csv
+a09_res288_fold1,config: pesos de clase con α = 1.0 (no se busca),True,None
+a09_res288_fold1,config: hiperparámetros fijos del protocolo,True,
+a09_res288_fold1,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a09_res288_fold1,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a09_res288_fold1,config: 800 train y 200 validation,True,800/200
+a09_res288_fold1,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a09_res288_fold1,flag: sin calendario,True,
+a09_res288_fold1,flag: sin layer decay,True,
+a09_res288_fold1,flag: sin drop path,True,
+a09_res288_fold1,flag: sin label smoothing,True,
+a09_res288_fold1,flag: sin aumento moderado,True,
+a09_res288_fold1,flag: tamaño de imagen,True,288
+a09_res288_fold1,flag: sin EMA,True,
+a09_res288_fold1,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a09_res288_fold1,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a09_res288_fold1,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a09_res288_fold1,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a09_res288_fold1,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.66712238, recalculado=0.66712238"
+a09_res288_fold1,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.90602656, recalculado=0.90602656"
+a09_res288_fold1,historial: longitud = épocas ejecutadas y AP por época presente,True,17 épocas
+a09_res288_fold1,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=17, run_config=17, meta=17"
+a09_res288_fold1,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.667122, json=0.667122"
+a09_res288_fold1,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.906027, json=0.906027"
+a09_res288_fold2,comando = flags de la candidata,True,--image-size 288
+a09_res288_fold2,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=2"
+a09_res288_fold2,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a09_res288_fold2,config: partición,True,configs/splits/cv_folds_e2.csv
+a09_res288_fold2,config: pesos de clase con α = 1.0 (no se busca),True,None
+a09_res288_fold2,config: hiperparámetros fijos del protocolo,True,
+a09_res288_fold2,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a09_res288_fold2,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a09_res288_fold2,config: 800 train y 200 validation,True,800/200
+a09_res288_fold2,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a09_res288_fold2,flag: sin calendario,True,
+a09_res288_fold2,flag: sin layer decay,True,
+a09_res288_fold2,flag: sin drop path,True,
+a09_res288_fold2,flag: sin label smoothing,True,
+a09_res288_fold2,flag: sin aumento moderado,True,
+a09_res288_fold2,flag: tamaño de imagen,True,288
+a09_res288_fold2,flag: sin EMA,True,
+a09_res288_fold2,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a09_res288_fold2,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a09_res288_fold2,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a09_res288_fold2,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a09_res288_fold2,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.62015492, recalculado=0.62015492"
+a09_res288_fold2,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.90143003, recalculado=0.90143003"
+a09_res288_fold2,historial: longitud = épocas ejecutadas y AP por época presente,True,15 épocas
+a09_res288_fold2,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=15, run_config=15, meta=15"
+a09_res288_fold2,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.620155, json=0.620155"
+a09_res288_fold2,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.901430, json=0.901430"
+a09_res288_fold3,comando = flags de la candidata,True,--image-size 288
+a09_res288_fold3,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=3"
+a09_res288_fold3,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a09_res288_fold3,config: partición,True,configs/splits/cv_folds_e2.csv
+a09_res288_fold3,config: pesos de clase con α = 1.0 (no se busca),True,None
+a09_res288_fold3,config: hiperparámetros fijos del protocolo,True,
+a09_res288_fold3,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a09_res288_fold3,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a09_res288_fold3,config: 800 train y 200 validation,True,800/200
+a09_res288_fold3,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a09_res288_fold3,flag: sin calendario,True,
+a09_res288_fold3,flag: sin layer decay,True,
+a09_res288_fold3,flag: sin drop path,True,
+a09_res288_fold3,flag: sin label smoothing,True,
+a09_res288_fold3,flag: sin aumento moderado,True,
+a09_res288_fold3,flag: tamaño de imagen,True,288
+a09_res288_fold3,flag: sin EMA,True,
+a09_res288_fold3,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a09_res288_fold3,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a09_res288_fold3,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a09_res288_fold3,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a09_res288_fold3,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.51709150, recalculado=0.51709150"
+a09_res288_fold3,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.88125638, recalculado=0.88125638"
+a09_res288_fold3,historial: longitud = épocas ejecutadas y AP por época presente,True,13 épocas
+a09_res288_fold3,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=13, run_config=13, meta=13"
+a09_res288_fold3,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.517091, json=0.517091"
+a09_res288_fold3,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.881256, json=0.881256"
+a09_res288_fold4,comando = flags de la candidata,True,--image-size 288
+a09_res288_fold4,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=4"
+a09_res288_fold4,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a09_res288_fold4,config: partición,True,configs/splits/cv_folds_e2.csv
+a09_res288_fold4,config: pesos de clase con α = 1.0 (no se busca),True,None
+a09_res288_fold4,config: hiperparámetros fijos del protocolo,True,
+a09_res288_fold4,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a09_res288_fold4,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a09_res288_fold4,config: 800 train y 200 validation,True,800/200
+a09_res288_fold4,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a09_res288_fold4,flag: sin calendario,True,
+a09_res288_fold4,flag: sin layer decay,True,
+a09_res288_fold4,flag: sin drop path,True,
+a09_res288_fold4,flag: sin label smoothing,True,
+a09_res288_fold4,flag: sin aumento moderado,True,
+a09_res288_fold4,flag: tamaño de imagen,True,288
+a09_res288_fold4,flag: sin EMA,True,
+a09_res288_fold4,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a09_res288_fold4,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a09_res288_fold4,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5617977380752563, 4.545454502105713]"
+a09_res288_fold4,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a09_res288_fold4,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.64162568, recalculado=0.64162568"
+a09_res288_fold4,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.91673317, recalculado=0.91673317"
+a09_res288_fold4,historial: longitud = épocas ejecutadas y AP por época presente,True,20 épocas
+a09_res288_fold4,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=20, run_config=20, meta=20"
+a09_res288_fold4,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.641626, json=0.641626"
+a09_res288_fold4,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.916733, json=0.916733"
+a10_ema099_fold0,comando = flags de la candidata,True,--ema-decay 0.99
+a10_ema099_fold0,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=0"
+a10_ema099_fold0,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a10_ema099_fold0,config: partición,True,configs/splits/cv_folds_e2.csv
+a10_ema099_fold0,config: pesos de clase con α = 1.0 (no se busca),True,None
+a10_ema099_fold0,config: hiperparámetros fijos del protocolo,True,
+a10_ema099_fold0,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a10_ema099_fold0,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a10_ema099_fold0,config: 800 train y 200 validation,True,800/200
+a10_ema099_fold0,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a10_ema099_fold0,flag: sin calendario,True,
+a10_ema099_fold0,flag: sin layer decay,True,
+a10_ema099_fold0,flag: sin drop path,True,
+a10_ema099_fold0,flag: sin label smoothing,True,
+a10_ema099_fold0,flag: sin aumento moderado,True,
+a10_ema099_fold0,flag: sin cambio de tamaño,True,
+a10_ema099_fold0,flag: EMA,True,0.99
+a10_ema099_fold0,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a10_ema099_fold0,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a10_ema099_fold0,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a10_ema099_fold0,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a10_ema099_fold0,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.50575605, recalculado=0.50575605"
+a10_ema099_fold0,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.85801839, recalculado=0.85801839"
+a10_ema099_fold0,historial: longitud = épocas ejecutadas y AP por época presente,True,13 épocas
+a10_ema099_fold0,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=13, run_config=13, meta=13"
+a10_ema099_fold0,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.505756, json=0.505756"
+a10_ema099_fold0,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.858018, json=0.858018"
+a10_ema099_fold1,comando = flags de la candidata,True,--ema-decay 0.99
+a10_ema099_fold1,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=1"
+a10_ema099_fold1,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a10_ema099_fold1,config: partición,True,configs/splits/cv_folds_e2.csv
+a10_ema099_fold1,config: pesos de clase con α = 1.0 (no se busca),True,None
+a10_ema099_fold1,config: hiperparámetros fijos del protocolo,True,
+a10_ema099_fold1,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a10_ema099_fold1,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a10_ema099_fold1,config: 800 train y 200 validation,True,800/200
+a10_ema099_fold1,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a10_ema099_fold1,flag: sin calendario,True,
+a10_ema099_fold1,flag: sin layer decay,True,
+a10_ema099_fold1,flag: sin drop path,True,
+a10_ema099_fold1,flag: sin label smoothing,True,
+a10_ema099_fold1,flag: sin aumento moderado,True,
+a10_ema099_fold1,flag: sin cambio de tamaño,True,
+a10_ema099_fold1,flag: EMA,True,0.99
+a10_ema099_fold1,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a10_ema099_fold1,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a10_ema099_fold1,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a10_ema099_fold1,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a10_ema099_fold1,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.56142712, recalculado=0.56142712"
+a10_ema099_fold1,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.85929520, recalculado=0.85929520"
+a10_ema099_fold1,historial: longitud = épocas ejecutadas y AP por época presente,True,16 épocas
+a10_ema099_fold1,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=11, run_config=11, meta=11"
+a10_ema099_fold1,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.561427, json=0.561427"
+a10_ema099_fold1,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.859295, json=0.859295"
+a10_ema099_fold2,comando = flags de la candidata,True,--ema-decay 0.99
+a10_ema099_fold2,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=2"
+a10_ema099_fold2,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a10_ema099_fold2,config: partición,True,configs/splits/cv_folds_e2.csv
+a10_ema099_fold2,config: pesos de clase con α = 1.0 (no se busca),True,None
+a10_ema099_fold2,config: hiperparámetros fijos del protocolo,True,
+a10_ema099_fold2,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a10_ema099_fold2,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a10_ema099_fold2,config: 800 train y 200 validation,True,800/200
+a10_ema099_fold2,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a10_ema099_fold2,flag: sin calendario,True,
+a10_ema099_fold2,flag: sin layer decay,True,
+a10_ema099_fold2,flag: sin drop path,True,
+a10_ema099_fold2,flag: sin label smoothing,True,
+a10_ema099_fold2,flag: sin aumento moderado,True,
+a10_ema099_fold2,flag: sin cambio de tamaño,True,
+a10_ema099_fold2,flag: EMA,True,0.99
+a10_ema099_fold2,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a10_ema099_fold2,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a10_ema099_fold2,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a10_ema099_fold2,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a10_ema099_fold2,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.60111005, recalculado=0.60111005"
+a10_ema099_fold2,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.86235955, recalculado=0.86235955"
+a10_ema099_fold2,historial: longitud = épocas ejecutadas y AP por época presente,True,16 épocas
+a10_ema099_fold2,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=15, run_config=15, meta=15"
+a10_ema099_fold2,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.601110, json=0.601110"
+a10_ema099_fold2,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.862360, json=0.862360"
+a10_ema099_fold3,comando = flags de la candidata,True,--ema-decay 0.99
+a10_ema099_fold3,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=3"
+a10_ema099_fold3,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a10_ema099_fold3,config: partición,True,configs/splits/cv_folds_e2.csv
+a10_ema099_fold3,config: pesos de clase con α = 1.0 (no se busca),True,None
+a10_ema099_fold3,config: hiperparámetros fijos del protocolo,True,
+a10_ema099_fold3,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a10_ema099_fold3,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a10_ema099_fold3,config: 800 train y 200 validation,True,800/200
+a10_ema099_fold3,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a10_ema099_fold3,flag: sin calendario,True,
+a10_ema099_fold3,flag: sin layer decay,True,
+a10_ema099_fold3,flag: sin drop path,True,
+a10_ema099_fold3,flag: sin label smoothing,True,
+a10_ema099_fold3,flag: sin aumento moderado,True,
+a10_ema099_fold3,flag: sin cambio de tamaño,True,
+a10_ema099_fold3,flag: EMA,True,0.99
+a10_ema099_fold3,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a10_ema099_fold3,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a10_ema099_fold3,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5610098242759705, 4.597701072692871]"
+a10_ema099_fold3,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a10_ema099_fold3,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.54110506, recalculado=0.54110506"
+a10_ema099_fold3,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.87717058, recalculado=0.87717058"
+a10_ema099_fold3,historial: longitud = épocas ejecutadas y AP por época presente,True,15 épocas
+a10_ema099_fold3,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=15, run_config=15, meta=15"
+a10_ema099_fold3,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.541105, json=0.541105"
+a10_ema099_fold3,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.877171, json=0.877171"
+a10_ema099_fold4,comando = flags de la candidata,True,--ema-decay 0.99
+a10_ema099_fold4,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=4"
+a10_ema099_fold4,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_agente/seed 42
+a10_ema099_fold4,config: partición,True,configs/splits/cv_folds_e2.csv
+a10_ema099_fold4,config: pesos de clase con α = 1.0 (no se busca),True,None
+a10_ema099_fold4,config: hiperparámetros fijos del protocolo,True,
+a10_ema099_fold4,config: criterio de checkpoint max val_roc_auc (ninguna candidata lo cambia),True,max val_roc_auc (first epoch among ties)
+a10_ema099_fold4,"config: early stopping activo (patience 5, min_delta 0.001)",True,
+a10_ema099_fold4,config: 800 train y 200 validation,True,800/200
+a10_ema099_fold4,flag: learning rate efectivo,True,"lr=0.0001 (yaml), esperado 0.0001"
+a10_ema099_fold4,flag: sin calendario,True,
+a10_ema099_fold4,flag: sin layer decay,True,
+a10_ema099_fold4,flag: sin drop path,True,
+a10_ema099_fold4,flag: sin label smoothing,True,
+a10_ema099_fold4,flag: sin aumento moderado,True,
+a10_ema099_fold4,flag: sin cambio de tamaño,True,
+a10_ema099_fold4,flag: EMA,True,0.99
+a10_ema099_fold4,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+a10_ema099_fold4,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+a10_ema099_fold4,pesos de clase = recalculados con las etiquetas de train del fold (α = 1.0),True,"[0.5617977380752563, 4.545454502105713]"
+a10_ema099_fold4,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+a10_ema099_fold4,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.56403301, recalculado=0.56403301"
+a10_ema099_fold4,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.90689013, recalculado=0.90689013"
+a10_ema099_fold4,historial: longitud = épocas ejecutadas y AP por época presente,True,20 épocas
+a10_ema099_fold4,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=16, run_config=16, meta=16"
+a10_ema099_fold4,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.564033, json=0.564033"
+a10_ema099_fold4,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.906890, json=0.906890"
+convnext_a_alpha1_fold0,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=0"
+convnext_a_alpha1_fold0,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha1_fold0,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha1_fold0,config: pesos de clase (exponente),True,alpha=1.0
+convnext_a_alpha1_fold0,config: hiperparámetros del protocolo,True,
+convnext_a_alpha1_fold0,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha1_fold0,config: early stopping activo,True,
+convnext_a_alpha1_fold0,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha1_fold0,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha1_fold0,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha1_fold0,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.5610098242759705, 4.597701072692871]"
+convnext_a_alpha1_fold0,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha1_fold0,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.49394984, recalculado=0.49394984"
+convnext_a_alpha1_fold0,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.87436159, recalculado=0.87436159"
+convnext_a_alpha1_fold0,historial: longitud = épocas ejecutadas y AP por época presente,True,11 épocas
+convnext_a_alpha1_fold0,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=6, run_config=6, meta=6"
+convnext_a_alpha1_fold0,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.493950, json=0.493950"
+convnext_a_alpha1_fold0,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.874362, json=0.874362"
+convnext_a_alpha1_fold1,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=1"
+convnext_a_alpha1_fold1,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha1_fold1,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha1_fold1,config: pesos de clase (exponente),True,alpha=1.0
+convnext_a_alpha1_fold1,config: hiperparámetros del protocolo,True,
+convnext_a_alpha1_fold1,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha1_fold1,config: early stopping activo,True,
+convnext_a_alpha1_fold1,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha1_fold1,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha1_fold1,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha1_fold1,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.5610098242759705, 4.597701072692871]"
+convnext_a_alpha1_fold1,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha1_fold1,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.69061900, recalculado=0.69061900"
+convnext_a_alpha1_fold1,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.90398366, recalculado=0.90398366"
+convnext_a_alpha1_fold1,historial: longitud = épocas ejecutadas y AP por época presente,True,18 épocas
+convnext_a_alpha1_fold1,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=18, run_config=18, meta=18"
+convnext_a_alpha1_fold1,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.690619, json=0.690619"
+convnext_a_alpha1_fold1,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.903984, json=0.903984"
+convnext_a_alpha1_fold2,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=2"
+convnext_a_alpha1_fold2,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha1_fold2,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha1_fold2,config: pesos de clase (exponente),True,alpha=1.0
+convnext_a_alpha1_fold2,config: hiperparámetros del protocolo,True,
+convnext_a_alpha1_fold2,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha1_fold2,config: early stopping activo,True,
+convnext_a_alpha1_fold2,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha1_fold2,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha1_fold2,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha1_fold2,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.5610098242759705, 4.597701072692871]"
+convnext_a_alpha1_fold2,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha1_fold2,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.58696475, recalculado=0.58696475"
+convnext_a_alpha1_fold2,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.89504597, recalculado=0.89504597"
+convnext_a_alpha1_fold2,historial: longitud = épocas ejecutadas y AP por época presente,True,17 épocas
+convnext_a_alpha1_fold2,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=17, run_config=17, meta=17"
+convnext_a_alpha1_fold2,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.586965, json=0.586965"
+convnext_a_alpha1_fold2,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.895046, json=0.895046"
+convnext_a_alpha1_fold3,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=3"
+convnext_a_alpha1_fold3,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha1_fold3,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha1_fold3,config: pesos de clase (exponente),True,alpha=1.0
+convnext_a_alpha1_fold3,config: hiperparámetros del protocolo,True,
+convnext_a_alpha1_fold3,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha1_fold3,config: early stopping activo,True,
+convnext_a_alpha1_fold3,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha1_fold3,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha1_fold3,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha1_fold3,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.5610098242759705, 4.597701072692871]"
+convnext_a_alpha1_fold3,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha1_fold3,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.50569941, recalculado=0.50569941"
+convnext_a_alpha1_fold3,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.90679265, recalculado=0.90679265"
+convnext_a_alpha1_fold3,historial: longitud = épocas ejecutadas y AP por época presente,True,13 épocas
+convnext_a_alpha1_fold3,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=4, run_config=4, meta=4"
+convnext_a_alpha1_fold3,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.505699, json=0.505699"
+convnext_a_alpha1_fold3,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.906793, json=0.906793"
+convnext_a_alpha1_fold4,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=4"
+convnext_a_alpha1_fold4,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha1_fold4,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha1_fold4,config: pesos de clase (exponente),True,alpha=1.0
+convnext_a_alpha1_fold4,config: hiperparámetros del protocolo,True,
+convnext_a_alpha1_fold4,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha1_fold4,config: early stopping activo,True,
+convnext_a_alpha1_fold4,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha1_fold4,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha1_fold4,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha1_fold4,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.5617977380752563, 4.545454502105713]"
+convnext_a_alpha1_fold4,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha1_fold4,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.58064263, recalculado=0.58064263"
+convnext_a_alpha1_fold4,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.90449588, recalculado=0.90449588"
+convnext_a_alpha1_fold4,historial: longitud = épocas ejecutadas y AP por época presente,True,19 épocas
+convnext_a_alpha1_fold4,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=14, run_config=14, meta=14"
+convnext_a_alpha1_fold4,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.580643, json=0.580643"
+convnext_a_alpha1_fold4,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.904496, json=0.904496"
+convnext_a_alpha05_fold0,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=0"
+convnext_a_alpha05_fold0,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha05_fold0,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha05_fold0,config: pesos de clase (exponente),True,alpha=0.5
+convnext_a_alpha05_fold0,config: hiperparámetros del protocolo,True,
+convnext_a_alpha05_fold0,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha05_fold0,config: early stopping activo,True,
+convnext_a_alpha05_fold0,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha05_fold0,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha05_fold0,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha05_fold0,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.8315487504005432, 2.380525588989258]"
+convnext_a_alpha05_fold0,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha05_fold0,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.34791437, recalculado=0.34791437"
+convnext_a_alpha05_fold0,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.76940756, recalculado=0.76940756"
+convnext_a_alpha05_fold0,historial: longitud = épocas ejecutadas y AP por época presente,True,10 épocas
+convnext_a_alpha05_fold0,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=8, run_config=8, meta=8"
+convnext_a_alpha05_fold0,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.347914, json=0.347914"
+convnext_a_alpha05_fold0,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.769408, json=0.769408"
+convnext_a_alpha05_fold1,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=1"
+convnext_a_alpha05_fold1,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha05_fold1,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha05_fold1,config: pesos de clase (exponente),True,alpha=0.5
+convnext_a_alpha05_fold1,config: hiperparámetros del protocolo,True,
+convnext_a_alpha05_fold1,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha05_fold1,config: early stopping activo,True,
+convnext_a_alpha05_fold1,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha05_fold1,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha05_fold1,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha05_fold1,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.8315487504005432, 2.380525588989258]"
+convnext_a_alpha05_fold1,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha05_fold1,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.60542258, recalculado=0.60542258"
+convnext_a_alpha05_fold1,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.87691522, recalculado=0.87691522"
+convnext_a_alpha05_fold1,historial: longitud = épocas ejecutadas y AP por época presente,True,13 épocas
+convnext_a_alpha05_fold1,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=13, run_config=13, meta=13"
+convnext_a_alpha05_fold1,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.605423, json=0.605423"
+convnext_a_alpha05_fold1,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.876915, json=0.876915"
+convnext_a_alpha05_fold2,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=2"
+convnext_a_alpha05_fold2,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha05_fold2,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha05_fold2,config: pesos de clase (exponente),True,alpha=0.5
+convnext_a_alpha05_fold2,config: hiperparámetros del protocolo,True,
+convnext_a_alpha05_fold2,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha05_fold2,config: early stopping activo,True,
+convnext_a_alpha05_fold2,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha05_fold2,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha05_fold2,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha05_fold2,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.8315487504005432, 2.380525588989258]"
+convnext_a_alpha05_fold2,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha05_fold2,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.61650007, recalculado=0.61650007"
+convnext_a_alpha05_fold2,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.89530133, recalculado=0.89530133"
+convnext_a_alpha05_fold2,historial: longitud = épocas ejecutadas y AP por época presente,True,16 épocas
+convnext_a_alpha05_fold2,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=11, run_config=11, meta=11"
+convnext_a_alpha05_fold2,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.616500, json=0.616500"
+convnext_a_alpha05_fold2,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.895301, json=0.895301"
+convnext_a_alpha05_fold3,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=3"
+convnext_a_alpha05_fold3,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha05_fold3,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha05_fold3,config: pesos de clase (exponente),True,alpha=0.5
+convnext_a_alpha05_fold3,config: hiperparámetros del protocolo,True,
+convnext_a_alpha05_fold3,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha05_fold3,config: early stopping activo,True,
+convnext_a_alpha05_fold3,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha05_fold3,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha05_fold3,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha05_fold3,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.8315487504005432, 2.380525588989258]"
+convnext_a_alpha05_fold3,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha05_fold3,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.60915492, recalculado=0.60915492"
+convnext_a_alpha05_fold3,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.87768131, recalculado=0.87768131"
+convnext_a_alpha05_fold3,historial: longitud = épocas ejecutadas y AP por época presente,True,9 épocas
+convnext_a_alpha05_fold3,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=8, run_config=8, meta=8"
+convnext_a_alpha05_fold3,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.609155, json=0.609155"
+convnext_a_alpha05_fold3,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.877681, json=0.877681"
+convnext_a_alpha05_fold4,config: esquema E2 y fold,True,"evaluation_scheme=E2, fold=4"
+convnext_a_alpha05_fold4,"config: arquitectura, condición, experimento, semilla",True,convnext_tiny/A/r7_robustez_e2/seed 42
+convnext_a_alpha05_fold4,config: partición,True,configs/splits/cv_folds_e2.csv
+convnext_a_alpha05_fold4,config: pesos de clase (exponente),True,alpha=0.5
+convnext_a_alpha05_fold4,config: hiperparámetros del protocolo,True,
+convnext_a_alpha05_fold4,config: criterio de checkpoint max val_roc_auc,True,max val_roc_auc (first epoch among ties)
+convnext_a_alpha05_fold4,config: early stopping activo,True,
+convnext_a_alpha05_fold4,config: 800 train y 200 validation,True,800/200
+convnext_a_alpha05_fold4,"manifiesto: 1000 imágenes, ninguna de test",True,1000 filas
+convnext_a_alpha05_fold4,manifiesto: validation = fold de cv_folds_e2.csv,True,200 imágenes
+convnext_a_alpha05_fold4,pesos de clase = recalculados con las etiquetas de train del fold,True,"[0.8313313722610474, 2.36468243598938]"
+convnext_a_alpha05_fold4,"predicciones: mismas imágenes y orden que validation del manifiesto, época del checkpoint",True,200 filas
+convnext_a_alpha05_fold4,AP: validation_metrics.json = recalculado desde las predicciones,True,"json=0.46343378, recalculado=0.46343378"
+convnext_a_alpha05_fold4,ROC-AUC: validation_metrics.json = recalculado desde las predicciones,True,"json=0.85182229, recalculado=0.85182229"
+convnext_a_alpha05_fold4,historial: longitud = épocas ejecutadas y AP por época presente,True,9 épocas
+convnext_a_alpha05_fold4,"checkpoint: época = primer máximo de val_roc_auc del historial (config, meta e historial coinciden)",True,"historial=9, run_config=9, meta=9"
+convnext_a_alpha05_fold4,AP: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.463434, json=0.463434"
+convnext_a_alpha05_fold4,ROC-AUC: historial en la época del checkpoint = validation_metrics.json,True,"historial=0.851822, json=0.851822"
+referencia B0,valor del protocolo: ap_medio,True,"leído=0.5716, protocolo=0.5716"
+referencia B0,valor del protocolo: roc_auc_medio,True,"leído=0.8969, protocolo=0.8969"
+referencia B0,valor del protocolo: ap_por_fold,True,"leído=[0.4939, 0.6906, 0.587, 0.5057, 0.5806], protocolo=[0.4939, 0.6906, 0.587, 0.5057, 0.5806]"
+referencia B2,valor del protocolo: ap_medio,True,"leído=0.5285, protocolo=0.5285"
+referencia B2,valor del protocolo: roc_auc_medio,True,"leído=0.8542, protocolo=0.8542"
+referencia B2,valor del protocolo: ap_por_fold,True,"leído=[0.3479, 0.6054, 0.6165, 0.6092, 0.4634], protocolo=[0.3479, 0.6054, 0.6165, 0.6092, 0.4634]"
+comandos_confirmacion,30 comandos (3 configuraciones x 2 semillas x 5 folds),True,30
+comandos_confirmacion,comandos y salidas únicos,True,
+comandos_confirmacion,sin espacios dobles ni espacios al final,True,
+comandos_confirmacion,todas las combinaciones id x semilla x fold,True,
+comandos_confirmacion,cada comando coincide con la plantilla y con los flags de su configuración,True,

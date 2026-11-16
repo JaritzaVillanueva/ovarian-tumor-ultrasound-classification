@@ -1,0 +1,257 @@
+{
+  "estado": "generado por sustitución mecánica de la plantilla del protocolo; pendiente de que el autor verifique que coinciden con ella antes de correr",
+  "protocolo": "results/classification/r7_optimizacion/agente/protocolo_agente.json (commit 7d48f86, con la enmienda E1)",
+  "finalista": "a03_cosine",
+  "flags_del_finalista": "--lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6",
+  "plantilla": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed {seed} --checkpoint-metric val_roc_auc {flags} --split-csv configs/splits/cv_folds_e2.csv --fold {k} --output-dir results/classification/r7_optimizacion/agente/confirmacion/{id}/seed_{seed}/fold_{k}",
+  "total": 30,
+  "verificacion_contra_la_plantilla": {
+    "30 comandos (3 configuraciones x 2 semillas x 5 folds)": true,
+    "comandos y salidas únicos": true,
+    "sin espacios dobles ni espacios al final": true,
+    "todas las combinaciones id x semilla x fold": true,
+    "cada comando coincide con la plantilla y con los flags de su configuración": true
+  },
+  "comandos": [
+    {
+      "id": "a03_cosine_seed43_fold0",
+      "config_id": "a03_cosine",
+      "seed": 43,
+      "fold": 0,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_0",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_0"
+    },
+    {
+      "id": "a03_cosine_seed43_fold1",
+      "config_id": "a03_cosine",
+      "seed": 43,
+      "fold": 1,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_1",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_1"
+    },
+    {
+      "id": "a03_cosine_seed43_fold2",
+      "config_id": "a03_cosine",
+      "seed": 43,
+      "fold": 2,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_2",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_2"
+    },
+    {
+      "id": "a03_cosine_seed43_fold3",
+      "config_id": "a03_cosine",
+      "seed": 43,
+      "fold": 3,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_3",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_3"
+    },
+    {
+      "id": "a03_cosine_seed43_fold4",
+      "config_id": "a03_cosine",
+      "seed": 43,
+      "fold": 4,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_4",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_43/fold_4"
+    },
+    {
+      "id": "a03_cosine_seed44_fold0",
+      "config_id": "a03_cosine",
+      "seed": 44,
+      "fold": 0,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_0",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_0"
+    },
+    {
+      "id": "a03_cosine_seed44_fold1",
+      "config_id": "a03_cosine",
+      "seed": 44,
+      "fold": 1,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_1",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_1"
+    },
+    {
+      "id": "a03_cosine_seed44_fold2",
+      "config_id": "a03_cosine",
+      "seed": 44,
+      "fold": 2,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_2",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_2"
+    },
+    {
+      "id": "a03_cosine_seed44_fold3",
+      "config_id": "a03_cosine",
+      "seed": 44,
+      "fold": 3,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_3",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_3"
+    },
+    {
+      "id": "a03_cosine_seed44_fold4",
+      "config_id": "a03_cosine",
+      "seed": 44,
+      "fold": 4,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_4",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/a03_cosine/seed_44/fold_4"
+    },
+    {
+      "id": "b0_seed43_fold0",
+      "config_id": "b0",
+      "seed": 43,
+      "fold": 0,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_0",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_0"
+    },
+    {
+      "id": "b0_seed43_fold1",
+      "config_id": "b0",
+      "seed": 43,
+      "fold": 1,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_1",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_1"
+    },
+    {
+      "id": "b0_seed43_fold2",
+      "config_id": "b0",
+      "seed": 43,
+      "fold": 2,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_2",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_2"
+    },
+    {
+      "id": "b0_seed43_fold3",
+      "config_id": "b0",
+      "seed": 43,
+      "fold": 3,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_3",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_3"
+    },
+    {
+      "id": "b0_seed43_fold4",
+      "config_id": "b0",
+      "seed": 43,
+      "fold": 4,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_4",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_4"
+    },
+    {
+      "id": "b0_seed44_fold0",
+      "config_id": "b0",
+      "seed": 44,
+      "fold": 0,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_0",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_0"
+    },
+    {
+      "id": "b0_seed44_fold1",
+      "config_id": "b0",
+      "seed": 44,
+      "fold": 1,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_1",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_1"
+    },
+    {
+      "id": "b0_seed44_fold2",
+      "config_id": "b0",
+      "seed": 44,
+      "fold": 2,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_2",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_2"
+    },
+    {
+      "id": "b0_seed44_fold3",
+      "config_id": "b0",
+      "seed": 44,
+      "fold": 3,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_3",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_3"
+    },
+    {
+      "id": "b0_seed44_fold4",
+      "config_id": "b0",
+      "seed": 44,
+      "fold": 4,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_4",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_4"
+    },
+    {
+      "id": "b2_seed43_fold0",
+      "config_id": "b2",
+      "seed": 43,
+      "fold": 0,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_0",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_0"
+    },
+    {
+      "id": "b2_seed43_fold1",
+      "config_id": "b2",
+      "seed": 43,
+      "fold": 1,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_1",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_1"
+    },
+    {
+      "id": "b2_seed43_fold2",
+      "config_id": "b2",
+      "seed": 43,
+      "fold": 2,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_2",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_2"
+    },
+    {
+      "id": "b2_seed43_fold3",
+      "config_id": "b2",
+      "seed": 43,
+      "fold": 3,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_3",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_3"
+    },
+    {
+      "id": "b2_seed43_fold4",
+      "config_id": "b2",
+      "seed": 43,
+      "fold": 4,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 43 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_4",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_4"
+    },
+    {
+      "id": "b2_seed44_fold0",
+      "config_id": "b2",
+      "seed": 44,
+      "fold": 0,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 0 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_0",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_0"
+    },
+    {
+      "id": "b2_seed44_fold1",
+      "config_id": "b2",
+      "seed": 44,
+      "fold": 1,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 1 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_1",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_1"
+    },
+    {
+      "id": "b2_seed44_fold2",
+      "config_id": "b2",
+      "seed": 44,
+      "fold": 2,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 2 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_2",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_2"
+    },
+    {
+      "id": "b2_seed44_fold3",
+      "config_id": "b2",
+      "seed": 44,
+      "fold": 3,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 3 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_3",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_3"
+    },
+    {
+      "id": "b2_seed44_fold4",
+      "config_id": "b2",
+      "seed": 44,
+      "fold": 4,
+      "comando": "python -m src.classification.run_experiment --arch convnext_tiny --condition A --experiment r7_agente --seed 44 --checkpoint-metric val_roc_auc --class-weight-alpha 0.5 --split-csv configs/splits/cv_folds_e2.csv --fold 4 --output-dir results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_4",
+      "salida": "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_4"
+    }
+  ]
+}

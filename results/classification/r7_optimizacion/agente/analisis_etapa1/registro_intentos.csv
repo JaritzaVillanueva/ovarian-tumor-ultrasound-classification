@@ -1,0 +1,56 @@
+etapa,config_id,fold,seed,flags,ap,roc_auc,epoca_elegida,epocas_ejecutadas,estado,ruta,nota
+etapa_1,a01_lr5e5,0,42,--learning-rate 5e-5,0.5974976314204443,0.874361593462717,11,11,completada,results/classification/r7_optimizacion/agente/corridas/a01_lr5e5/fold_0,
+etapa_1,a01_lr5e5,1,42,--learning-rate 5e-5,0.7027219879470809,0.8975995914198162,11,12,completada,results/classification/r7_optimizacion/agente/corridas/a01_lr5e5/fold_1,
+etapa_1,a01_lr5e5,2,42,--learning-rate 5e-5,0.6505440475615171,0.9126659856996936,13,13,completada,results/classification/r7_optimizacion/agente/corridas/a01_lr5e5/fold_2,
+etapa_1,a01_lr5e5,3,42,--learning-rate 5e-5,0.5756583658895643,0.8953013278855976,11,17,completada,results/classification/r7_optimizacion/agente/corridas/a01_lr5e5/fold_3,
+etapa_1,a01_lr5e5,4,42,--learning-rate 5e-5,0.43997908384920326,0.8337323756318169,5,10,completada,results/classification/r7_optimizacion/agente/corridas/a01_lr5e5/fold_4,
+etapa_1,a02_lr2e4,0,42,--learning-rate 2e-4,0.5255145102347571,0.8199693564862104,16,17,completada,results/classification/r7_optimizacion/agente/corridas/a02_lr2e4/fold_0,
+etapa_1,a02_lr2e4,1,42,--learning-rate 2e-4,0.5962912838728383,0.8894279877425945,13,16,completada,results/classification/r7_optimizacion/agente/corridas/a02_lr2e4/fold_1,
+etapa_1,a02_lr2e4,2,42,--learning-rate 2e-4,0.5722540322082484,0.8927477017364658,18,19,completada,results/classification/r7_optimizacion/agente/corridas/a02_lr2e4/fold_2,
+etapa_1,a02_lr2e4,3,42,--learning-rate 2e-4,0.25483557147399216,0.7867722165474975,4,9,completada,results/classification/r7_optimizacion/agente/corridas/a02_lr2e4/fold_3,
+etapa_1,a02_lr2e4,4,42,--learning-rate 2e-4,0.6196837379643718,0.8659217877094972,19,19,completada,results/classification/r7_optimizacion/agente/corridas/a02_lr2e4/fold_4,
+etapa_1,a03_cosine,0,42,--lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6,0.4984491347053837,0.8822778345250255,8,9,completada,results/classification/r7_optimizacion/agente/corridas/a03_cosine/fold_0,
+etapa_1,a03_cosine,1,42,--lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6,0.7482318729443869,0.911899897854954,9,12,completada,results/classification/r7_optimizacion/agente/corridas/a03_cosine/fold_1,
+etapa_1,a03_cosine,2,42,--lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6,0.6948285659347886,0.9213483146067416,12,13,completada,results/classification/r7_optimizacion/agente/corridas/a03_cosine/fold_2,
+etapa_1,a03_cosine,3,42,--lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6,0.6329468173688949,0.9121552604698672,13,13,completada,results/classification/r7_optimizacion/agente/corridas/a03_cosine/fold_3,
+etapa_1,a03_cosine,4,42,--lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6,0.5093508424743083,0.8433093907954243,9,10,completada,results/classification/r7_optimizacion/agente/corridas/a03_cosine/fold_4,
+etapa_1,a04_llrd08,0,42,--layer-decay 0.8,0.489489532699613,0.8559754851889684,11,11,completada,results/classification/r7_optimizacion/agente/corridas/a04_llrd08/fold_0,
+etapa_1,a04_llrd08,1,42,--layer-decay 0.8,0.6775002962288074,0.8873850868232891,9,10,completada,results/classification/r7_optimizacion/agente/corridas/a04_llrd08/fold_1,
+etapa_1,a04_llrd08,2,42,--layer-decay 0.8,0.6374573796194579,0.9284984678243104,8,11,completada,results/classification/r7_optimizacion/agente/corridas/a04_llrd08/fold_2,
+etapa_1,a04_llrd08,3,42,--layer-decay 0.8,0.6066250962061799,0.8975995914198163,9,9,completada,results/classification/r7_optimizacion/agente/corridas/a04_llrd08/fold_3,
+etapa_1,a04_llrd08,4,42,--layer-decay 0.8,0.4208114767049971,0.8278797552540569,8,10,completada,results/classification/r7_optimizacion/agente/corridas/a04_llrd08/fold_4,
+etapa_1,a05_dp03,0,42,--drop-path-rate 0.3,0.49838192136333026,0.8365679264555669,14,14,completada,results/classification/r7_optimizacion/agente/corridas/a05_dp03/fold_0,
+etapa_1,a05_dp03,1,42,--drop-path-rate 0.3,0.4813156595697058,0.8656792645556691,9,11,completada,results/classification/r7_optimizacion/agente/corridas/a05_dp03/fold_1,
+etapa_1,a05_dp03,2,42,--drop-path-rate 0.3,0.5976987116415902,0.9236465781409602,15,20,completada,results/classification/r7_optimizacion/agente/corridas/a05_dp03/fold_2,
+etapa_1,a05_dp03,3,42,--drop-path-rate 0.3,0.6237632556214199,0.9014300306435138,16,16,completada,results/classification/r7_optimizacion/agente/corridas/a05_dp03/fold_3,
+etapa_1,a05_dp03,4,42,--drop-path-rate 0.3,0.5194105982065953,0.8645916467145517,14,15,completada,results/classification/r7_optimizacion/agente/corridas/a05_dp03/fold_4,
+etapa_1,a06_ls01,0,42,--label-smoothing 0.1,0.3920525266484655,0.8488253319713994,6,10,completada,results/classification/r7_optimizacion/agente/corridas/a06_ls01/fold_0,
+etapa_1,a06_ls01,1,42,--label-smoothing 0.1,0.6182144430875123,0.8764044943820224,8,13,completada,results/classification/r7_optimizacion/agente/corridas/a06_ls01/fold_1,
+etapa_1,a06_ls01,2,42,--label-smoothing 0.1,0.5993489272396567,0.8955566905005107,16,21,completada,results/classification/r7_optimizacion/agente/corridas/a06_ls01/fold_2,
+etapa_1,a06_ls01,3,42,--label-smoothing 0.1,0.5937436524613573,0.9029622063329928,10,13,completada,results/classification/r7_optimizacion/agente/corridas/a06_ls01/fold_3,
+etapa_1,a06_ls01,4,42,--label-smoothing 0.1,0.5656802170329616,0.8901303538175047,15,17,completada,results/classification/r7_optimizacion/agente/corridas/a06_ls01/fold_4,
+etapa_1,a08_augmod,0,42,--augmentation moderate,0.5464334091838791,0.881511746680286,11,11,completada,results/classification/r7_optimizacion/agente/corridas/a08_augmod/fold_0,
+etapa_1,a08_augmod,1,42,--augmentation moderate,0.5414403155954262,0.8654239019407559,11,11,completada,results/classification/r7_optimizacion/agente/corridas/a08_augmod/fold_1,
+etapa_1,a08_augmod,2,42,--augmentation moderate,0.5797357145196232,0.8940245148110316,13,13,completada,results/classification/r7_optimizacion/agente/corridas/a08_augmod/fold_2,
+etapa_1,a08_augmod,3,42,--augmentation moderate,0.5037871068865536,0.8907048008171603,14,14,completada,results/classification/r7_optimizacion/agente/corridas/a08_augmod/fold_3,
+etapa_1,a08_augmod,4,42,--augmentation moderate,0.4138978930378809,0.8228252194732641,12,15,completada,results/classification/r7_optimizacion/agente/corridas/a08_augmod/fold_4,
+etapa_1,a09_res288,0,42,--image-size 288,0.5505647437233632,0.8687436159346272,10,15,completada,results/classification/r7_optimizacion/agente/corridas/a09_res288/fold_0,
+etapa_1,a09_res288,1,42,--image-size 288,0.667122375383302,0.9060265577119511,17,17,completada,results/classification/r7_optimizacion/agente/corridas/a09_res288/fold_1,
+etapa_1,a09_res288,2,42,--image-size 288,0.6201549245711736,0.9014300306435137,15,15,completada,results/classification/r7_optimizacion/agente/corridas/a09_res288/fold_2,
+etapa_1,a09_res288,3,42,--image-size 288,0.5170914976020363,0.8812563840653729,13,13,completada,results/classification/r7_optimizacion/agente/corridas/a09_res288/fold_3,
+etapa_1,a09_res288,4,42,--image-size 288,0.6416256823638877,0.9167331737164139,20,20,completada,results/classification/r7_optimizacion/agente/corridas/a09_res288/fold_4,
+etapa_1,a10_ema099,0,42,--ema-decay 0.99,0.5057560545826765,0.8580183861082737,13,13,completada,results/classification/r7_optimizacion/agente/corridas/a10_ema099/fold_0,
+etapa_1,a10_ema099,1,42,--ema-decay 0.99,0.5614271168633482,0.8592951991828397,11,16,completada,results/classification/r7_optimizacion/agente/corridas/a10_ema099/fold_1,
+etapa_1,a10_ema099,2,42,--ema-decay 0.99,0.6011100510324285,0.8623595505617978,15,16,completada,results/classification/r7_optimizacion/agente/corridas/a10_ema099/fold_2,
+etapa_1,a10_ema099,3,42,--ema-decay 0.99,0.5411050565505713,0.877170582226762,15,15,completada,results/classification/r7_optimizacion/agente/corridas/a10_ema099/fold_3,
+etapa_1,a10_ema099,4,42,--ema-decay 0.99,0.5640330135731386,0.9068901303538175,16,20,completada,results/classification/r7_optimizacion/agente/corridas/a10_ema099/fold_4,
+referencia,b0,0,42,,0.493949838576636,0.8743615934627171,6,11,completada,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_0,corrida existente de robustez_e2 (no se repite)
+referencia,b0,1,42,,0.690619003275698,0.9039836567926456,18,18,completada,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_1,corrida existente de robustez_e2 (no se repite)
+referencia,b0,2,42,,0.5869647485659485,0.8950459652706845,17,17,completada,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_2,corrida existente de robustez_e2 (no se repite)
+referencia,b0,3,42,,0.5056994090113875,0.9067926455566906,4,13,completada,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_3,corrida existente de robustez_e2 (no se repite)
+referencia,b0,4,42,,0.5806426253845682,0.9044958765629156,14,19,completada,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_4,corrida existente de robustez_e2 (no se repite)
+referencia,b2,0,42,--class-weight-alpha 0.5,0.34791436547482274,0.7694075587334015,8,10,completada,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_0,corrida existente de robustez_e2 (no se repite)
+referencia,b2,1,42,--class-weight-alpha 0.5,0.605422580002147,0.8769152196118488,13,13,completada,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_1,corrida existente de robustez_e2 (no se repite)
+referencia,b2,2,42,--class-weight-alpha 0.5,0.616500073456959,0.8953013278855976,11,16,completada,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_2,corrida existente de robustez_e2 (no se repite)
+referencia,b2,3,42,--class-weight-alpha 0.5,0.6091549180752037,0.8776813074565883,8,9,completada,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_3,corrida existente de robustez_e2 (no se repite)
+referencia,b2,4,42,--class-weight-alpha 0.5,0.4634337815239643,0.8518222931630752,9,9,completada,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_4,corrida existente de robustez_e2 (no se repite)

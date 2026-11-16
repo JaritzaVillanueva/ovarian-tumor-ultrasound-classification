@@ -1,0 +1,167 @@
+{
+  "protocolo": {
+    "archivo": "results/classification/r7_optimizacion/agente/protocolo_agente.json",
+    "commit_de_referencia": "7d48f86",
+    "idéntico_al_commit": true,
+    "enmiendas": [
+      "E1"
+    ],
+    "estado": "protocolo v1 commiteado en f646cd0; lleva la enmienda E1 (2026-11-16, a06_ls01); ninguna corrida ejecutada"
+  },
+  "regla": {
+    "texto": {
+      "elegibles": "candidatas con ΔROC-AUC medio frente a B0 >= -0.02 (tope de caída aplicado ya aquí para no confirmar una candidata que no puede cumplir la regla final)",
+      "finalista": "la elegible con mayor AP medio entre los 5 folds (semilla 42); empate (diferencia < 0.005): mayor ROC-AUC medio; luego menor id",
+      "sin_elegibles": "si ninguna es elegible no hay confirmación (75 -> 45 corridas), no hay ganadora y se aplica sin_ganadora",
+      "nota": "la confirmación se corre aunque el ΔAP del finalista sea pequeño o negativo: el presupuesto es fijo (75 corridas) y aporta además B0 y B2 con tres semillas"
+    },
+    "umbrales_leidos_del_texto": {
+      "delta_auc_minimo": -0.02,
+      "empate_ap": 0.005
+    },
+    "interpretacion_del_empate": "se consideran empatadas las elegibles cuyo AP medio difiere del AP medio máximo en menos del umbral; entre ellas decide la mayor ROC-AUC media y luego el menor id"
+  },
+  "referencias": {
+    "b0": {
+      "ap_medio": 0.5715751249628477,
+      "roc_auc_medio": 0.8969359475291306
+    },
+    "b2": {
+      "ap_medio": 0.5284851437066194,
+      "roc_auc_medio": 0.8542255413701023
+    }
+  },
+  "conteo": {
+    "corridas_etapa_1": 45,
+    "completadas": 45,
+    "fallidas": 0,
+    "candidatas_probadas": 9,
+    "referencias": 2
+  },
+  "candidatas": [
+    {
+      "id": "a01_lr5e5",
+      "folds_completos": true,
+      "descartada": false,
+      "ap_medio": 0.593280223333562,
+      "roc_auc_medio": 0.8827321748199283,
+      "delta_auc_medio_vs_b0": -0.014203772709202367,
+      "elegible": true,
+      "motivo": "",
+      "flags": "--learning-rate 5e-5",
+      "delta_ap_medio_vs_b0": 0.021705098370714326
+    },
+    {
+      "id": "a02_lr2e4",
+      "folds_completos": true,
+      "descartada": false,
+      "ap_medio": 0.5137158271508415,
+      "roc_auc_medio": 0.8509678100444531,
+      "delta_auc_medio_vs_b0": -0.04596813748467754,
+      "elegible": false,
+      "motivo": "ΔROC-AUC medio frente a B0 < -0.02",
+      "flags": "--learning-rate 2e-4",
+      "delta_ap_medio_vs_b0": -0.05785929781200616
+    },
+    {
+      "id": "a03_cosine",
+      "folds_completos": true,
+      "descartada": false,
+      "ap_medio": 0.6167614466855524,
+      "roc_auc_medio": 0.8941981396504025,
+      "delta_auc_medio_vs_b0": -0.002737807878728127,
+      "elegible": true,
+      "motivo": "",
+      "flags": "--lr-schedule warmup_cosine --warmup-epochs 1 --cosine-epochs 15 --lr-min 1e-6",
+      "delta_ap_medio_vs_b0": 0.04518632172270476
+    },
+    {
+      "id": "a04_llrd08",
+      "folds_completos": true,
+      "descartada": false,
+      "ap_medio": 0.5663767562918111,
+      "roc_auc_medio": 0.8794676773020882,
+      "delta_auc_medio_vs_b0": -0.01746827022704245,
+      "elegible": true,
+      "motivo": "",
+      "flags": "--layer-decay 0.8",
+      "delta_ap_medio_vs_b0": -0.005198368671036624
+    },
+    {
+      "id": "a05_dp03",
+      "folds_completos": true,
+      "descartada": false,
+      "ap_medio": 0.5441140292805283,
+      "roc_auc_medio": 0.8783830893020523,
+      "delta_auc_medio_vs_b0": -0.018552858227078306,
+      "elegible": true,
+      "motivo": "",
+      "flags": "--drop-path-rate 0.3",
+      "delta_ap_medio_vs_b0": -0.02746109568231936
+    },
+    {
+      "id": "a06_ls01",
+      "folds_completos": true,
+      "descartada": false,
+      "ap_medio": 0.5538079532939907,
+      "roc_auc_medio": 0.882775815400886,
+      "delta_auc_medio_vs_b0": -0.014160132128244629,
+      "elegible": true,
+      "motivo": "",
+      "flags": "--label-smoothing 0.1",
+      "delta_ap_medio_vs_b0": -0.017767171668856996
+    },
+    {
+      "id": "a08_augmod",
+      "folds_completos": true,
+      "descartada": false,
+      "ap_medio": 0.5170588878446726,
+      "roc_auc_medio": 0.8708980367444996,
+      "delta_auc_medio_vs_b0": -0.026037910784631024,
+      "elegible": false,
+      "motivo": "ΔROC-AUC medio frente a B0 < -0.02",
+      "flags": "--augmentation moderate",
+      "delta_ap_medio_vs_b0": -0.054516237118175104
+    },
+    {
+      "id": "a09_res288",
+      "folds_completos": true,
+      "descartada": false,
+      "ap_medio": 0.5993118447287525,
+      "roc_auc_medio": 0.8948379524143758,
+      "delta_auc_medio_vs_b0": -0.002097995114754836,
+      "elegible": true,
+      "motivo": "",
+      "flags": "--image-size 288",
+      "delta_ap_medio_vs_b0": 0.02773671976590486
+    },
+    {
+      "id": "a10_ema099",
+      "folds_completos": true,
+      "descartada": false,
+      "ap_medio": 0.5546862585204326,
+      "roc_auc_medio": 0.8727467696866982,
+      "delta_auc_medio_vs_b0": -0.024189177842432463,
+      "elegible": false,
+      "motivo": "ΔROC-AUC medio frente a B0 < -0.02",
+      "flags": "--ema-decay 0.99",
+      "delta_ap_medio_vs_b0": -0.01688886644241505
+    }
+  ],
+  "elegibles": [
+    "a03_cosine",
+    "a09_res288",
+    "a01_lr5e5",
+    "a04_llrd08",
+    "a06_ls01",
+    "a05_dp03"
+  ],
+  "sin_elegibles": false,
+  "ap_maximo": 0.6167614466855524,
+  "en_empate": [
+    "a03_cosine"
+  ],
+  "finalista": "a03_cosine",
+  "el_desempate_cambia_el_finalista": false,
+  "consecuencia": "hay finalista: se generan los 30 comandos de confirmación (comandos_confirmacion.json)"
+}
