@@ -12,6 +12,7 @@ from torch.cuda.amp import GradScaler, autocast
 from torch.utils.data import SequentialSampler
 
 from src.classification.evaluate import evaluate_predictions
+from src.classification.training_options import ModelEMA
 
 # Métricas de validation registradas por época (clave del historial -> clave de evaluate_predictions).
 EPOCH_VALIDATION_METRICS = {
@@ -34,9 +35,14 @@ def set_seed(seed: int) -> None:
     torch.cuda.manual_seed_all(seed)
 
 
-def train_one_epoch(model, dataloader, criterion, optimizer, device, scaler=None):
+def train_one_epoch(model, dataloader, criterion, optimizer, device, scaler=None, lr_fn=None, step_offset=0, ema=None):
     """
     Ejecuta una época de entrenamiento.
+
+    Opciones opt-in (R7, brazo del agente; por defecto no cambian nada):
+        lr_fn: función paso global -> multiplicador; antes de cada iteración fija lr = base_lr * multiplicador
+            en cada grupo del optimizador. step_offset es el número de iteraciones previas.
+        ema: ModelEMA que se actualiza después de cada paso del optimizador.
     """
     model.train()
 
@@ -44,9 +50,14 @@ def train_one_epoch(model, dataloader, criterion, optimizer, device, scaler=None
     correct = 0
     total = 0
 
-    for images, labels in dataloader:
+    for step, (images, labels) in enumerate(dataloader):
         images = images.to(device)
         labels = labels.to(device)
+
+        if lr_fn is not None:
+            factor = lr_fn(step_offset + step)
+            for group in optimizer.param_groups:
+                group["lr"] = group["base_lr"] * factor
 
         optimizer.zero_grad()
 
@@ -62,6 +73,9 @@ def train_one_epoch(model, dataloader, criterion, optimizer, device, scaler=None
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
+
+        if ema is not None:
+            ema.update(model)
 
         running_loss += loss.item() * images.size(0)
         _, predicted = torch.max(outputs, 1)
@@ -216,6 +230,9 @@ def train_model(
     val_expected_labels=None,
     checkpoint_metric: str = "val_loss",
     early_stopping: bool = True,
+    lr_fn=None,
+    ema_decay=None,
+    val_criterion=None,
 ):
     """
     Entrena un modelo de clasificación.
@@ -235,6 +252,16 @@ def train_model(
         predictions_path: CSV con epoch, image_id, y_true y probability_malignant de validation por
             época. Requiere val_image_ids y val_expected_labels (en el orden del dataset de
             validation) y un val_loader con shuffle=False.
+
+    Opciones opt-in del brazo del agente de optimización (R7); ninguna cambia el criterio de checkpoint:
+        lr_fn: función paso global (por iteración) -> multiplicador del learning rate base de cada grupo
+            (ver training_options.lr_multiplier_fn). Con None no se toca el learning rate. Si se usa, el historial
+            añade la clave "lr" (learning rate del último grupo al final de cada época).
+        ema_decay: si no es None, se mantiene un promedio exponencial de pesos (training_options.ModelEMA). La
+            validación, el early stopping y el checkpoint usan los pesos EMA; el entrenamiento sigue con el modelo.
+        val_criterion: pérdida con la que se calcula la pérdida ponderada de validation (val_loss, que alimenta el
+            early stopping). Con None se usa `criterion`, como siempre. Sirve para entrenar con label smoothing y
+            validar sin suavizado.
     """
     if checkpoint_metric not in ("val_loss", "val_roc_auc"):
         raise ValueError(f"checkpoint_metric no soportado: {checkpoint_metric}")
@@ -252,6 +279,13 @@ def train_model(
     _use_amp = use_amp and torch.cuda.is_available()
     scaler = GradScaler() if _use_amp else None
 
+    if lr_fn is not None:
+        for group in optimizer.param_groups:
+            group.setdefault("base_lr", group["lr"])
+    ema = ModelEMA(model, ema_decay) if ema_decay is not None else None
+    eval_model = ema.module if ema is not None else model  # modelo con el que se valida y se guarda el checkpoint
+    validation_criterion = criterion if val_criterion is None else val_criterion
+
     # best_checkpoint_loss: mínimo absoluto de val_weighted_loss
     # early_stop_reference: solo se actualiza cuando la mejora supera min_delta
     best_checkpoint_loss = float("inf")
@@ -268,20 +302,25 @@ def train_model(
     }
     for key in EPOCH_VALIDATION_METRICS:
         history[key] = []
+    if lr_fn is not None:
+        history["lr"] = []
 
     for epoch in range(epochs):
         print(f"Epoch {epoch + 1}/{epochs}")
 
         train_loss, train_acc = train_one_epoch(
-            model, train_loader, criterion, optimizer, device, scaler=scaler
+            model, train_loader, criterion, optimizer, device, scaler=scaler,
+            lr_fn=lr_fn, step_offset=epoch * len(train_loader), ema=ema,
         )
         val_weighted_loss, val_unweighted_loss, val_acc, val_y_true, val_y_prob = validate_one_epoch(
-            model, val_loader, criterion, device, return_predictions=True
+            eval_model, val_loader, validation_criterion, device, return_predictions=True
         )
         epoch_metrics = compute_epoch_validation_metrics(val_y_true, val_y_prob)
 
         history["train_loss"].append(train_loss)
         history["train_acc"].append(train_acc)
+        if lr_fn is not None:
+            history["lr"].append(optimizer.param_groups[-1]["lr"])
         history["val_loss"].append(val_weighted_loss)
         history["val_unweighted_loss"].append(val_unweighted_loss)
         history["val_acc"].append(val_acc)
@@ -305,7 +344,7 @@ def train_model(
         # Checkpoint por pérdida: cualquier mínimo absoluto guarda el modelo.
         if checkpoint_metric == "val_loss" and val_weighted_loss < best_checkpoint_loss:
             best_checkpoint_loss = val_weighted_loss
-            torch.save(model.state_dict(), save_path)
+            torch.save(eval_model.state_dict(), save_path)
             _save_checkpoint_meta(
                 save_path=save_path,
                 epoch=epoch + 1,
@@ -326,7 +365,7 @@ def train_model(
             val_auc = epoch_metrics["val_roc_auc"]
             if val_auc is not None and val_auc > best_checkpoint_auc:
                 best_checkpoint_auc = val_auc
-                torch.save(model.state_dict(), auc_target_path)
+                torch.save(eval_model.state_dict(), auc_target_path)
                 _save_checkpoint_meta(
                     save_path=auc_target_path,
                     epoch=epoch + 1,

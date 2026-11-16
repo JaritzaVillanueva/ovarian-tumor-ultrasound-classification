@@ -30,14 +30,19 @@ from src.classification.cv_folds_e2 import (
 )
 from src.classification.dataloader import create_dataloader
 from src.classification.evaluate import predict, evaluate_predictions
-from src.classification.losses import build_criterion
+from src.classification.losses import build_criterion, build_validation_criterion
 from src.classification.models import (
     create_resnet50_classifier,
     create_densenet121_classifier,
     create_convnext_tiny_classifier,
 )
 from src.classification.train import set_seed, train_model
-from src.classification.transforms import get_train_transforms, get_val_transforms
+from src.classification.training_options import (
+    LR_SCHEDULES,
+    build_layer_decay_param_groups,
+    lr_multiplier_fn,
+)
+from src.classification.transforms import AUGMENTATION_PARAMS, get_train_transforms, get_val_transforms
 from src.classification.utils import compute_class_weights
 
 ARCH_CONFIGS = {
@@ -227,6 +232,35 @@ def main() -> None:
         default=None,
         help=f"E2: fold (0 a {N_FOLDS - 1}) usado como validation; los demás forman train. Requiere --split-csv.",
     )
+    # Argumentos del brazo del agente de optimización (R7). Todos valen None por defecto y entonces no se ejecuta
+    # nada nuevo. Ninguno cambia el criterio de checkpoint. Todos requieren --experiment distinto de 'formal'.
+    parser.add_argument(
+        "--lr-schedule",
+        choices=list(LR_SCHEDULES),
+        default=None,
+        help=(
+            "R7: calendario del learning rate. constant (por defecto) no lo toca; warmup_cosine = calentamiento "
+            "lineal y decaimiento coseno por iteración (requiere --cosine-epochs)."
+        ),
+    )
+    parser.add_argument("--warmup-epochs", type=float, default=None,
+                        help="R7: épocas de calentamiento lineal (>= 0; 0 si no se indica). Solo con warmup_cosine.")
+    parser.add_argument("--cosine-epochs", type=float, default=None,
+                        help="R7: épocas de decaimiento coseno, a continuación del calentamiento. Solo con warmup_cosine.")
+    parser.add_argument("--lr-min", type=float, default=None,
+                        help="R7: learning rate final del coseno (0 si no se indica; debe ser menor que el pico). Solo con warmup_cosine.")
+    parser.add_argument("--layer-decay", type=float, default=None,
+                        help="R7: decaimiento del learning rate por capa en (0, 1]; solo convnext_tiny. El módulo i de features recibe lr * d^(8-i).")
+    parser.add_argument("--drop-path-rate", type=float, default=None,
+                        help="R7: probabilidad máxima de stochastic depth en [0, 1); solo convnext_tiny (torchvision usa 0.1 si no se indica).")
+    parser.add_argument("--label-smoothing", type=float, default=None,
+                        help="R7: label smoothing uniforme en [0, 1) solo en la pérdida de entrenamiento, con los pesos de clase como peso por muestra (enmienda E1); la validación se calcula sin suavizado.")
+    parser.add_argument("--augmentation", choices=list(AUGMENTATION_PARAMS), default=None,
+                        help="R7: intensidad del aumento. standard (por defecto) = R4-R8; moderate = rotación ±30° y brillo/contraste ±0.2.")
+    parser.add_argument("--image-size", type=int, default=None,
+                        help="R7: lado de la imagen de entrada en train y validation (224 por defecto).")
+    parser.add_argument("--ema-decay", type=float, default=None,
+                        help="R7: decaimiento (0, 1) del promedio exponencial de pesos; la validación y el checkpoint usan los pesos EMA.")
     args = parser.parse_args()
 
     if not re.fullmatch(r"[A-Za-z0-9_.-]+", args.experiment):
@@ -273,6 +307,48 @@ def main() -> None:
         if not 0 <= args.fold < N_FOLDS:
             parser.error(f"--fold debe estar entre 0 y {N_FOLDS - 1}.")
 
+    # Brazo del agente (R7): validaciones de los argumentos nuevos (no dependen del YAML).
+    agent_flags = {
+        "--lr-schedule": args.lr_schedule, "--warmup-epochs": args.warmup_epochs, "--cosine-epochs": args.cosine_epochs,
+        "--lr-min": args.lr_min, "--layer-decay": args.layer_decay, "--drop-path-rate": args.drop_path_rate,
+        "--label-smoothing": args.label_smoothing, "--augmentation": args.augmentation,
+        "--image-size": args.image_size, "--ema-decay": args.ema_decay,
+    }
+    if args.experiment == "formal":
+        used = [flag for flag, value in agent_flags.items() if value is not None]
+        if used:
+            parser.error(f"{', '.join(used)} requiere --experiment distinto de 'formal' para no mezclar corridas formales.")
+    if args.lr_schedule != "warmup_cosine":
+        extra = [flag for flag in ("--warmup-epochs", "--cosine-epochs", "--lr-min") if agent_flags[flag] is not None]
+        if extra:
+            parser.error(f"{', '.join(extra)} solo se usan con --lr-schedule warmup_cosine.")
+    else:
+        if args.cosine_epochs is None or args.cosine_epochs <= 0:
+            parser.error("--lr-schedule warmup_cosine requiere --cosine-epochs mayor que 0.")
+        if args.warmup_epochs is not None and args.warmup_epochs < 0:
+            parser.error("--warmup-epochs debe ser mayor o igual que 0.")
+        if args.lr_min is not None and args.lr_min < 0:
+            parser.error("--lr-min debe ser mayor o igual que 0.")
+    if args.layer_decay is not None:
+        if not 0.0 < args.layer_decay <= 1.0:
+            parser.error("--layer-decay debe estar en (0, 1].")
+        if args.arch != "convnext_tiny":
+            parser.error("--layer-decay solo está implementado para --arch convnext_tiny.")
+    if args.drop_path_rate is not None:
+        if not 0.0 <= args.drop_path_rate < 1.0:
+            parser.error("--drop-path-rate debe estar en [0, 1).")
+        if args.arch != "convnext_tiny":
+            parser.error("--drop-path-rate solo está implementado para --arch convnext_tiny.")
+    if args.label_smoothing is not None:
+        if not 0.0 <= args.label_smoothing < 1.0:
+            parser.error("--label-smoothing debe estar en [0, 1).")
+        if args.label_smoothing > 0 and args.loss_type == "focal":
+            parser.error("--label-smoothing no se combina con --loss-type focal.")
+    if args.image_size is not None and args.image_size <= 0:
+        parser.error("--image-size debe ser positivo.")
+    if args.ema_decay is not None and not 0.0 < args.ema_decay < 1.0:
+        parser.error("--ema-decay debe estar en (0, 1).")
+
     project_root = Path.cwd()
     csv_path = project_root / (CSV_REL if args.split_csv is None else args.split_csv)
     folder_column = None  # E2: se fija más abajo; None = carpeta física = split (comportamiento original)
@@ -287,6 +363,13 @@ def main() -> None:
         output_dir = project_root / "results" / "classification" / args.experiment / args.arch / args.condition
         if args.seed is not None:
             output_dir = output_dir / f"seed_{args.seed}"
+
+    if args.lr_schedule == "warmup_cosine" and args.lr_min is not None and config_path.exists():
+        # --lr-min debe ser menor que el learning rate pico efectivo (antes de crear carpetas)
+        with open(config_path) as f:
+            peak_lr = args.learning_rate if args.learning_rate is not None else yaml.safe_load(f)["training"]["learning_rate"]
+        if args.lr_min >= peak_lr:
+            parser.error(f"--lr-min ({args.lr_min}) debe ser menor que el learning rate pico ({peak_lr}).")
 
     # Validaciones previas
     if not csv_path.exists():
@@ -346,6 +429,9 @@ def main() -> None:
         print(f"  Early stopping: DESACTIVADO ({epochs} épocas)")
     if args.split_csv is not None:
         print(f"  Esquema E2:   fold {args.fold} de {N_FOLDS} ({args.split_csv})")
+    for flag, value in agent_flags.items():
+        if value is not None:
+            print(f"  {flag}: {value}")
     print(f"  Device:       {device}")
     print(f"  Output:       {output_dir}")
     print(f"{'='*60}")
@@ -353,11 +439,15 @@ def main() -> None:
     # Datasets
     set_seed(seed)
 
+    # Aumento e imagen de entrada: sin los argumentos nuevos son los de siempre (standard, 224)
+    augmentation = "standard" if args.augmentation is None else args.augmentation
+    image_size = 224 if args.image_size is None else args.image_size
+
     ds_train = MMOTUClassificationDataset(
         csv_file=str(csv_path),
         image_dir=str(image_dir),
         split="train",
-        transform=get_train_transforms(),
+        transform=get_train_transforms(augmentation, image_size),
         condition=args.condition,
         folder_column=folder_column,
     )
@@ -365,7 +455,7 @@ def main() -> None:
         csv_file=str(csv_path),
         image_dir=str(image_dir),
         split="validation",
-        transform=get_val_transforms(),
+        transform=get_val_transforms(image_size),
         condition=args.condition,
         folder_column=folder_column,
     )
@@ -386,15 +476,35 @@ def main() -> None:
     # Modelo 
     set_seed(seed)
     create_model = ARCH_CREATORS[args.arch]
-    model = create_model( pretrained=pretrained, num_classes=num_classes, freeze_backbone=False, ).to(device)
+    model_kwargs = {} if args.drop_path_rate is None else {"drop_path_rate": args.drop_path_rate}
+    model = create_model( pretrained=pretrained, num_classes=num_classes, freeze_backbone=False, **model_kwargs, ).to(device)
 
-    # Criterion y optimizer 
+    # Criterion y optimizer
     loss_type = "cross_entropy" if args.loss_type is None else args.loss_type
     focal_gamma = 2.0 if args.focal_gamma is None else args.focal_gamma
-    criterion = build_criterion(loss_type, class_weights, focal_gamma)
+    label_smoothing = 0.0 if args.label_smoothing is None else args.label_smoothing
+    criterion = build_criterion(loss_type, class_weights, focal_gamma, label_smoothing)
+    # Con label smoothing solo se suaviza la pérdida de entrenamiento: val_loss (early stopping) se calcula sin suavizado
+    val_criterion = build_validation_criterion(class_weights) if label_smoothing > 0 else None
     if loss_type == "focal":
         print(f"  Pérdida: Focal Loss ponderada (gamma={focal_gamma})")
-    optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
+    if args.layer_decay is None:
+        optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
+    else:
+        layer_groups = build_layer_decay_param_groups(model, lr, weight_decay, args.layer_decay)
+        optimizer = torch.optim.AdamW(layer_groups, lr=lr, weight_decay=weight_decay)
+
+    lr_fn = None
+    if args.lr_schedule == "warmup_cosine":
+        try:
+            lr_fn = lr_multiplier_fn(
+                lr, len(train_loader),
+                0.0 if args.warmup_epochs is None else args.warmup_epochs,
+                args.cosine_epochs,
+                0.0 if args.lr_min is None else args.lr_min,
+            )
+        except ValueError as error:
+            parser.error(str(error))
 
     # Entrenamiento 
     diagnostic = args.save_both_checkpoints
@@ -433,6 +543,9 @@ def main() -> None:
         use_amp=use_amp,
         checkpoint_metric=args.checkpoint_metric,
         early_stopping=early_stopping,
+        lr_fn=lr_fn,
+        ema_decay=args.ema_decay,
+        val_criterion=val_criterion,
         **diagnostic_kwargs,
     )
 
@@ -567,6 +680,40 @@ def main() -> None:
         run_config["evaluation_scheme"] = "E2"
         run_config["fold"] = args.fold
         run_config["fold_manifest"] = FOLD_MANIFEST_NAME
+    # Brazo del agente (R7): solo se registra lo que se indicó; sin estos argumentos el formato no cambia.
+    # Ninguno cambia checkpoint_criterion (sigue siendo el de --checkpoint-metric).
+    if args.lr_schedule is not None:
+        run_config["lr_schedule"] = {
+            "type": args.lr_schedule,
+            **({
+                "update": "per_iteration (global step)",
+                "peak_lr": lr,
+                "warmup_epochs": 0.0 if args.warmup_epochs is None else args.warmup_epochs,
+                "cosine_epochs": args.cosine_epochs,
+                "lr_min": 0.0 if args.lr_min is None else args.lr_min,
+                "steps_per_epoch": len(train_loader),
+                "after_cosine": "lr_min constant",
+            } if args.lr_schedule == "warmup_cosine" else {}),
+        }
+    if args.layer_decay is not None:
+        run_config["layer_decay"] = {
+            "decay": args.layer_decay,
+            "groups": {group["name"]: group["lr_scale"] for group in layer_groups},
+            "weight_decay": "same in all groups",
+        }
+    if args.drop_path_rate is not None:
+        run_config["drop_path_rate"] = args.drop_path_rate  # stochastic_depth_prob de torchvision (rampa lineal por bloque)
+    if args.label_smoothing is not None:
+        run_config["label_smoothing"] = args.label_smoothing
+        run_config["label_smoothing_scope"] = "training loss only; validation loss (early stopping) is the weighted cross entropy without smoothing"
+        run_config["label_smoothing_type"] = "uniform (1-e+e/C on the true class, e/C elsewhere); class weights as per-sample weight by true class (protocol amendment E1)"
+    if args.augmentation is not None:
+        run_config["augmentation"] = {"name": args.augmentation, **AUGMENTATION_PARAMS[args.augmentation]}
+    if args.image_size is not None:
+        run_config["image_size"] = args.image_size
+    if args.ema_decay is not None:
+        run_config["ema_decay"] = args.ema_decay
+        run_config["ema_scope"] = "validation, early stopping and checkpoint use the EMA weights; EMA initialised with the starting weights, no bias correction"
     if args.class_weight_alpha is not None:
         # Solo si se indica --class-weight-alpha; class_weights ya registra los pesos efectivos.
         run_config["class_weight_alpha"] = class_weight_alpha

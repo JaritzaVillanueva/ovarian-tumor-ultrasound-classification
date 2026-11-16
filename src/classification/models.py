@@ -69,14 +69,26 @@ def create_densenet121_classifier(
 def create_convnext_tiny_classifier(
     pretrained=True,
     num_classes=2,
-    freeze_backbone=False
+    freeze_backbone=False,
+    drop_path_rate=None
 ):
     """
     Crea un clasificador ConvNeXt-Tiny adaptado para clasificación binaria.
+
+    drop_path_rate (R7, brazo del agente): probabilidad máxima de stochastic depth (torchvision la llama
+    stochastic_depth_prob; crece linealmente de 0 en el primer bloque a este valor en el último). Con None no se
+    pasa nada y se conserva el valor por defecto de torchvision (0.1).
     """
 
+    kwargs = {}
+    if drop_path_rate is not None:
+        if not 0.0 <= drop_path_rate < 1.0:
+            raise ValueError(f"drop_path_rate debe estar en [0, 1); se recibió {drop_path_rate}.")
+        kwargs["stochastic_depth_prob"] = drop_path_rate
+
     model = models.convnext_tiny(
-        weights="DEFAULT" if pretrained else None
+        weights="DEFAULT" if pretrained else None,
+        **kwargs
     )
 
 
