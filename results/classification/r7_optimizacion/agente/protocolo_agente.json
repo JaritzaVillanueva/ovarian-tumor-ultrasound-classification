@@ -1,9 +1,25 @@
 {
   "etapa": "R7 - brazo del agente de optimización (experimento r7_agente)",
-  "estado": "borrador v1 aprobado con cambios por el autor; pendiente de commit; ninguna corrida ejecutada; los argumentos nuevos de entrenamiento aún no están implementados (Fase 4)",
+  "estado": "protocolo v1 commiteado en f646cd0; lleva la enmienda E1 (2026-11-16, a06_ls01); ninguna corrida ejecutada",
   "version": "v1",
   "fecha_redaccion": "2026-11-11",
-  "enmiendas": [],
+  "enmiendas": [
+    {
+      "id": "E1",
+      "fecha": "2026-11-16",
+      "afecta": ["a06_ls01"],
+      "motivo": "la implementación literal con weight= (nn.CrossEntropyLoss(weight=w, label_smoothing=ε) de PyTorch 2.5) desplaza el óptimo de una benigna a P(maligna) ≈ 0.30 y el de una maligna a ≈ 0.994 con los pesos de B0; eso no es label smoothing y confunde dos factores (suavizado y reponderación de clases). Detectado al implementar, antes de correr ninguna candidata.",
+      "cambio": "suavizado uniforme: objetivo 0.95 sobre la clase verdadera y 0.05 sobre la otra (ε = 0.1, C = 2), con los pesos de clase aplicados como peso por muestra según la clase verdadera: L = Σ_n w[y_n]·(−Σ_c q_c·log p_c) / Σ_n w[y_n]. La validación sigue sin suavizado (pérdida ponderada de validation como en B0 y B2). Los flags (--label-smoothing 0.1) y el comando no cambian.",
+      "no_cambia": [
+        "reglas de lectura",
+        "regla de elección",
+        "comandos",
+        "presupuesto",
+        "demás candidatas"
+      ],
+      "evidencia": "tests/test_agent_arguments.py (clase TestLabelSmoothing)"
+    }
+  ],
   "regla_de_enmiendas": "ninguna técnica, valor, regla ni comando nuevo entra después de commitear este archivo sin una enmienda commiteada y registrada en la trazabilidad. Las reglas de lectura y de elección no se cambian después de ver resultados.",
   "marcas": {
     "eleccion_del_autor_sin_fuente": [
@@ -56,7 +72,7 @@
   "declaraciones_sobre_early_stopping_y_checkpoint": [
     "El criterio de checkpoint (máx val_roc_auc) no cambia en ninguna candidata.",
     "α queda fijo en 1.0: la pérdida ponderada de validación y, con ella, el early stopping son los de B0 en todas las candidatas.",
-    "a06 (label smoothing): el suavizado se aplica solo a la pérdida de entrenamiento; la pérdida de validación que alimenta el early stopping se calcula sin suavizado (criterio de validación separado), para no cambiar el criterio.",
+    "a06 (label smoothing, enmienda E1): el suavizado es uniforme (0.95 sobre la clase verdadera y 0.05 sobre la otra) con los pesos de clase como peso por muestra, y se aplica solo a la pérdida de entrenamiento; la pérdida de validación que alimenta el early stopping se calcula sin suavizado (criterio de validación separado), para no cambiar el criterio.",
     "a10 (EMA): la validación, el early stopping y el checkpoint se evalúan con los pesos EMA, de modo que la entrada del early stopping CAMBIA (pérdida del modelo EMA). Se declara.",
     "a01, a02 y a03 no cambian el criterio, pero cambian la trayectoria de la pérdida y por tanto el momento en que se detiene el entrenamiento.",
     "a08 y a09 cambian lo que ve el entrenamiento (aumento) o todo el pipeline de imagen (resolución, en train y en validation); el criterio no cambia."
@@ -118,11 +134,11 @@
     {
       "id": "a06_ls01",
       "factor": "label smoothing",
-      "valor": "0.1 (solo en la pérdida de entrenamiento)",
+      "valor": "0.1 (solo en la pérdida de entrenamiento; suavizado uniforme 0.95/0.05 con los pesos de clase como peso por muestra, enmienda E1)",
       "flags": "--label-smoothing 0.1",
       "argumento_existente": false,
       "fuente": "Liu et al. 2022 (receta, Tabla 5: 0.1); Müller, Kornblith y Hinton 2019, arXiv:1906.02629",
-      "estado_de_la_fuente": "existencia verificada; valor de la Tabla 5 por extracción automática [CITA POR VERIFICAR]; la semántica exacta de label_smoothing combinada con weight en nn.CrossEntropyLoss de PyTorch 2.5 debe revisarse en la documentación al implementar"
+      "estado_de_la_fuente": "existencia verificada; valor de la Tabla 5 por extracción automática [CITA POR VERIFICAR]; la semántica de label_smoothing combinada con weight en nn.CrossEntropyLoss de PyTorch 2.5 se revisó al implementar y no sirve (desplaza el óptimo); se sustituye por suavizado uniforme con peso por muestra (enmienda E1)"
     },
     {
       "id": "a08_augmod",
