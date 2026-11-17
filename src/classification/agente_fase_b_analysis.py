@@ -608,7 +608,8 @@ def run_analysis(root, output_dir=None, verbose=True):
     cs.write_csv(out_dir / OUTPUT_FILES["registro"], registry)
     e2a.write_json(out_dir / OUTPUT_FILES["best_alpha"], payload)
     if verbose:
-        print(f"Piso de ruido (AP): {piso:.4f} | etiquetas: {{{', '.join(f'{a}: {v['etiqueta']}' for a, v in labels.items())}}}")
+        resumen_etiquetas = ", ".join(f"{a}: {v['etiqueta']}" for a, v in labels.items())
+        print(f"Piso de ruido (AP): {piso:.4f} | etiquetas: {{{resumen_etiquetas}}}")
         print(f"Mejor α observado (exploratorio): {best['alpha']} | en empate: {best['en_empate']}")
         print("Escrito en", out_dir)
     return 0, {"checks": checks, "stats": stats, "curve": curve, "summaries": summary_rows, "labels": labels, "floor": floor_rows,
