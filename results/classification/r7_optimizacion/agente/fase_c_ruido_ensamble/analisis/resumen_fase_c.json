@@ -1,0 +1,292 @@
+{
+  "rotulo_obligatorio": "exploratorio; definido después de ver E1, E2 y las fases A y B; no confirmado; sin datos independientes; no entra a R8 sin enmienda previa",
+  "protocolo": {
+    "archivo": "results/classification/r7_optimizacion/agente/fase_c_ruido_ensamble/protocolo_fase_c.json",
+    "commit_de_referencia": "cc768aa",
+    "idéntico_al_commit": true
+  },
+  "entradas": {
+    "parte_1": [
+      "results/classification/r7_optimizacion/agente/fase_b_alpha/analisis/metricas_por_corrida.csv",
+      "results/classification/r7_optimizacion/agente/fase_b_alpha/analisis/registro_intentos_fase_b.csv",
+      "results/classification/r7_optimizacion/agente/fase_b_alpha/analisis/metricas_por_fold.csv",
+      "results/classification/r7_optimizacion/agente/fase_b_alpha/analisis/mejor_alpha_observado.json"
+    ],
+    "parte_2": [
+      "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_0",
+      "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_1",
+      "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_2",
+      "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_3",
+      "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_4",
+      "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_0",
+      "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_1",
+      "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_2",
+      "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_3",
+      "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_4",
+      "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_0",
+      "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_1",
+      "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_2",
+      "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_3",
+      "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_4",
+      "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_0",
+      "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_1",
+      "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_2",
+      "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_3",
+      "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_4",
+      "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_0",
+      "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_1",
+      "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_2",
+      "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_3",
+      "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_4",
+      "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_0",
+      "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_1",
+      "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_2",
+      "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_3",
+      "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_4"
+    ],
+    "particion": "configs/splits/cv_folds_e2.csv"
+  },
+  "parte_1": {
+    "componentes": [
+      {
+        "metrica": "AP",
+        "fuente": "fold",
+        "SS": 0.23860322147315136,
+        "gl": 4,
+        "MS": 0.05965080536828784,
+        "componente": 0.0037504083312388556,
+        "componente_truncada": 0.0037504083312388556,
+        "negativa": false,
+        "porcentaje_SS": 45.46392365918473,
+        "porcentaje_componente": 45.64822163918255
+      },
+      {
+        "metrica": "AP",
+        "fuente": "alpha",
+        "SS": 0.00862654337542404,
+        "gl": 4,
+        "MS": 0.00215663584385601,
+        "componente": -0.0004394705379379743,
+        "componente_truncada": 0.0,
+        "negativa": true,
+        "porcentaje_SS": 1.6437184168825478,
+        "porcentaje_componente": 0.0
+      },
+      {
+        "metrica": "AP",
+        "fuente": "semilla_dentro_de_alpha",
+        "SS": 0.08748693912925624,
+        "gl": 10,
+        "MS": 0.008748693912925624,
+        "componente": 0.0010708027026441241,
+        "componente_truncada": 0.0010708027026441241,
+        "negativa": false,
+        "porcentaje_SS": 16.669932187800793,
+        "porcentaje_componente": 13.03331125173463
+      },
+      {
+        "metrica": "AP",
+        "fuente": "residual",
+        "SS": 0.1901021023834802,
+        "gl": 56,
+        "MS": 0.003394680399705003,
+        "componente": 0.003394680399705003,
+        "componente_truncada": 0.003394680399705003,
+        "negativa": false,
+        "porcentaje_SS": 36.222425736131925,
+        "porcentaje_componente": 41.31846710908282
+      },
+      {
+        "metrica": "AP",
+        "fuente": "total",
+        "SS": 0.5248188063613118,
+        "gl": 74,
+        "MS": 0.00709214603190962,
+        "componente": "",
+        "componente_truncada": "",
+        "negativa": "",
+        "porcentaje_SS": 100.0,
+        "porcentaje_componente": ""
+      },
+      {
+        "metrica": "ROC-AUC",
+        "fuente": "fold",
+        "SS": 0.07739143327683023,
+        "gl": 4,
+        "MS": 0.01934785831920756,
+        "componente": 0.0012436997307629866,
+        "componente_truncada": 0.0012436997307629866,
+        "negativa": false,
+        "porcentaje_SS": 59.25215708533259,
+        "porcentaje_componente": 60.881915978190264
+      },
+      {
+        "metrica": "ROC-AUC",
+        "fuente": "alpha",
+        "SS": 0.0021891286432024954,
+        "gl": 4,
+        "MS": 0.0005472821608006239,
+        "componente": -4.5253480247375716e-05,
+        "componente_truncada": 0.0,
+        "negativa": true,
+        "porcentaje_SS": 1.6760329761959396,
+        "porcentaje_componente": 0.0
+      },
+      {
+        "metrica": "ROC-AUC",
+        "fuente": "semilla_dentro_de_alpha",
+        "SS": 0.012260843645112596,
+        "gl": 10,
+        "MS": 0.0012260843645112596,
+        "componente": 0.00010674440134970012,
+        "componente_truncada": 0.00010674440134970012,
+        "negativa": false,
+        "porcentaje_SS": 9.38710401008183,
+        "porcentaje_componente": 5.225379979882899
+      },
+      {
+        "metrica": "ROC-AUC",
+        "fuente": "residual",
+        "SS": 0.03877229203471451,
+        "gl": 56,
+        "MS": 0.0006923623577627591,
+        "componente": 0.0006923623577627591,
+        "componente_truncada": 0.0006923623577627591,
+        "negativa": false,
+        "porcentaje_SS": 29.684705928389644,
+        "porcentaje_componente": 33.89270404192685
+      },
+      {
+        "metrica": "ROC-AUC",
+        "fuente": "total",
+        "SS": 0.13061369759985983,
+        "gl": 74,
+        "MS": 0.0017650499675656733,
+        "componente": "",
+        "componente_truncada": "",
+        "negativa": "",
+        "porcentaje_SS": 100.0,
+        "porcentaje_componente": ""
+      }
+    ],
+    "ruido_lectura_b": {
+      "AP": {
+        "s2_p": 0.004678058959553712,
+        "sd_b": 0.05584537557431061,
+        "piso_ap_fase_b": 0.09490273664094005,
+        "cociente_piso_ap_sobre_sd_b": 1.6993839805886486,
+        "fuente_del_piso": "results/classification/r7_optimizacion/agente/fase_b_alpha/analisis/mejor_alpha_observado.json (piso_de_ruido.piso_ap)"
+      },
+      "ROC-AUC": {
+        "s2_p": 0.0008072722700491504,
+        "sd_b": 0.023198739477956563,
+        "nota": "descriptiva"
+      },
+      "definicion": "sd_b = sqrt(2·s²_p / 3): desviación de un Δ_k de la lectura b entre dos configuraciones sin diferencia real, si la variación entre semillas de cada una fuera la de s²_p",
+      "no_es": "no es un umbral de decisión ni un intervalo de confianza; no cambia la etiqueta de la fase B ni reclasifica resultados de las fases A o B"
+    }
+  },
+  "parte_2": {
+    "hipotesis": {
+      "primaria_unica": "B0 (α = 1.0): ¿el ensamble de 3 semillas tiene mayor AP que el promedio de sus semillas individuales en el mismo fold?",
+      "secundaria_declarada": "B2 (α = 0.5), la misma pregunta; se informa aparte y no modifica la lectura de la primaria",
+      "no_se_prueba": "ningún otro α, ningún ensamble entre configuraciones (B0 + B2) y ningún subconjunto de semillas"
+    },
+    "delta_por_fold": {
+      "B0": {
+        "AP": {
+          "deltas": [
+            0.08064116645064467,
+            0.01422222975641474,
+            0.05063064923003935,
+            0.078895166366718,
+            0.11037418475024019
+          ],
+          "signos": [
+            "+",
+            "+",
+            "+",
+            "+",
+            "+"
+          ],
+          "media": 0.06695267931081139,
+          "minimo": 0.01422222975641474,
+          "maximo": 0.11037418475024019,
+          "positivos": 5,
+          "negativos": 0,
+          "ceros": 0
+        },
+        "ROC-AUC": {
+          "deltas": [
+            0.048689138576779145,
+            0.008852570650323521,
+            0.020088525706503213,
+            0.025706503234593114,
+            0.03032721468475652
+          ],
+          "signos": [
+            "+",
+            "+",
+            "+",
+            "+",
+            "+"
+          ],
+          "media": 0.0267327905705911,
+          "minimo": 0.008852570650323521,
+          "maximo": 0.048689138576779145,
+          "positivos": 5,
+          "negativos": 0,
+          "ceros": 0
+        }
+      },
+      "B2": {
+        "AP": {
+          "deltas": [
+            0.05791253129096602,
+            0.0791680405213373,
+            0.10135636851418295,
+            0.06636709851994782,
+            0.007550717517036176
+          ],
+          "signos": [
+            "+",
+            "+",
+            "+",
+            "+",
+            "+"
+          ],
+          "media": 0.06247095127269405,
+          "minimo": 0.007550717517036176,
+          "maximo": 0.10135636851418295,
+          "positivos": 5,
+          "negativos": 0,
+          "ceros": 0
+        },
+        "ROC-AUC": {
+          "deltas": [
+            0.022301668369084093,
+            0.003915560095335335,
+            0.028260129383724797,
+            0.006809669731018153,
+            0.01055245189323395
+          ],
+          "signos": [
+            "+",
+            "+",
+            "+",
+            "+",
+            "+"
+          ],
+          "media": 0.014367895894479265,
+          "minimo": 0.003915560095335335,
+          "maximo": 0.028260129383724797,
+          "positivos": 5,
+          "negativos": 0,
+          "ceros": 0
+        }
+      }
+    },
+    "folds_con_orden_distinto": []
+  },
+  "no_se_hace": "aplicar la regla 4/5 u otra regla con etiqueta, declarar ganador, proponer el ensamble para R8, reportar p-valor o intervalo de confianza"
+}

@@ -1,0 +1,436 @@
+corrida,comprobacion,ok,detalle
+protocolo,idéntico al del commit cc768aa,True,True
+parte_1,"metricas_por_corrida.csv: 75 filas, cada (α, semilla, fold) una sola vez",True,"75 filas, 75 distintas"
+alpha_0.0_seed42_fold0,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.0_seed42_fold0,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.43217541, json=0.43217541"
+alpha_0.0_seed42_fold0,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.79622063, json=0.79622063"
+alpha_0.0_seed42_fold1,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.0_seed42_fold1,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.60695082, json=0.60695082"
+alpha_0.0_seed42_fold1,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.90347293, json=0.90347293"
+alpha_0.0_seed42_fold2,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.0_seed42_fold2,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.69962238, json=0.69962238"
+alpha_0.0_seed42_fold2,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.93590398, json=0.93590398"
+alpha_0.0_seed42_fold3,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.0_seed42_fold3,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.57646378, json=0.57646378"
+alpha_0.0_seed42_fold3,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.88253320, json=0.88253320"
+alpha_0.0_seed42_fold4,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.0_seed42_fold4,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.48429777, json=0.48429777"
+alpha_0.0_seed42_fold4,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.84410748, json=0.84410748"
+alpha_0.0_seed43_fold0,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.0_seed43_fold0,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.49761177, json=0.49761177"
+alpha_0.0_seed43_fold0,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.81358529, json=0.81358529"
+alpha_0.0_seed43_fold1,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.0_seed43_fold1,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.70648408, json=0.70648408"
+alpha_0.0_seed43_fold1,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.91368744, json=0.91368744"
+alpha_0.0_seed43_fold2,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.0_seed43_fold2,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.63762770, json=0.63762770"
+alpha_0.0_seed43_fold2,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.91828396, json=0.91828396"
+alpha_0.0_seed43_fold3,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.0_seed43_fold3,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.65588465, json=0.65588465"
+alpha_0.0_seed43_fold3,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.91624106, json=0.91624106"
+alpha_0.0_seed43_fold4,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.0_seed43_fold4,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.57055215, json=0.57055215"
+alpha_0.0_seed43_fold4,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.90635807, json=0.90635807"
+alpha_0.0_seed44_fold0,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.0_seed44_fold0,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.47408859, json=0.47408859"
+alpha_0.0_seed44_fold0,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.84269663, json=0.84269663"
+alpha_0.0_seed44_fold1,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.0_seed44_fold1,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.58924954, json=0.58924954"
+alpha_0.0_seed44_fold1,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.88304392, json=0.88304392"
+alpha_0.0_seed44_fold2,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.0_seed44_fold2,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.59512107, json=0.59512107"
+alpha_0.0_seed44_fold2,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.94382022, json=0.94382022"
+alpha_0.0_seed44_fold3,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.0_seed44_fold3,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.50747784, json=0.50747784"
+alpha_0.0_seed44_fold3,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.85214505, json=0.85214505"
+alpha_0.0_seed44_fold4,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.0_seed44_fold4,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.61999213, json=0.61999213"
+alpha_0.0_seed44_fold4,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.88693802, json=0.88693802"
+alpha_0.25_seed42_fold0,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.25_seed42_fold0,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.44933155, json=0.44933155"
+alpha_0.25_seed42_fold0,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.82609806, json=0.82609806"
+alpha_0.25_seed42_fold1,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.25_seed42_fold1,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.61823771, json=0.61823771"
+alpha_0.25_seed42_fold1,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.87538304, json=0.87538304"
+alpha_0.25_seed42_fold2,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.25_seed42_fold2,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.68945659, json=0.68945659"
+alpha_0.25_seed42_fold2,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.93462717, json=0.93462717"
+alpha_0.25_seed42_fold3,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.25_seed42_fold3,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.52960676, json=0.52960676"
+alpha_0.25_seed42_fold3,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.81179775, json=0.81179775"
+alpha_0.25_seed42_fold4,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.25_seed42_fold4,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.50503925, json=0.50503925"
+alpha_0.25_seed42_fold4,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.83000798, json=0.83000798"
+alpha_0.25_seed43_fold0,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.25_seed43_fold0,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.49448779, json=0.49448779"
+alpha_0.25_seed43_fold0,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.78600613, json=0.78600613"
+alpha_0.25_seed43_fold1,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.25_seed43_fold1,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.69141448, json=0.69141448"
+alpha_0.25_seed43_fold1,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.90526047, json=0.90526047"
+alpha_0.25_seed43_fold2,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.25_seed43_fold2,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.63838689, json=0.63838689"
+alpha_0.25_seed43_fold2,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.92747702, json=0.92747702"
+alpha_0.25_seed43_fold3,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.25_seed43_fold3,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.58063389, json=0.58063389"
+alpha_0.25_seed43_fold3,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.88993871, json=0.88993871"
+alpha_0.25_seed43_fold4,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.25_seed43_fold4,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.60610474, json=0.60610474"
+alpha_0.25_seed43_fold4,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.89491886, json=0.89491886"
+alpha_0.25_seed44_fold0,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.25_seed44_fold0,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.63836652, json=0.63836652"
+alpha_0.25_seed44_fold0,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.86899898, json=0.86899898"
+alpha_0.25_seed44_fold1,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.25_seed44_fold1,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.68504077, json=0.68504077"
+alpha_0.25_seed44_fold1,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.91649642, json=0.91649642"
+alpha_0.25_seed44_fold2,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.25_seed44_fold2,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.70443571, json=0.70443571"
+alpha_0.25_seed44_fold2,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.95429009, json=0.95429009"
+alpha_0.25_seed44_fold3,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.25_seed44_fold3,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.50567289, json=0.50567289"
+alpha_0.25_seed44_fold3,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.87206333, json=0.87206333"
+alpha_0.25_seed44_fold4,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.25_seed44_fold4,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.60002222, json=0.60002222"
+alpha_0.25_seed44_fold4,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.88933227, json=0.88933227"
+alpha_0.5_seed42_fold0,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.5_seed42_fold0,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.34791437, json=0.34791437"
+alpha_0.5_seed42_fold0,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.76940756, json=0.76940756"
+alpha_0.5_seed42_fold1,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.5_seed42_fold1,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.60542258, json=0.60542258"
+alpha_0.5_seed42_fold1,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.87691522, json=0.87691522"
+alpha_0.5_seed42_fold2,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.5_seed42_fold2,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.61650007, json=0.61650007"
+alpha_0.5_seed42_fold2,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.89530133, json=0.89530133"
+alpha_0.5_seed42_fold3,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.5_seed42_fold3,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.60915492, json=0.60915492"
+alpha_0.5_seed42_fold3,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.87768131, json=0.87768131"
+alpha_0.5_seed42_fold4,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.5_seed42_fold4,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.46343378, json=0.46343378"
+alpha_0.5_seed42_fold4,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.85182229, json=0.85182229"
+alpha_0.5_seed43_fold0,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.5_seed43_fold0,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.58424188, json=0.58424188"
+alpha_0.5_seed43_fold0,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.82328907, json=0.82328907"
+alpha_0.5_seed43_fold1,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.5_seed43_fold1,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.68765456, json=0.68765456"
+alpha_0.5_seed43_fold1,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.91189990, json=0.91189990"
+alpha_0.5_seed43_fold2,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.5_seed43_fold2,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.71000608, json=0.71000608"
+alpha_0.5_seed43_fold2,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.93232891, json=0.93232891"
+alpha_0.5_seed43_fold3,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.5_seed43_fold3,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.52863565, json=0.52863565"
+alpha_0.5_seed43_fold3,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.88917263, json=0.88917263"
+alpha_0.5_seed43_fold4,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.5_seed43_fold4,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.60640123, json=0.60640123"
+alpha_0.5_seed43_fold4,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.89119447, json=0.89119447"
+alpha_0.5_seed44_fold0,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.5_seed44_fold0,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.41981550, json=0.41981550"
+alpha_0.5_seed44_fold0,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.80949949, json=0.80949949"
+alpha_0.5_seed44_fold1,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.5_seed44_fold1,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.55542014, json=0.55542014"
+alpha_0.5_seed44_fold1,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.91598570, json=0.91598570"
+alpha_0.5_seed44_fold2,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.5_seed44_fold2,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.69367617, json=0.69367617"
+alpha_0.5_seed44_fold2,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.94050051, json=0.94050051"
+alpha_0.5_seed44_fold3,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.5_seed44_fold3,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.54668933, json=0.54668933"
+alpha_0.5_seed44_fold3,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.86567926, json=0.86567926"
+alpha_0.5_seed44_fold4,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.5_seed44_fold4,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.52003482, json=0.52003482"
+alpha_0.5_seed44_fold4,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.89491886, json=0.89491886"
+alpha_0.75_seed42_fold0,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.75_seed42_fold0,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.50459115, json=0.50459115"
+alpha_0.75_seed42_fold0,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.87257406, json=0.87257406"
+alpha_0.75_seed42_fold1,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.75_seed42_fold1,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.61967309, json=0.61967309"
+alpha_0.75_seed42_fold1,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.88840654, json=0.88840654"
+alpha_0.75_seed42_fold2,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.75_seed42_fold2,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.49728897, json=0.49728897"
+alpha_0.75_seed42_fold2,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.84014300, json=0.84014300"
+alpha_0.75_seed42_fold3,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.75_seed42_fold3,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.58012196, json=0.58012196"
+alpha_0.75_seed42_fold3,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.87819203, json=0.87819203"
+alpha_0.75_seed42_fold4,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.75_seed42_fold4,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.52729313, json=0.52729313"
+alpha_0.75_seed42_fold4,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.87017824, json=0.87017824"
+alpha_0.75_seed43_fold0,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.75_seed43_fold0,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.58056737, json=0.58056737"
+alpha_0.75_seed43_fold0,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.79570991, json=0.79570991"
+alpha_0.75_seed43_fold1,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.75_seed43_fold1,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.72019850, json=0.72019850"
+alpha_0.75_seed43_fold1,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.89708887, json=0.89708887"
+alpha_0.75_seed43_fold2,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.75_seed43_fold2,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.68794112, json=0.68794112"
+alpha_0.75_seed43_fold2,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.93692543, json=0.93692543"
+alpha_0.75_seed43_fold3,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.75_seed43_fold3,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.69247460, json=0.69247460"
+alpha_0.75_seed43_fold3,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.88023493, json=0.88023493"
+alpha_0.75_seed43_fold4,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.75_seed43_fold4,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.51077688, json=0.51077688"
+alpha_0.75_seed43_fold4,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.83479649, json=0.83479649"
+alpha_0.75_seed44_fold0,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.75_seed44_fold0,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.50864718, json=0.50864718"
+alpha_0.75_seed44_fold0,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.87640449, json=0.87640449"
+alpha_0.75_seed44_fold1,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.75_seed44_fold1,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.57958516, json=0.57958516"
+alpha_0.75_seed44_fold1,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.87691522, json=0.87691522"
+alpha_0.75_seed44_fold2,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.75_seed44_fold2,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.64483978, json=0.64483978"
+alpha_0.75_seed44_fold2,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.91164454, json=0.91164454"
+alpha_0.75_seed44_fold3,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.75_seed44_fold3,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.62491912, json=0.62491912"
+alpha_0.75_seed44_fold3,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.91087845, json=0.91087845"
+alpha_0.75_seed44_fold4,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_0.75_seed44_fold4,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.55643769, json=0.55643769"
+alpha_0.75_seed44_fold4,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.89864326, json=0.89864326"
+alpha_1.0_seed42_fold0,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_1.0_seed42_fold0,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.49394984, json=0.49394984"
+alpha_1.0_seed42_fold0,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.87436159, json=0.87436159"
+alpha_1.0_seed42_fold1,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_1.0_seed42_fold1,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.69061900, json=0.69061900"
+alpha_1.0_seed42_fold1,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.90398366, json=0.90398366"
+alpha_1.0_seed42_fold2,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_1.0_seed42_fold2,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.58696475, json=0.58696475"
+alpha_1.0_seed42_fold2,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.89504597, json=0.89504597"
+alpha_1.0_seed42_fold3,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_1.0_seed42_fold3,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.50569941, json=0.50569941"
+alpha_1.0_seed42_fold3,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.90679265, json=0.90679265"
+alpha_1.0_seed42_fold4,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_1.0_seed42_fold4,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.58064263, json=0.58064263"
+alpha_1.0_seed42_fold4,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.90449588, json=0.90449588"
+alpha_1.0_seed43_fold0,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_1.0_seed43_fold0,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.53446796, json=0.53446796"
+alpha_1.0_seed43_fold0,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.78855975, json=0.78855975"
+alpha_1.0_seed43_fold1,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_1.0_seed43_fold1,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.62906978, json=0.62906978"
+alpha_1.0_seed43_fold1,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.89070480, json=0.89070480"
+alpha_1.0_seed43_fold2,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_1.0_seed43_fold2,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.75430789, json=0.75430789"
+alpha_1.0_seed43_fold2,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.94586313, json=0.94586313"
+alpha_1.0_seed43_fold3,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_1.0_seed43_fold3,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.72252478, json=0.72252478"
+alpha_1.0_seed43_fold3,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.92339122, json=0.92339122"
+alpha_1.0_seed43_fold4,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_1.0_seed43_fold4,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.56041059, json=0.56041059"
+alpha_1.0_seed43_fold4,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.89119447, json=0.89119447"
+alpha_1.0_seed44_fold0,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_1.0_seed44_fold0,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.52874671, json=0.52874671"
+alpha_1.0_seed44_fold0,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.83784474, json=0.83784474"
+alpha_1.0_seed44_fold1,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_1.0_seed44_fold1,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.50686319, json=0.50686319"
+alpha_1.0_seed44_fold1,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.87691522, json=0.87691522"
+alpha_1.0_seed44_fold2,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_1.0_seed44_fold2,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.69533278, json=0.69533278"
+alpha_1.0_seed44_fold2,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.94713994, json=0.94713994"
+alpha_1.0_seed44_fold3,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_1.0_seed44_fold3,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.50581813, json=0.50581813"
+alpha_1.0_seed44_fold3,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.88968335, json=0.88968335"
+alpha_1.0_seed44_fold4,registro_intentos_fase_b.csv: estado 'completada',True,completada
+alpha_1.0_seed44_fold4,AP de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.57019855, json=0.57019855"
+alpha_1.0_seed44_fold4,ROC-AUC de metricas_por_corrida.csv = validation_metrics.json de la ruta (1e-6),True,"csv=0.89545092, json=0.89545092"
+parte_1,DE entre semillas de AP = ap_de_entre_semillas de la fase B (1e-9),True,[]
+parte_1,DE entre semillas de ROC-AUC = roc_auc_de_entre_semillas de la fase B (1e-9),True,[]
+parte_2,"30 corridas declaradas: B0 y B2 × semillas 42, 43, 44 × folds 0..4",True,30
+B0_seed42_fold0,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_0
+B0_seed42_fold0,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B0_seed42_fold0,"class_weight_alpha: ausente en B0, 0.5 en B2",True,no registrado
+B0_seed42_fold0,semilla y fold de run_config.json = los de la carpeta,True,"seed=42, fold=0"
+B0_seed42_fold1,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_1
+B0_seed42_fold1,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B0_seed42_fold1,"class_weight_alpha: ausente en B0, 0.5 en B2",True,no registrado
+B0_seed42_fold1,semilla y fold de run_config.json = los de la carpeta,True,"seed=42, fold=1"
+B0_seed42_fold2,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_2
+B0_seed42_fold2,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B0_seed42_fold2,"class_weight_alpha: ausente en B0, 0.5 en B2",True,no registrado
+B0_seed42_fold2,semilla y fold de run_config.json = los de la carpeta,True,"seed=42, fold=2"
+B0_seed42_fold3,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_3
+B0_seed42_fold3,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B0_seed42_fold3,"class_weight_alpha: ausente en B0, 0.5 en B2",True,no registrado
+B0_seed42_fold3,semilla y fold de run_config.json = los de la carpeta,True,"seed=42, fold=3"
+B0_seed42_fold4,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_4
+B0_seed42_fold4,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B0_seed42_fold4,"class_weight_alpha: ausente en B0, 0.5 en B2",True,no registrado
+B0_seed42_fold4,semilla y fold de run_config.json = los de la carpeta,True,"seed=42, fold=4"
+B0_seed43_fold0,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_0
+B0_seed43_fold0,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B0_seed43_fold0,"class_weight_alpha: ausente en B0, 0.5 en B2",True,no registrado
+B0_seed43_fold0,semilla y fold de run_config.json = los de la carpeta,True,"seed=43, fold=0"
+B0_seed43_fold1,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_1
+B0_seed43_fold1,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B0_seed43_fold1,"class_weight_alpha: ausente en B0, 0.5 en B2",True,no registrado
+B0_seed43_fold1,semilla y fold de run_config.json = los de la carpeta,True,"seed=43, fold=1"
+B0_seed43_fold2,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_2
+B0_seed43_fold2,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B0_seed43_fold2,"class_weight_alpha: ausente en B0, 0.5 en B2",True,no registrado
+B0_seed43_fold2,semilla y fold de run_config.json = los de la carpeta,True,"seed=43, fold=2"
+B0_seed43_fold3,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_3
+B0_seed43_fold3,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B0_seed43_fold3,"class_weight_alpha: ausente en B0, 0.5 en B2",True,no registrado
+B0_seed43_fold3,semilla y fold de run_config.json = los de la carpeta,True,"seed=43, fold=3"
+B0_seed43_fold4,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b0/seed_43/fold_4
+B0_seed43_fold4,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B0_seed43_fold4,"class_weight_alpha: ausente en B0, 0.5 en B2",True,no registrado
+B0_seed43_fold4,semilla y fold de run_config.json = los de la carpeta,True,"seed=43, fold=4"
+B0_seed44_fold0,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_0
+B0_seed44_fold0,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B0_seed44_fold0,"class_weight_alpha: ausente en B0, 0.5 en B2",True,no registrado
+B0_seed44_fold0,semilla y fold de run_config.json = los de la carpeta,True,"seed=44, fold=0"
+B0_seed44_fold1,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_1
+B0_seed44_fold1,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B0_seed44_fold1,"class_weight_alpha: ausente en B0, 0.5 en B2",True,no registrado
+B0_seed44_fold1,semilla y fold de run_config.json = los de la carpeta,True,"seed=44, fold=1"
+B0_seed44_fold2,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_2
+B0_seed44_fold2,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B0_seed44_fold2,"class_weight_alpha: ausente en B0, 0.5 en B2",True,no registrado
+B0_seed44_fold2,semilla y fold de run_config.json = los de la carpeta,True,"seed=44, fold=2"
+B0_seed44_fold3,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_3
+B0_seed44_fold3,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B0_seed44_fold3,"class_weight_alpha: ausente en B0, 0.5 en B2",True,no registrado
+B0_seed44_fold3,semilla y fold de run_config.json = los de la carpeta,True,"seed=44, fold=3"
+B0_seed44_fold4,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b0/seed_44/fold_4
+B0_seed44_fold4,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B0_seed44_fold4,"class_weight_alpha: ausente en B0, 0.5 en B2",True,no registrado
+B0_seed44_fold4,semilla y fold de run_config.json = los de la carpeta,True,"seed=44, fold=4"
+B2_seed42_fold0,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_0
+B2_seed42_fold0,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B2_seed42_fold0,"class_weight_alpha: ausente en B0, 0.5 en B2",True,0.5
+B2_seed42_fold0,semilla y fold de run_config.json = los de la carpeta,True,"seed=42, fold=0"
+B2_seed42_fold1,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_1
+B2_seed42_fold1,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B2_seed42_fold1,"class_weight_alpha: ausente en B0, 0.5 en B2",True,0.5
+B2_seed42_fold1,semilla y fold de run_config.json = los de la carpeta,True,"seed=42, fold=1"
+B2_seed42_fold2,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_2
+B2_seed42_fold2,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B2_seed42_fold2,"class_weight_alpha: ausente en B0, 0.5 en B2",True,0.5
+B2_seed42_fold2,semilla y fold de run_config.json = los de la carpeta,True,"seed=42, fold=2"
+B2_seed42_fold3,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_3
+B2_seed42_fold3,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B2_seed42_fold3,"class_weight_alpha: ausente en B0, 0.5 en B2",True,0.5
+B2_seed42_fold3,semilla y fold de run_config.json = los de la carpeta,True,"seed=42, fold=3"
+B2_seed42_fold4,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_4
+B2_seed42_fold4,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B2_seed42_fold4,"class_weight_alpha: ausente en B0, 0.5 en B2",True,0.5
+B2_seed42_fold4,semilla y fold de run_config.json = los de la carpeta,True,"seed=42, fold=4"
+B2_seed43_fold0,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_0
+B2_seed43_fold0,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B2_seed43_fold0,"class_weight_alpha: ausente en B0, 0.5 en B2",True,0.5
+B2_seed43_fold0,semilla y fold de run_config.json = los de la carpeta,True,"seed=43, fold=0"
+B2_seed43_fold1,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_1
+B2_seed43_fold1,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B2_seed43_fold1,"class_weight_alpha: ausente en B0, 0.5 en B2",True,0.5
+B2_seed43_fold1,semilla y fold de run_config.json = los de la carpeta,True,"seed=43, fold=1"
+B2_seed43_fold2,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_2
+B2_seed43_fold2,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B2_seed43_fold2,"class_weight_alpha: ausente en B0, 0.5 en B2",True,0.5
+B2_seed43_fold2,semilla y fold de run_config.json = los de la carpeta,True,"seed=43, fold=2"
+B2_seed43_fold3,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_3
+B2_seed43_fold3,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B2_seed43_fold3,"class_weight_alpha: ausente en B0, 0.5 en B2",True,0.5
+B2_seed43_fold3,semilla y fold de run_config.json = los de la carpeta,True,"seed=43, fold=3"
+B2_seed43_fold4,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b2/seed_43/fold_4
+B2_seed43_fold4,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B2_seed43_fold4,"class_weight_alpha: ausente en B0, 0.5 en B2",True,0.5
+B2_seed43_fold4,semilla y fold de run_config.json = los de la carpeta,True,"seed=43, fold=4"
+B2_seed44_fold0,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_0
+B2_seed44_fold0,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B2_seed44_fold0,"class_weight_alpha: ausente en B0, 0.5 en B2",True,0.5
+B2_seed44_fold0,semilla y fold de run_config.json = los de la carpeta,True,"seed=44, fold=0"
+B2_seed44_fold1,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_1
+B2_seed44_fold1,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B2_seed44_fold1,"class_weight_alpha: ausente en B0, 0.5 en B2",True,0.5
+B2_seed44_fold1,semilla y fold de run_config.json = los de la carpeta,True,"seed=44, fold=1"
+B2_seed44_fold2,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_2
+B2_seed44_fold2,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B2_seed44_fold2,"class_weight_alpha: ausente en B0, 0.5 en B2",True,0.5
+B2_seed44_fold2,semilla y fold de run_config.json = los de la carpeta,True,"seed=44, fold=2"
+B2_seed44_fold3,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_3
+B2_seed44_fold3,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B2_seed44_fold3,"class_weight_alpha: ausente en B0, 0.5 en B2",True,0.5
+B2_seed44_fold3,semilla y fold de run_config.json = los de la carpeta,True,"seed=44, fold=3"
+B2_seed44_fold4,"carpeta con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",True,results/classification/r7_optimizacion/agente/confirmacion/b2/seed_44/fold_4
+B2_seed44_fold4,"probability_malignant finita en [0, 1], y_true ∈ {0, 1}, epoch único = epoch_best",True,
+B2_seed44_fold4,"class_weight_alpha: ausente en B0, 0.5 en B2",True,0.5
+B2_seed44_fold4,semilla y fold de run_config.json = los de la carpeta,True,"seed=44, fold=4"
+B0_fold0,"mismas image_id, sin repetidos y mismo y_true entre las 3 semillas (alineadas por image_id)",True,mismo orden
+B0_fold0,image_id = validation del fold en cv_folds_e2.csv,True,"200 imágenes, 200 en la partición"
+B0_fold1,"mismas image_id, sin repetidos y mismo y_true entre las 3 semillas (alineadas por image_id)",True,mismo orden
+B0_fold1,image_id = validation del fold en cv_folds_e2.csv,True,"200 imágenes, 200 en la partición"
+B0_fold2,"mismas image_id, sin repetidos y mismo y_true entre las 3 semillas (alineadas por image_id)",True,mismo orden
+B0_fold2,image_id = validation del fold en cv_folds_e2.csv,True,"200 imágenes, 200 en la partición"
+B0_fold3,"mismas image_id, sin repetidos y mismo y_true entre las 3 semillas (alineadas por image_id)",True,mismo orden
+B0_fold3,image_id = validation del fold en cv_folds_e2.csv,True,"200 imágenes, 200 en la partición"
+B0_fold4,"mismas image_id, sin repetidos y mismo y_true entre las 3 semillas (alineadas por image_id)",True,mismo orden
+B0_fold4,image_id = validation del fold en cv_folds_e2.csv,True,"200 imágenes, 200 en la partición"
+B2_fold0,"mismas image_id, sin repetidos y mismo y_true entre las 3 semillas (alineadas por image_id)",True,mismo orden
+B2_fold0,image_id = validation del fold en cv_folds_e2.csv,True,"200 imágenes, 200 en la partición"
+B2_fold1,"mismas image_id, sin repetidos y mismo y_true entre las 3 semillas (alineadas por image_id)",True,mismo orden
+B2_fold1,image_id = validation del fold en cv_folds_e2.csv,True,"200 imágenes, 200 en la partición"
+B2_fold2,"mismas image_id, sin repetidos y mismo y_true entre las 3 semillas (alineadas por image_id)",True,mismo orden
+B2_fold2,image_id = validation del fold en cv_folds_e2.csv,True,"200 imágenes, 200 en la partición"
+B2_fold3,"mismas image_id, sin repetidos y mismo y_true entre las 3 semillas (alineadas por image_id)",True,mismo orden
+B2_fold3,image_id = validation del fold en cv_folds_e2.csv,True,"200 imágenes, 200 en la partición"
+B2_fold4,"mismas image_id, sin repetidos y mismo y_true entre las 3 semillas (alineadas por image_id)",True,mismo orden
+B2_fold4,image_id = validation del fold en cv_folds_e2.csv,True,"200 imágenes, 200 en la partición"
+fold0,mismas image_id en B0 y B2,True,
+fold1,mismas image_id en B0 y B2,True,
+fold2,mismas image_id en B0 y B2,True,
+fold3,mismas image_id en B0 y B2,True,
+fold4,mismas image_id en B0 y B2,True,
+B0_seed42_fold0,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.49394984, json=0.49394984"
+B0_seed42_fold0,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.87436159, json=0.87436159"
+B0_seed42_fold1,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.69061900, json=0.69061900"
+B0_seed42_fold1,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.90398366, json=0.90398366"
+B0_seed42_fold2,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.58696475, json=0.58696475"
+B0_seed42_fold2,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.89504597, json=0.89504597"
+B0_seed42_fold3,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.50569941, json=0.50569941"
+B0_seed42_fold3,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.90679265, json=0.90679265"
+B0_seed42_fold4,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.58064263, json=0.58064263"
+B0_seed42_fold4,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.90449588, json=0.90449588"
+B0_seed43_fold0,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.53446796, json=0.53446796"
+B0_seed43_fold0,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.78855975, json=0.78855975"
+B0_seed43_fold1,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.62906978, json=0.62906978"
+B0_seed43_fold1,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.89070480, json=0.89070480"
+B0_seed43_fold2,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.75430789, json=0.75430789"
+B0_seed43_fold2,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.94586313, json=0.94586313"
+B0_seed43_fold3,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.72252478, json=0.72252478"
+B0_seed43_fold3,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.92339122, json=0.92339122"
+B0_seed43_fold4,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.56041059, json=0.56041059"
+B0_seed43_fold4,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.89119447, json=0.89119447"
+B0_seed44_fold0,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.52874671, json=0.52874671"
+B0_seed44_fold0,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.83784474, json=0.83784474"
+B0_seed44_fold1,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.50686319, json=0.50686319"
+B0_seed44_fold1,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.87691522, json=0.87691522"
+B0_seed44_fold2,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.69533278, json=0.69533278"
+B0_seed44_fold2,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.94713994, json=0.94713994"
+B0_seed44_fold3,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.50581813, json=0.50581813"
+B0_seed44_fold3,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.88968335, json=0.88968335"
+B0_seed44_fold4,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.57019855, json=0.57019855"
+B0_seed44_fold4,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.89545092, json=0.89545092"
+B2_seed42_fold0,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.34791437, json=0.34791437"
+B2_seed42_fold0,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.76940756, json=0.76940756"
+B2_seed42_fold1,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.60542258, json=0.60542258"
+B2_seed42_fold1,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.87691522, json=0.87691522"
+B2_seed42_fold2,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.61650007, json=0.61650007"
+B2_seed42_fold2,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.89530133, json=0.89530133"
+B2_seed42_fold3,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.60915492, json=0.60915492"
+B2_seed42_fold3,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.87768131, json=0.87768131"
+B2_seed42_fold4,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.46343378, json=0.46343378"
+B2_seed42_fold4,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.85182229, json=0.85182229"
+B2_seed43_fold0,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.58424188, json=0.58424188"
+B2_seed43_fold0,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.82328907, json=0.82328907"
+B2_seed43_fold1,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.68765456, json=0.68765456"
+B2_seed43_fold1,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.91189990, json=0.91189990"
+B2_seed43_fold2,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.71000608, json=0.71000608"
+B2_seed43_fold2,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.93232891, json=0.93232891"
+B2_seed43_fold3,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.52863565, json=0.52863565"
+B2_seed43_fold3,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.88917263, json=0.88917263"
+B2_seed43_fold4,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.60640123, json=0.60640123"
+B2_seed43_fold4,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.89119447, json=0.89119447"
+B2_seed44_fold0,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.41981550, json=0.41981550"
+B2_seed44_fold0,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.80949949, json=0.80949949"
+B2_seed44_fold1,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.55542014, json=0.55542014"
+B2_seed44_fold1,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.91598570, json=0.91598570"
+B2_seed44_fold2,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.69367617, json=0.69367617"
+B2_seed44_fold2,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.94050051, json=0.94050051"
+B2_seed44_fold3,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.54668933, json=0.54668933"
+B2_seed44_fold3,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.86567926, json=0.86567926"
+B2_seed44_fold4,AP recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.52003482, json=0.52003482"
+B2_seed44_fold4,ROC-AUC recalculado desde el CSV = validation_metrics.json (1e-6),True,"recalculado=0.89491886, json=0.89491886"

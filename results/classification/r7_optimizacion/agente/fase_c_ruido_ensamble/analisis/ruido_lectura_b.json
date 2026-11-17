@@ -1,0 +1,16 @@
+{
+  "AP": {
+    "s2_p": 0.004678058959553712,
+    "sd_b": 0.05584537557431061,
+    "piso_ap_fase_b": 0.09490273664094005,
+    "cociente_piso_ap_sobre_sd_b": 1.6993839805886486,
+    "fuente_del_piso": "results/classification/r7_optimizacion/agente/fase_b_alpha/analisis/mejor_alpha_observado.json (piso_de_ruido.piso_ap)"
+  },
+  "ROC-AUC": {
+    "s2_p": 0.0008072722700491504,
+    "sd_b": 0.023198739477956563,
+    "nota": "descriptiva"
+  },
+  "definicion": "sd_b = sqrt(2·s²_p / 3): desviación de un Δ_k de la lectura b entre dos configuraciones sin diferencia real, si la variación entre semillas de cada una fuera la de s²_p",
+  "no_es": "no es un umbral de decisión ni un intervalo de confianza; no cambia la etiqueta de la fase B ni reclasifica resultados de las fases A o B"
+}
