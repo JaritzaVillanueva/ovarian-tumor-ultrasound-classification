@@ -1,0 +1,222 @@
+{
+  "protocolo": {
+    "archivo": "results/classification/r7_optimizacion/agente/fase_b_alpha/protocolo_fase_b.json",
+    "commit_de_referencia": "ed10abd",
+    "idéntico_al_commit": true
+  },
+  "rotulo_obligatorio": "exploratorio; definido después de ver E1 y E2; no confirmado; sin datos independientes; no entra a R8",
+  "mejor_alpha_observado": {
+    "alpha": 1.0,
+    "ap_maximo": 0.5957491834118047,
+    "en_empate": [
+      0.25,
+      1.0
+    ],
+    "el_desempate_cambia_el_resultado": true,
+    "config_id": "alpha_100",
+    "definicion": "el α con mayor AP medio sobre 3 semillas × 5 folds entre los 5 valores de la rejilla",
+    "desempate": "si la diferencia con el máximo es < 0.005: mayor ROC-AUC medio; después, el α más cercano a 1.0",
+    "umbral_de_empate_leido": 0.005,
+    "sesgo": "es el máximo de 5 estimaciones ruidosas (sesgo al alza; Cawley y Talbot 2010; Varma y Simon 2006); las 200 imágenes de validation de E1, con las que se eligió B2, están dentro de E2",
+    "no_es": "no es una ganadora, no hay regla de elección, no se reentrena en E1 y no se propone para R8"
+  },
+  "curva": [
+    {
+      "alpha": 0.0,
+      "config_id": "alpha_000",
+      "ap_medio": 0.5769066453774212,
+      "ap_min_corridas": 0.4321754116722611,
+      "ap_max_corridas": 0.7064840847708806,
+      "ap_min_medias_por_fold": 0.4679585919815409,
+      "ap_max_medias_por_fold": 0.6441237135214744,
+      "ap_de_entre_semillas_media_folds": 0.058367197160757806,
+      "roc_auc_medio": 0.8826025257008874,
+      "roc_auc_min_corridas": 0.7962206332992849,
+      "roc_auc_max_corridas": 0.9438202247191011,
+      "roc_auc_min_medias_por_fold": 0.8175008512087164,
+      "roc_auc_max_medias_por_fold": 0.932669390534559,
+      "roc_auc_de_entre_semillas_media_folds": 0.023214334263105017,
+      "epocas_ejecutadas_media": 11.066666666666666,
+      "epoca_elegida_media": 9.2
+    },
+    {
+      "alpha": 0.25,
+      "config_id": "alpha_025",
+      "ap_medio": 0.5957491834118047,
+      "ap_min_corridas": 0.44933154980777246,
+      "ap_max_corridas": 0.7044357105732367,
+      "ap_min_medias_por_fold": 0.5273952865393025,
+      "ap_max_medias_por_fold": 0.6774263987342584,
+      "ap_de_entre_semillas_media_folds": 0.053769455006610616,
+      "roc_auc_medio": 0.8788464194841697,
+      "roc_auc_min_corridas": 0.7860061287027579,
+      "roc_auc_max_corridas": 0.9542900919305414,
+      "roc_auc_min_medias_por_fold": 0.8270343888321416,
+      "roc_auc_max_medias_por_fold": 0.9387980932924753,
+      "roc_auc_de_entre_semillas_media_folds": 0.03071051164041469,
+      "epocas_ejecutadas_media": 10.466666666666667,
+      "epoca_elegida_media": 8.866666666666667
+    },
+    {
+      "alpha": 0.5,
+      "config_id": "alpha_050",
+      "ap_medio": 0.5663334053555774,
+      "ap_min_corridas": 0.34791436547482274,
+      "ap_max_corridas": 0.7100060844061509,
+      "ap_min_medias_por_fold": 0.45065724990244876,
+      "ap_max_medias_por_fold": 0.6733941094568616,
+      "ap_de_entre_semillas_media_folds": 0.07042142247204478,
+      "roc_auc_medio": 0.8763730999748827,
+      "roc_auc_min_corridas": 0.7694075587334015,
+      "roc_auc_max_corridas": 0.9405005107252298,
+      "roc_auc_min_medias_por_fold": 0.8007320394960845,
+      "roc_auc_max_medias_por_fold": 0.9227102485529453,
+      "roc_auc_de_entre_semillas_media_folds": 0.021835689206745376,
+      "epocas_ejecutadas_media": 11.133333333333333,
+      "epoca_elegida_media": 8.8
+    },
+    {
+      "alpha": 0.75,
+      "config_id": "alpha_075",
+      "ap_medio": 0.5890237141936957,
+      "ap_min_corridas": 0.4972889724317628,
+      "ap_max_corridas": 0.7201985048366002,
+      "ap_min_medias_por_fold": 0.5312685669889984,
+      "ap_max_medias_por_fold": 0.639818918969526,
+      "ap_de_entre_semillas_media_folds": 0.05896820627810907,
+      "roc_auc_medio": 0.8779156966872741,
+      "roc_auc_min_corridas": 0.7957099080694585,
+      "roc_auc_max_corridas": 0.9369254341164454,
+      "roc_auc_min_medias_por_fold": 0.8482294858699353,
+      "roc_auc_max_medias_por_fold": 0.8962376574736125,
+      "roc_auc_de_entre_semillas_media_folds": 0.031227202306719874,
+      "epocas_ejecutadas_media": 11.266666666666667,
+      "epoca_elegida_media": 9.8
+    },
+    {
+      "alpha": 1.0,
+      "config_id": "alpha_100",
+      "ap_medio": 0.5910410658462549,
+      "ap_min_corridas": 0.493949838576636,
+      "ap_max_corridas": 0.7543078898616868,
+      "ap_min_medias_por_fold": 0.5190548364794559,
+      "ap_max_medias_por_fold": 0.6788684720438145,
+      "ap_de_entre_semillas_media_folds": 0.06712120905483333,
+      "roc_auc_medio": 0.8914284844734911,
+      "roc_auc_min_corridas": 0.7885597548518897,
+      "roc_auc_max_corridas": 0.9471399387129724,
+      "roc_auc_min_medias_por_fold": 0.8335886959482465,
+      "roc_auc_max_medias_por_fold": 0.9293496765406878,
+      "roc_auc_de_entre_semillas_media_folds": 0.021991229529693776,
+      "epocas_ejecutadas_media": 13,
+      "epoca_elegida_media": 10.533333333333333
+    }
+  ],
+  "forma_de_la_curva": {
+    "ap": "no_monotona",
+    "roc_auc": "no_monotona",
+    "alphas_en_orden": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "completa": true
+  },
+  "alphas_incompletos": [],
+  "piso_de_ruido": {
+    "piso_ap": 0.09490273664094005,
+    "par_que_lo_define": "B2 42->43",
+    "pares_de_una_misma_configuracion_que_cumplen_4_de_5": 3,
+    "pares": 6,
+    "semilla_42": "reutilizada"
+  },
+  "etiquetas_frente_a_b0": {
+    "0.0": {
+      "i_lectura_b_consistente": false,
+      "ii_mismo_signo_en_cada_semilla": true,
+      "iii_abs_delta_medio_b_mayor_que_piso": false,
+      "etiqueta": "dentro_del_piso_de_ruido",
+      "direccion_4_de_5_coincide_con_el_signo_medio": false
+    },
+    "0.25": {
+      "i_lectura_b_consistente": false,
+      "ii_mismo_signo_en_cada_semilla": false,
+      "iii_abs_delta_medio_b_mayor_que_piso": false,
+      "etiqueta": "dentro_del_piso_de_ruido",
+      "direccion_4_de_5_coincide_con_el_signo_medio": false
+    },
+    "0.5": {
+      "i_lectura_b_consistente": true,
+      "ii_mismo_signo_en_cada_semilla": true,
+      "iii_abs_delta_medio_b_mayor_que_piso": false,
+      "etiqueta": "dentro_del_piso_de_ruido",
+      "direccion_4_de_5_coincide_con_el_signo_medio": true
+    },
+    "0.75": {
+      "i_lectura_b_consistente": false,
+      "ii_mismo_signo_en_cada_semilla": false,
+      "iii_abs_delta_medio_b_mayor_que_piso": false,
+      "etiqueta": "dentro_del_piso_de_ruido",
+      "direccion_4_de_5_coincide_con_el_signo_medio": false
+    }
+  },
+  "multiplicidad": {
+    "comparaciones": 4,
+    "p_una": 0.1875,
+    "p_al_menos_una": 0.5641937255859375,
+    "nota": "aproximación gruesa: los folds no son independientes"
+  },
+  "huella": {
+    "veredicto": true,
+    "lineas_esperadas": [
+      "rutas de src distintas: True",
+      "todos los modulos src desde su arbol src (886acce, HEAD): True True",
+      "huella identica byte a byte: True"
+    ]
+  },
+  "no_se_calcula": "no se reporta p-valor, intervalo de confianza ni prueba de hipótesis, igual que en la fase A (5 folds no independientes; Bengio y Grandvalet 2004)",
+  "puntos_no_definidos_por_el_protocolo": [
+    {
+      "punto": "config_id de las corridas reutilizadas",
+      "aplicado": "alpha_100 (B0) y alpha_050 (B2), los ids de las condicionales; la nota dice B0/B2",
+      "alternativa": "b0/b2 como en la confirmación"
+    },
+    {
+      "punto": "claves 'iguales a B0 salvo class_weight_alpha, seed y experiment'",
+      "aplicado": "se comparan solo las claves de 'iguales_en_las_30'; class_weights se verifica por recálculo con α y los campos de resultado no se comparan",
+      "alternativa": "comparar todas las claves menos esas tres (fallaría siempre por class_weights y por los campos de resultado)"
+    },
+    {
+      "punto": "corrida nueva incompleta (carpeta sin todos los archivos)",
+      "aplicado": "se registra como fallida y su α se informa como incompleto: queda fuera de la curva, de los Δ, de la etiqueta y del mejor α; si es de B0 o B2 (condicional) el análisis se detiene",
+      "alternativa": "detener todo el análisis"
+    },
+    {
+      "punto": "forma de la curva",
+      "aplicado": "monótona solo si todas las diferencias consecutivas de la media global tienen el mismo signo estricto; un empate exacto es no monótona",
+      "alternativa": "monotonía no estricta, o sobre las medias por fold"
+    },
+    {
+      "punto": "mínimo y máximo de la curva por α",
+      "aplicado": "se informan dos versiones: sobre las 15 corridas y sobre las 5 medias por fold",
+      "alternativa": "una sola"
+    },
+    {
+      "punto": "condición (ii) de la etiqueta",
+      "aplicado": "las 3 semillas con el mismo signo estricto entre sí; no se exige que coincida con la dirección de la regla 4/5 (se informa aparte)",
+      "alternativa": "exigir además la misma dirección que la lectura b"
+    },
+    {
+      "punto": "empate del mejor α",
+      "aplicado": "empatan los α a menos de 0.005 del máximo; entre ellos, mayor ROC-AUC medio y luego el más cercano a 1.0 (como en la etapa 1)",
+      "alternativa": "empate por pares encadenados"
+    },
+    {
+      "punto": "registro con corridas condicionales",
+      "aplicado": "solo entran las corridas usadas; las originales de semilla 42 no tienen fila",
+      "alternativa": "añadir las originales con estado no usada"
+    }
+  ]
+}
