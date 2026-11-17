@@ -1,0 +1,2 @@
+2026-11-16 19:40:56.151855249 -0500 /home/jvillanueva/fase_b_corridas.sh
+2026-11-16 20:48:26.142806793 -0500 /home/jvillanueva/fase_b.log

@@ -1,0 +1,2 @@
+f1254e5f9d5ffa5ce85f163bb80a6f9fc3a751860af42a0a42b0f3a3b7ae2d02  fase_b_corridas.sh
+7bdce4df26874d7db00a1344ad1d346f1fbbfb681e3502571450def93bad91b4  fase_b.log

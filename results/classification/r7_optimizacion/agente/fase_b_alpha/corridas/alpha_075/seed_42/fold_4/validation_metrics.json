@@ -1,0 +1,20 @@
+{
+  "accuracy": 0.9,
+  "balanced_accuracy": 0.6499068901303539,
+  "precision_malignant": 0.5384615384615384,
+  "recall_malignant": 0.3333333333333333,
+  "specificity": 0.9664804469273743,
+  "f1_malignant": 0.4117647058823529,
+  "roc_auc": 0.8701782388933227,
+  "average_precision": 0.527293133581166,
+  "confusion_matrix": [
+    [
+      173,
+      6
+    ],
+    [
+      14,
+      7
+    ]
+  ]
+}
