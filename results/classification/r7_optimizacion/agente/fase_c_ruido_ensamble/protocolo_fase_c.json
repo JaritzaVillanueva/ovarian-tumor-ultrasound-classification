@@ -1,0 +1,215 @@
+{
+  "etapa": "R7 - brazo del agente de optimización, fase C (exploratoria): estudio de ruido y ensamble de semillas",
+  "estado": "borrador v1 del 2026-11-17 para revisión del autor; no commiteado; ningún script escrito; nada calculado ni ejecutado",
+  "version": "v1",
+  "fecha_redaccion": "2026-11-17",
+  "redaccion": "sesión principal de Claude Code (modelo claude-opus-5-5)",
+  "rotulo_obligatorio": "exploratorio; definido después de ver E1, E2 y las fases A y B; no confirmado; sin datos independientes; no entra a R8 sin enmienda previa",
+  "relacion_con_fases_anteriores": {
+    "fase_a": "results/classification/r7_optimizacion/agente/protocolo_agente.json; cerrada sin ganadora (agente/confirmacion/analisis/veredicto_confirmacion.json)",
+    "fase_b": "results/classification/r7_optimizacion/agente/fase_b_alpha/protocolo_fase_b.json; resultados en fase_b_alpha/analisis/ (commit d522407)",
+    "este_archivo_no_es_una_enmienda": "la fase C tiene protocolo propio; no modifica reglas, comandos, resultados ni conclusiones de las fases A y B",
+    "r8": "no modifica results/classification/r7_optimizacion/cierre_seleccion/protocolo_r8_congelado.json, que fija 'total_modelos': 6 y 'ensambles': false; incorporar un ensamble a R8 requeriría una enmienda previa del autor a ese archivo"
+  },
+  "objetivo": "Parte 1: describir de qué fuentes viene la variación del AP (y, como descriptiva, del ROC-AUC) en las 75 corridas de la fase B (fold, α, semilla dentro de α, residual) y comparar la desviación del Δ en la lectura b (sd_b) con el piso de la fase B. Parte 2: describir si promediar las probabilidades de las 3 semillas (ensamble) cambia el AP y el ROC-AUC respecto del promedio de las semillas individuales, en B0 (hipótesis primaria) y en B2 (secundaria). No es un estudio de selección.",
+  "sin_entrenamiento": "la fase C no entrena ni ejecuta ninguna corrida nueva y no usa GPU: solo lee archivos de validation ya versionados. No usa test ni carga checkpoints.",
+
+  "entradas": {
+    "parte_1": {
+      "archivo": "results/classification/r7_optimizacion/agente/fase_b_alpha/analisis/metricas_por_corrida.csv",
+      "contenido": "75 filas: α ∈ {0.0, 0.25, 0.5, 0.75, 1.0} × semillas {42, 43, 44} × folds 0..4; columnas alpha, config_id, seed, fold, ap, roc_auc, epoca_elegida, epocas_ejecutadas, origen",
+      "procedencia_de_cada_fila": "results/classification/r7_optimizacion/agente/fase_b_alpha/analisis/registro_intentos_fase_b.csv (columnas origen y ruta)"
+    },
+    "parte_2": {
+      "archivo_por_corrida": "val_predictions_best_auc.csv (columnas epoch, image_id, y_true, probability_malignant), junto con validation_metrics.json y run_config.json de la misma carpeta",
+      "rutas": {
+        "B0_semilla_42": "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha1/fold_{0..4}/",
+        "B2_semilla_42": "results/classification/r7_optimizacion/robustez_e2/corridas/convnext_a_alpha05/fold_{0..4}/",
+        "B0_semillas_43_44": "results/classification/r7_optimizacion/agente/confirmacion/b0/seed_{43,44}/fold_{0..4}/",
+        "B2_semillas_43_44": "results/classification/r7_optimizacion/agente/confirmacion/b2/seed_{43,44}/fold_{0..4}/"
+      },
+      "de_donde_salen_las_rutas": [
+        "protocolo_fase_b.json, reutilizacion.alpha_1_0 y reutilizacion.alpha_0_5 (semilla_42 y semillas_43_44)",
+        "fase_b_alpha/analisis/registro_intentos_fase_b.csv: las filas de alpha_100 y alpha_050 tienen origen 'reutilizada:<ruta>' con estas mismas carpetas",
+        "fase_b_alpha/analisis/mejor_alpha_observado.json: piso_de_ruido.semilla_42 = 'reutilizada' y huella.veredicto = true, por lo que la semilla 42 de B0 y B2 es la original de robustez_e2 y no las corridas condicionales (que no existen)",
+        "semillas 43 y 44: agente/analisis_etapa1/comandos_confirmacion.json (ids b0_seed4x_fold<k> y b2_seed4x_fold<k>)"
+      ],
+      "corridas": "30 (2 configuraciones × 3 semillas × 5 folds)",
+      "no_se_usan": "las corridas de α = 0, 0.25 y 0.75 ni las del finalista a03_cosine"
+    },
+    "particion": "configs/splits/cv_folds_e2.csv (5 folds de 200 imágenes de validation cada uno)"
+  },
+
+  "significado_de_la_probabilidad": {
+    "columna": "probability_malignant",
+    "definicion": "softmax(logits, dim=1)[:, 1] del modelo en modo eval: la probabilidad de la clase 1 (positiva operacional: categorías 6 y 7) en el checkpoint seleccionado por máximo val_roc_auc",
+    "aclaracion": "es la softmax sobre las dos salidas, no el máximo de los logits; por construcción está en [0, 1] y las dos probabilidades suman 1",
+    "evidencia_en_el_codigo": [
+      "src/classification/evaluate.py, predict(): probabilities = torch.softmax(outputs, dim=1); y_prob = probabilities[:, 1]",
+      "src/classification/run_experiment.py, save_selected_predictions(): escribe epoch, image_id, y_true y probability_malignant con el orden de image_id del dataset de validation (sampler secuencial) y comprueba que las etiquetas coinciden",
+      "src/classification/run_experiment.py: val_predictions_best_auc.csv se escribe con las predicciones del checkpoint de best_auc_meta.json"
+    ],
+    "y_true": "1 = clase positiva operacional, 0 = benigna"
+  },
+
+  "parte_1_estudio_de_ruido": {
+    "tipo": "descriptivo; sin p-valores, intervalos de confianza ni pruebas",
+    "metrica": "AP (average_precision) del checkpoint seleccionado; ROC-AUC con la misma descomposición, solo como descriptiva",
+    "modelo_de_descomposicion": {
+      "ecuacion": "AP(a, s, k) = μ + F_k + A_a + S_{s(a)} + e_{a,s,k}",
+      "factores": {
+        "F": "fold, k = 0..4 (cruzado con α y con semilla)",
+        "A": "α, a ∈ {0.0, 0.25, 0.5, 0.75, 1.0}",
+        "S(A)": "semilla dentro de α, s ∈ {42, 43, 44} (anidada: la semilla 42 de un α se trata como distinta de la semilla 42 de otro α)",
+        "por_que_anidada": "es conservadora: S(A) no separa el efecto de la semilla de su interacción con α (la misma semilla puede dar la misma inicialización y el mismo orden de lotes en todos los α); ambos quedan juntos en S(A)",
+        "e": "residual; con una observación por celda incluye las interacciones fold × α y fold × semilla(α)"
+      },
+      "diseño": "balanceado: 5 × 3 × 5 = 75 observaciones, una por (α, semilla, fold)"
+    },
+    "sumas_de_cuadrados": {
+      "notacion": "a = 5 α, s = 3 semillas, K = 5 folds; ȳ media global; ȳ_a.. media de α; ȳ_as. media de (α, semilla) sobre folds; ȳ_..k media del fold",
+      "SS_fold": "a·s·Σ_k (ȳ_..k − ȳ)², gl = K − 1 = 4",
+      "SS_alpha": "s·K·Σ_a (ȳ_a.. − ȳ)², gl = a − 1 = 4",
+      "SS_semilla_dentro_de_alpha": "K·Σ_a Σ_s (ȳ_as. − ȳ_a..)², gl = a·(s − 1) = 10",
+      "SS_total": "Σ (y − ȳ)², gl = 74",
+      "SS_residual": "SS_total − SS_fold − SS_alpha − SS_semilla_dentro_de_alpha, gl = 56",
+      "cuadrados_medios": "MS = SS / gl"
+    },
+    "componentes_de_varianza": {
+      "metodo": "método de momentos con los cuadrados medios esperados del diseño balanceado",
+      "residual": "σ²_e = MS_residual",
+      "semilla_dentro_de_alpha": "σ²_S(A) = (MS_semilla_dentro_de_alpha − MS_residual) / K",
+      "fold": "σ²_F = (MS_fold − MS_residual) / (a·s)",
+      "alpha": "θ²_A = (MS_alpha − MS_semilla_dentro_de_alpha) / (s·K); α es un factor fijo de 5 niveles elegidos, así que θ²_A es una magnitud descriptiva de la dispersión de las medias de α, no una varianza poblacional",
+      "estimaciones_negativas": "se informan con su valor sin truncar y se marcan como negativas; para los porcentajes, una componente negativa cuenta como 0 y se indica",
+      "porcentajes": "(1) cada SS sobre SS_total; (2) cada componente (truncada en 0) sobre la suma de componentes"
+    },
+    "de_entre_semillas_por_fold": {
+      "definicion": "para cada (α, fold), desviación estándar muestral (n − 1) de la métrica entre las 3 semillas; su media sobre los 5 folds por α; y la varianza agrupada s²_p = media de las 25 varianzas entre semillas (5 α × 5 folds); para AP y, como descriptiva, ROC-AUC",
+      "control": "debe coincidir con las columnas ap_de_entre_semillas y roc_auc_de_entre_semillas de fase_b_alpha/analisis/metricas_por_fold.csv (tolerancia 1e-9)"
+    },
+    "ruido_del_delta_en_la_lectura_b": {
+      "lectura_b": "Δ_k = media_s AP(c1, s, k) − media_s AP(c2, s, k), con las 3 semillas de cada configuración en el mismo fold",
+      "sd_b": "sd_b = sqrt(2·s²_p / 3): desviación de un Δ_k de la lectura b entre dos configuraciones sin diferencia real, si la variación entre semillas de cada una fuera la de s²_p",
+      "comparacion": "sd_b se informa junto al piso de AP de la fase B (fase_b_alpha/analisis/mejor_alpha_observado.json, piso_de_ruido.piso_ap = 0.0949) y se describe la relación entre ambas magnitudes (por ejemplo, su cociente), sin ningún cálculo de potencia ni supuesto de normalidad",
+      "no_es": "no es un umbral de decisión ni un intervalo de confianza; no cambia la etiqueta de la fase B ni reclasifica resultados de las fases A o B"
+    },
+    "salidas": [
+      "componentes_varianza.csv (métrica, fuente, SS, gl, MS, componente, componente_truncada, porcentaje_SS, porcentaje_componente; AP y ROC-AUC)",
+      "de_entre_semillas_por_fold.csv (métrica, α, fold, DE entre semillas; medias por α; s²_p)",
+      "ruido_lectura_b.json (s²_p, sd_b y piso_ap de la fase B, para AP; s²_p y sd_b de ROC-AUC como descriptivas)"
+    ]
+  },
+
+  "parte_2_ensamble_de_semillas": {
+    "tipo": "descriptivo; sin p-valores, intervalos de confianza, pruebas ni ganador",
+    "ensamble": "para cada configuración (B0, B2) y cada fold k, para cada image_id de validation: p_ens = media aritmética de probability_malignant de las semillas 42, 43 y 44 (cada una en su checkpoint seleccionado). Sin pesos, sin calibración, sin promediar logits ni elegir semillas",
+    "metricas": "AP y ROC-AUC de p_ens frente a y_true, con las mismas funciones del pipeline: sklearn.metrics.average_precision_score y sklearn.metrics.roc_auc_score (src/classification/evaluate.py, evaluate_predictions)",
+    "hipotesis": {
+      "primaria_unica": "B0 (α = 1.0): ¿el ensamble de 3 semillas tiene mayor AP que el promedio de sus semillas individuales en el mismo fold?",
+      "secundaria_declarada": "B2 (α = 0.5), la misma pregunta; se informa aparte y no modifica la lectura de la primaria",
+      "no_se_prueba": "ningún otro α, ningún ensamble entre configuraciones (B0 + B2) y ningún subconjunto de semillas"
+    },
+    "delta_por_fold": "Δ_k = métrica(ensamble, k) − media_s métrica(s, k), s ∈ {42, 43, 44}, para AP (primaria) y ROC-AUC (secundaria descriptiva)",
+    "se_reporta_siempre": {
+      "contenido": "para B0 y B2 y para AP y ROC-AUC: los 5 Δ_k, su signo (+, −, 0), la media de los 5 Δ, el mínimo, el máximo y el conteo de signos; además el AP y ROC-AUC de cada semilla individual y del ensamble por fold",
+      "independiente_del_resultado": "se reporta lo mismo sea cual sea el signo o tamaño de los Δ",
+      "no_se_hace": "aplicar la regla 4/5 u otra regla con etiqueta, declarar ganador, proponer el ensamble para R8, reportar p-valor o intervalo de confianza"
+    },
+    "salidas": [
+      "ensamble_por_fold.csv (configuración, fold, AP y ROC-AUC de cada semilla, media individual, ensamble, Δ y signo)",
+      "resumen_ensamble.csv (configuración, métrica, media de Δ, mínimo, máximo, positivos, negativos, ceros)"
+    ]
+  },
+
+  "verificaciones_de_integridad": {
+    "regla": "si alguna comprobación falla, el análisis se detiene y no escribe ningún resultado",
+    "parte_1": [
+      "metricas_por_corrida.csv tiene 75 filas y cada (α, semilla, fold) aparece exactamente una vez",
+      "cada fila coincide con validation_metrics.json de la carpeta indicada en registro_intentos_fase_b.csv (ruta) para AP y ROC-AUC (tolerancia 1e-6), y todas las filas tienen estado 'completada'"
+    ],
+    "parte_2": [
+      "existen las 30 carpetas declaradas en entradas.parte_2.rutas, cada una con val_predictions_best_auc.csv, validation_metrics.json y run_config.json",
+      "en cada fold, las predicciones de las 3 semillas de una misma configuración se alinean por image_id antes de promediar; un orden distinto entre semillas no detiene el análisis (se registra en verificacion.csv). Se detiene solo si el conjunto de image_id no es el mismo en las 3 semillas, si hay image_id repetidos o si, después de alinear, el y_true de alguna imagen difiere entre semillas",
+      "las imágenes de cada fold son exactamente las 200 de validation de ese fold en configs/splits/cv_folds_e2.csv; las de B0 y B2 coinciden en cada fold",
+      "significado de la probabilidad: la columna se llama probability_malignant, todos sus valores son finitos y están en [0, 1], y_true ∈ {0, 1}, y la columna epoch tiene un único valor igual a epoch_best de run_config.json (checkpoint por máximo val_roc_auc)",
+      "configuración: class_weight_alpha registrado ausente en B0 (α = 1.0) y 0.5 en B2; semilla y fold de run_config.json iguales a los de la carpeta",
+      "el AP y el ROC-AUC recalculados con las funciones del pipeline desde el CSV de cada corrida individual coinciden con validation_metrics.json (tolerancia 1e-6)"
+    ]
+  },
+
+  "sesgo_y_limitaciones_declarados": [
+    "Los checkpoints se eligieron por máximo ROC-AUC sobre el mismo fold de validation que se evalúa: tanto las corridas individuales como el ensamble son optimistas. El sesgo afecta a ambos, pero no necesariamente en la misma medida, y Δ no lo elimina.",
+    "La semilla se modela anidada en α: su componente S(A) incluye la interacción semilla × α y por eso puede sobreestimar el ruido propio de la semilla (lectura conservadora).",
+    "Los folds de E2 son estratificados y no están agrupados por paciente (no hay identificadores de paciente): puede sobreestimar, y los 5 folds no son independientes entre sí.",
+    "Cada fold de validation tiene 21 o 22 positivas: AP y ROC-AUC por fold son ruidosos.",
+    "E2 contiene las 200 imágenes de validation de E1 con las que se eligieron B2 y el criterio de checkpoint.",
+    "La fase C se diseñó después de ver E1, E2 y las fases A y B.",
+    "La semilla 42 de B0 y B2 se entrenó con el código del commit 886acce; su reutilización se apoya en la huella de equivalencia de la fase B (fase_b_alpha/verificacion_equivalencia/veredicto_huella.txt), que es en CPU, sin preentrenamiento ni AMP.",
+    "La descomposición de la parte 1 usa un modelo aditivo con una observación por celda: el residual mezcla interacciones con el ruido. Las componentes son descriptivas.",
+    "El ensamble de 3 semillas triplica el costo de inferencia; aquí solo se describe su efecto en validation."
+  ],
+
+  "no_se_hace": [
+    "entrenar, usar GPU o ejecutar corridas nuevas",
+    "usar test o cargar checkpoints",
+    "modificar archivos existentes de las fases A y B, de R8 (protocolo_r8_congelado.json) o de r8_evaluacion_final",
+    "probar otros α, otros tamaños de ensamble o ensambles entre configuraciones",
+    "cambiar estas reglas después de ver los resultados",
+    "reportar p-valores, intervalos de confianza o un ganador"
+  ],
+
+  "salidas": {
+    "carpeta": "results/classification/r7_optimizacion/agente/fase_c_ruido_ensamble/analisis/",
+    "archivos": [
+      "componentes_varianza.csv",
+      "de_entre_semillas_por_fold.csv",
+      "ruido_lectura_b.json",
+      "ensamble_por_fold.csv",
+      "resumen_ensamble.csv",
+      "verificacion.csv",
+      "resumen_fase_c.json (rótulo obligatorio, entradas usadas y resultados de ambas partes)"
+    ],
+    "no_se_sobrescribe": "si algún archivo de salida existe, el análisis se detiene"
+  },
+
+  "codigo_previsto": {
+    "script": "src/classification/agente_fase_c_analysis.py (lee solo CSV y JSON; AP y ROC-AUC con sklearn como el pipeline)",
+    "pruebas": "tests/test_agente_fase_c_analysis.py (componentes de varianza con datos sintéticos de valores conocidos, ensamble con predicciones sintéticas, cada verificación de integridad con un caso manipulado)",
+    "notebook": "notebooks/R7_optimizacion/11_fase_c_ruido_ensamble.ipynb, opcional: solo si queda tiempo y en el mismo commit del script; no bloquea el análisis (sin entrenamiento; sin ejecutar hasta después del commit del protocolo)"
+  },
+
+  "orden_de_commits": [
+    {"n": 1, "mensaje": "docs(r7): add optimizer agent phase c noise and ensemble protocol", "contenido": "este archivo"},
+    {"n": 2, "mensaje": "feat(r7): add agent phase c noise and ensemble analysis script", "contenido": "script y pruebas; el notebook 11 sin ejecutar, solo si está listo"},
+    {"n": 3, "mensaje": "feat(r7): add agent phase c noise and ensemble results", "contenido": "fase_c_ruido_ensamble/analisis/ (y el notebook 11 ejecutado, si existe)"}
+  ],
+  "regla_de_ejecucion": "no se ejecuta nada (ni el script ni el notebook) antes del commit de este protocolo",
+
+  "fuentes": [
+    {
+      "ref": "Lakshminarayanan, Pritzel y Blundell, Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles, NIPS 2017",
+      "id": "arXiv:1612.01474",
+      "uso": "ensamble de redes entrenadas desde inicializaciones aleatorias distintas, con promedio de las probabilidades predichas",
+      "estado": "título, autores y 'NIPS 2017' verificados en la página de arXiv el 2026-11-17; el resumen no menciona el promedio de probabilidades y el texto no se leyó en esta sesión [CITA POR VERIFICAR: pasaje sobre el promedio de predicciones]"
+    },
+    {
+      "ref": "Bouthillier et al., Accounting for Variance in Machine Learning Benchmarks, 2021",
+      "id": "arXiv:2103.03098",
+      "uso": "fuentes de variación de los resultados (muestreo de datos, inicialización, hiperparámetros) al comparar algoritmos",
+      "estado": "título, autores y año verificados en arXiv el 2026-11-17; la página indica 'Submitted to MLSys2021'; solo se leyó el resumen [CITA POR VERIFICAR: contenido y publicación final]"
+    },
+    {
+      "ref": "Varoquaux, Cross-validation failure: small sample sizes lead to large error bars",
+      "id": "arXiv:1706.07581",
+      "uso": "incertidumbre de la validación cruzada con muestras pequeñas; el error estándar entre folds la subestima",
+      "estado": "título y autor verificados en arXiv el 2026-11-17 (enviado en 2017; la página no lista referencia de revista); la publicación en revista de 2018 no se verificó; solo se leyó el resumen [CITA POR VERIFICAR: contenido y referencia de 2018]"
+    }
+  ],
+
+  "no_verificado": [
+    "que las 30 val_predictions_best_auc.csv tengan las mismas imágenes en el mismo orden entre semillas (lo comprueba el script; no se miró)",
+    "que sklearn esté disponible en el entorno donde se ejecute el script (lo está en ovarian_cnn_env según el uso en evaluate.py; no se comprobó la versión)",
+    "las referencias marcadas [CITA POR VERIFICAR]"
+  ]
+}
