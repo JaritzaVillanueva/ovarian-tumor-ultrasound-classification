@@ -129,11 +129,53 @@ def make_dir_link(link, target):
             pytest.skip("no se pueden crear enlaces simbólicos ni uniones")
 
 
+# Referencias a las implementaciones REALES, capturadas antes de que los fixtures las sustituyan.
+REAL_GIT = C._git
+REAL_ASSIGN = mf.assign_folds
+
+
+def stable_assign_folds(ids, labels, groups, n_folds=5, seed=42):
+    """Asignador DETERMINISTA y sin scikit-learn, solo para pruebas de extremo a extremo.
+
+    StratifiedGroupKFold es una heurística cuyo reparto de positivas cambia entre versiones de scikit-learn
+    (p. ej. 1.7.2 frente a 1.9.1): no se puede depender de su distribución exacta en pruebas de la lógica del
+    programa. Este asignador respeta los grupos y reparte las positivas de forma equilibrada. El `assign_folds`
+    real se prueba aparte, solo por sus invariantes (ver test_real_assign_folds_*).
+    """
+    members = {}
+    for i, y in zip(ids, labels):
+        entry = members.setdefault(groups[i], [0, []])
+        entry[0] += y
+        entry[1].append(i)
+    pos, size, fold_of = [0] * n_folds, [0] * n_folds, {}
+    with_pos = sorted((kv for kv in members.items() if kv[1][0] > 0), key=lambda kv: (-kv[1][0], -len(kv[1][1]), str(kv[0])))
+    no_pos = sorted((kv for kv in members.items() if kv[1][0] == 0), key=lambda kv: (-len(kv[1][1]), str(kv[0])))
+    for g, (p, ms) in with_pos:
+        k = min(range(n_folds), key=lambda f: (pos[f], size[f], f))
+        pos[k] += p
+        size[k] += len(ms)
+        fold_of.update({i: k for i in ms})
+    for g, (p, ms) in no_pos:
+        k = min(range(n_folds), key=lambda f: (size[f], f))
+        size[k] += len(ms)
+        fold_of.update({i: k for i in ms})
+    return [fold_of[i] for i in ids]
+
+
+@pytest.fixture(autouse=True)
+def _isolated_from_external_state(monkeypatch):
+    """Cada prueba parte de un estado controlado: sin depender del Git real ni de la versión de scikit-learn."""
+    monkeypatch.setattr(C, "_git", fake_git(False))               # código "sin commit", salvo que la prueba diga otra cosa
+    monkeypatch.setattr(mf, "assign_folds", stable_assign_folds)  # las pruebas del algoritmo real usan REAL_ASSIGN
+
+
 @pytest.fixture(scope="module")
 def base_info(tmp_path_factory):
     root = tmp_path_factory.mktemp("base")
     info = make_project(root, plants=BASE_PLANTS)
-    assert run_audit(root) == 0
+    with pytest.MonkeyPatch.context() as mp:                      # la auditoría base no depende del Git real
+        mp.setattr(C, "_git", fake_git(False))
+        assert run_audit(root) == 0
     return info
 
 
@@ -299,13 +341,14 @@ def test_code_state_detects_committed_modified_untracked_and_no_git():
 
 
 def test_real_git_runner_on_real_repository():
-    if C._git(C.PROJECT_ROOT, "rev-parse", "HEAD") is None:
-        pytest.skip("git no disponible o no es un clon")
-    state = C.code_state(C.PROJECT_ROOT, [C.SOURCE_REL, "src/r2_v2/__no_existe__.py"])
+    """Solo comprueba propiedades que no dependen de si el código ya está o no en un commit."""
+    if REAL_GIT(C.PROJECT_ROOT, "rev-parse", "HEAD") is None or not (C.PROJECT_ROOT / C.SOURCE_REL).is_file():
+        pytest.skip("git no disponible, no es un clon o falta la fuente")
+    state = C.code_state(C.PROJECT_ROOT, [C.SOURCE_REL, "src/r2_v2/__no_existe__.py"], REAL_GIT)
     assert state["archivos"]["src/r2_v2/__no_existe__.py"]["en_commit"] is False   # no versionado ni existente
     assert state["en_commit"] is False
     assert state["archivos"][C.SOURCE_REL]["blob"]                                  # id de git, independiente del SO
-    assert state["commit"] == C._git(C.PROJECT_ROOT, "rev-parse", "HEAD")
+    assert state["commit"] == REAL_GIT(C.PROJECT_ROOT, "rev-parse", "HEAD")
 
 
 def test_code_state_records_platform_independent_blob():
@@ -612,14 +655,43 @@ def test_groups_transitive():
     assert g["1"] == g["2"] == g["3"] != g["4"]
 
 
-def test_folds_respect_groups_and_positives():
+def _groups_820():
     ids = [str(i) for i in range(820)]
     labels = [1 if i < 38 else 0 for i in range(820)]
     edges = [(str(i), str(i + 1)) for i in range(100, 300, 2)] + [("0", "1")]
-    groups = mf.build_groups(ids, edges)
-    folds = mf.assign_folds(ids, labels, groups)
+    return ids, labels, mf.build_groups(ids, edges)
+
+
+def test_real_assign_folds_invariants_do_not_depend_on_the_sklearn_balance():
+    """Solo lo que StratifiedGroupKFold garantiza en cualquier versión: no el reparto exacto de positivas."""
+    ids, labels, groups = _groups_820()
+    folds = REAL_ASSIGN(ids, labels, groups)
+    assert len(folds) == 820 and set(folds) == {0, 1, 2, 3, 4}            # todas asignadas, los cinco folds usados
+    by_group = {}
+    for i, f in zip(ids, folds):
+        by_group.setdefault(groups[i], set()).add(f)
+    assert all(len(fs) == 1 for fs in by_group.values())                  # NUNCA se separa un grupo
+    assert folds[0] == folds[1]
+    assert folds == REAL_ASSIGN(ids, labels, groups)                      # determinista con la misma versión y entradas
     per_fold, problems, _ = mf.verify(ids, labels, groups, folds)
-    assert problems == [] and sum(f["positivas"] for f in per_fold) == 38 and folds[0] == folds[1]
+    assert sum(f["positivas"] for f in per_fold) == 38
+    assert not any("más de un fold" in p for p in problems)               # y verify lo comprueba
+
+
+def test_verify_floor_of_four_positives_is_kept_and_applies_to_any_assigner():
+    ids = [str(i) for i in range(100)]
+    labels = [1 if i < 12 else 0 for i in range(100)]
+    folds = [i % 5 for i in range(100)]                                   # 12 positivas -> 3,3,2,2,2 por fold
+    _, problems, _ = mf.verify(ids, labels, {i: i for i in ids}, folds)
+    assert sum("solo" in p and "positivas" in p for p in problems) == 5   # los cinco folds quedan por debajo de 4
+
+
+def test_stable_test_assigner_respects_groups_and_balances_positives():
+    ids, labels, groups = _groups_820()
+    folds = stable_assign_folds(ids, labels, groups)
+    per_fold, problems, _ = mf.verify(ids, labels, groups, folds)
+    assert problems == [] and folds == stable_assign_folds(ids, labels, groups)
+    assert max(f["positivas"] for f in per_fold) - min(f["positivas"] for f in per_fold) <= 1
 
 
 def test_fold_with_too_few_positives_is_error_not_warning():
@@ -630,13 +702,18 @@ def test_fold_with_too_few_positives_is_error_not_warning():
     assert any("positivas" in p for p in problems)
 
 
-def test_large_group_is_never_split_and_only_warns():
+def test_large_group_is_never_split_by_the_real_assigner():
     ids = [str(i) for i in range(820)]
     labels = [1 if i < 38 else 0 for i in range(820)]
-    groups = mf.build_groups(ids, [(str(i), str(i + 1)) for i in range(0, 11)])
-    folds = mf.assign_folds(ids, labels, groups)
-    _, problems, warnings = mf.verify(ids, labels, groups, folds)
-    assert len({folds[i] for i in range(12)}) == 1 and problems == []
+    groups = mf.build_groups(ids, [(str(i), str(i + 1)) for i in range(0, 11)])   # 12 positivas en un grupo
+    folds = REAL_ASSIGN(ids, labels, groups)
+    assert len({folds[i] for i in range(12)}) == 1                        # invariante garantizada; no el reparto
+
+
+def test_range_warning_for_positives_is_a_warning_not_an_error():
+    ids, labels, folds = _sized_folds([164] * 5, [12, 7, 7, 6, 6])        # un fold con 12 positivas (fuera de 6-9)
+    _, problems, warnings = mf.verify(ids, labels, {i: i for i in ids}, folds)
+    assert problems == []
     assert any("12 positivas fuera de [6, 9]" in w for w in warnings)
 
 
@@ -1016,3 +1093,43 @@ def test_folds_translate_sheet_reviews_through_the_correspondence(project, base_
     s = json.loads((project / mf.DEFAULT_OUT_REL / "resumen_folds_v2.json").read_text(encoding="utf-8"))
     assert s["aristas_confirmadas_por_revision"] == 1
     assert s["entradas_sha256"]["revision_ciega.csv"] == C.sha256_file(adir(project) / "revision_ciega.csv")
+
+
+# ---------------------------------------------------------------- generación de folds con el asignador REAL
+def test_folds_with_the_real_assigner_either_succeed_validly_or_block_safely(project, base_info, monkeypatch, capsys):
+    """Contrato, no distribución: con StratifiedGroupKFold real el resultado depende de la versión de scikit-learn;
+    lo que nunca puede ocurrir es una salida publicada que viole el mínimo de positivas o separe un grupo."""
+    monkeypatch.setattr(mf, "assign_folds", REAL_ASSIGN)
+    annotate(project, misma={near_pair(base_info)})
+    rc = run_folds(project)
+    out = project / mf.DEFAULT_OUT_REL
+    if rc == 0:
+        rows = C.read_csv_rows(out / "cv_folds_v2.csv")
+        per_fold = {}
+        for r in rows:
+            per_fold[r["fold"]] = per_fold.get(r["fold"], 0) + int(r["label_v2"])
+        assert len(per_fold) == 5 and min(per_fold.values()) >= mf.MIN_POS_HARD
+        by_group = {}
+        for r in rows:
+            by_group.setdefault(r["group_id"], set()).add(r["fold"])
+        assert all(len(fs) == 1 for fs in by_group.values())
+    else:
+        assert rc == 1 and "Partición no viable" in capsys.readouterr().err
+        assert not out.exists() and not list(out.parent.glob(".*staging*"))   # bloqueo seguro: no se publica nada
+
+
+def test_folds_block_deterministically_when_a_fold_has_fewer_than_four_positives(project, base_info, monkeypatch, capsys):
+    """El bloqueo 'Partición no viable' se prueba sin depender de scikit-learn: un asignador simulado deja un fold con 2 positivas."""
+    def too_few_positives(ids, labels, groups, n_folds=5, seed=42):
+        folds = stable_assign_folds(ids, labels, groups, n_folds, seed)
+        positives_in_0 = [k for k, (f, y) in enumerate(zip(folds, labels)) if f == 0 and y == 1]
+        for k in positives_in_0[2:]:                   # las positivas son singletons: mover una no separa ningún grupo
+            folds[k] = 1
+        return folds
+    monkeypatch.setattr(mf, "assign_folds", too_few_positives)
+    annotate(project, misma={near_pair(base_info)})
+    assert run_folds(project) == 1
+    err = capsys.readouterr().err
+    assert "Partición no viable" in err and "fold 0: solo 2 positivas (mínimo 4)" in err
+    out = project / mf.DEFAULT_OUT_REL
+    assert not out.exists() and not list(out.parent.glob(".*staging*"))   # no se publica nada

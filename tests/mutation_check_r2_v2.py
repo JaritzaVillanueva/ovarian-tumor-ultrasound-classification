@@ -22,6 +22,7 @@ from pathlib import Path
 # (archivo, texto original, texto mutado, descripción)
 MUTATIONS = [
     ("make_folds_v2.py", "        require_complete_review(stats)", "        pass", "folds sin bloqueo por revisión incompleta"),
+    ("make_folds_v2.py", "        if problems:\n            raise C.GuardError(\"Partición no viable:", "        if False:\n            raise C.GuardError(\"Partición no viable:", "[no viable] folds con menos de 4 positivas se publican"),
     ("make_folds_v2.py", "edges_pairs + edges_dup", "edges_pairs", "duplicados exactos no se unen"),
     ("make_folds_v2.py", "if len({label_of[i] for i in ids}) > 1:", "if False:", "duplicado exacto contradictorio no aborta"),
     ("make_folds_v2.py", "if label_of[a] != label_of[b]:", "if False:", "par misma contradictorio no aborta"),
