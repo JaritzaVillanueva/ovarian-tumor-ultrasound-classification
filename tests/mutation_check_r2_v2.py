@@ -46,6 +46,22 @@ MUTATIONS = [
     ("common.py", "committed = in_head is not None and in_work is not None and in_head == in_work", "committed = True", "archivos modificados se dan por versionados"),
     ("common.py", "    inside = inside or allowed in out.parents", "    inside = True", "--out sin restricción de directorio"),
     ("common.py", "    if bad:", "    if False:", "--out admite directorios de agentes o reportes"),
+    ("make_folds_phash_v1.py", "        if mixed:", "        if False:", "[phash] un grupo mixto no detiene la generacion"),
+    ("make_folds_phash_v1.py", "        cross_check_with_audit(recomputed, data[\"cand_rows\"], data[\"calib_rows\"], cutoff, phash_of)", "        pass", "[phash] no se reproducen las distancias de la auditoria"),
+    ("make_folds_phash_v1.py", "        if C.sha256_file(audit_dir / name) != declared[name]:", "        if False:", "[phash] entradas de la auditoria alteradas no se detectan"),
+    ("make_folds_phash_v1.py", "    if undeclared:", "    if False:", "[phash] el resumen puede omitir hashes de entradas"),
+    ("make_folds_phash_v1.py", "if not protocol[\"en_commit\"] and not args.permitir_codigo_sin_commit:", "if False:", "[phash] protocolo sin commit no bloquea"),
+    ("make_folds_phash_v1.py", "if not args.aprobacion.strip():", "if False:", "[phash] sin --aprobacion"),
+    ("make_folds_phash_v1.py", "PHASH_THRESHOLD = 8 ", "PHASH_THRESHOLD = 12 ", "[phash] umbral distinto del aprobado"),
+    ("make_folds_phash_v1.py", "k = min(range(n_folds), key=lambda f: (pos[f], size[f], f))", "k = max(range(n_folds), key=lambda f: (pos[f], size[f], f))", "[phash] asignador apila positivas en un fold"),
+    ("make_folds_phash_v1.py", "        validate_staging(staging, eligible, expected)", "        pass", "[phash] no se valida la salida antes de publicar"),
+    ("make_folds_phash_v1.py", "C.require_safe_out(out, root, ALLOWED_OUT_PREFIX, allow_equal=True, forbidden_paths=[audit_dir])", "pass", "[phash] --out sin restriccion"),
+    ("make_folds_phash_v1.py", "dup_edges = mf.exact_duplicate_edges(data[\"dup_rows\"], label_of)", "dup_edges = []", "[phash] duplicado exacto contradictorio no se detecta"),
+    ("make_folds_phash_v1.py", "        if problems:\n            raise C.GuardError(\"Partición no viable:", "        if False:\n            raise C.GuardError(\"Partición no viable:", "[phash] folds con menos de 4 positivas se publican"),
+    ("make_folds_phash_v1.py", "    if C.sha256_file(audit_dir / \"resumen_auditoria.json\") != resumen_sha256:", "    if False:", "[phash] el resumen de la auditoria no esta anclado"),
+    ("make_folds_phash_v1.py", "if len(pinned) != 64 or any(c not in \"0123456789abcdef\" for c in pinned):", "if False:", "[phash] --resumen-sha256 no es obligatorio"),
+    ("make_folds_phash_v1.py", "    if got != wanted:", "    if False:", "[phash] los recuentos no se recalculan desde las filas"),
+    ("make_folds_phash_v1.py", "    if (src_elig != {r[\"image_id\"]: int(r[\"original_class\"]) for r in eligible}", "    if (False and src_elig != {r[\"image_id\"]: int(r[\"original_class\"]) for r in eligible}", "[phash] los elegibles no se cruzan con la fuente"),
     ("build_development_audit.py", "validate_staging(staging, expected, expected_total, with_sheets=not args.no_sheets)", "pass", "no se valida antes de publicar"),
     ("build_development_audit.py", "        C.prepare_output(out, PROTECTED_FILES, args.force)  # el destino pudo cambiar", "        pass  # ", "no se re-comprueba el destino antes de publicar"),
     ("build_development_audit.py", "\"categorias_originales_distintas\": len(set(classes)) > 1,", "\"categorias_originales_distintas\": False,", "indicador de categorías siempre falso"),
@@ -55,9 +71,12 @@ MUTATIONS = [
 ]
 
 
-def run_suite(work):
+TEST_FILE_OF = {"make_folds_phash_v1.py": "tests/test_r2_phash_v1.py"}  # por defecto: tests/test_r2_v2.py
+
+
+def run_suite(work, test_file="tests/test_r2_v2.py"):
     env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
-    r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-p", "no:cacheprovider", "tests/test_r2_v2.py", "-q", "-x"],
+    r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-p", "no:cacheprovider", test_file, "-q", "-x"],
                        cwd=work, capture_output=True, text=True, env=env)
     return r.returncode, (r.stdout.strip().splitlines() or [""])[-1]
 
@@ -86,7 +105,9 @@ def main(argv):
         (work / "tests").mkdir()
         (work / "configs" / "splits").mkdir(parents=True)
         shutil.copytree(repo / "src" / "r2_v2", work / "src" / "r2_v2", ignore=shutil.ignore_patterns("__pycache__"))
-        shutil.copy(repo / "tests" / "test_r2_v2.py", work / "tests")
+        for test_name in ("test_r2_v2.py", "test_r2_phash_v1.py"):
+            if (repo / "tests" / test_name).is_file():
+                shutil.copy(repo / "tests" / test_name, work / "tests")
         (work / "tests" / "__init__.py").write_text("", encoding="utf-8")
         shutil.copy(repo / "configs" / "splits" / "cv_folds_e2.csv", work / "configs" / "splits")
         target = work / "src" / "r2_v2" / fname
@@ -96,7 +117,7 @@ def main(argv):
             survivors += 1
             continue
         target.write_text(text.replace(old, new, 1), encoding="utf-8")
-        code, tail = run_suite(work)
+        code, tail = run_suite(work, TEST_FILE_OF.get(fname, "tests/test_r2_v2.py"))
         survivors += code == 0
         print(f"[{'DETECTADA ' if code else 'SOBREVIVE  '}] {fname}: {label}  -> {tail}")
     shutil.rmtree(work, ignore_errors=True)
