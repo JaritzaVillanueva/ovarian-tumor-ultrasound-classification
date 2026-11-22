@@ -1,0 +1,5 @@
+# Artefactos de la particion provisional phash_le8_v1 (G1/R2 v2): conservar los bytes EXACTOS.
+# `-text` desactiva toda conversion de saltos de linea (incluida core.autocrlf=true de Windows), de modo que el
+# SHA-256 del archivo de trabajo sea el mismo en Falcon (Linux) y en Windows.
+configs/splits/v2_auto/*.csv -text
+configs/splits/v2_auto/*.json -text
