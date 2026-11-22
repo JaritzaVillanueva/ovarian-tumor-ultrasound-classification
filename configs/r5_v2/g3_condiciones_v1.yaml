@@ -14,8 +14,8 @@ protocolo:
   id: g3_condiciones_v1
   ruta: src/r5_v2/protocolo_g3b_v1.md
   estado: "congelado al registrarse commit y hash del protocolo (commit posterior al del protocolo)"
-  git_commit: null
-  sha256_contenido_blob: null
+  git_commit: 947cea6670269ec2cf11eee390bffac528956115
+  sha256_contenido_blob: 67deafc08e0d58198f1f22197c200b443ddaf499be3161b62e2a042cd3e89f04
   conformidad_academica_asesor: PENDIENTE
   trazabilidad: "pendiente de registro"
 
