@@ -11,8 +11,8 @@ protocolo:
   id: g3_segmentacion_v1
   ruta: src/r5_v2/protocolo_g3a_v1.md
   estado: "congelado al registrarse commit y hash del protocolo (commit posterior al del protocolo)"
-  git_commit: null                  # commit que introdujo el protocolo; lo registra la autora en el commit 2
-  sha256_contenido_blob: null       # SHA-256 de los bytes del blob del protocolo en ese commit; lo registra la autora en el commit 2
+  git_commit: 2192fa21683bd76a01ba85e1443c0b2b98445f4c
+  sha256_contenido_blob: 842a066ada0c5d53584f74624622ece8a0b9c38bba97956cef7dc63f5d9f12c6
   conformidad_academica_asesor: PENDIENTE
   trazabilidad: "pendiente de registro"
 
