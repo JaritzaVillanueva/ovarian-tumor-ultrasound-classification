@@ -12,10 +12,10 @@ esquema: g2_baseline_v1_config/1
 protocolo:
   id: g2_baseline_v1
   ruta: src/r4_v2/protocolo_g2_baseline_v1.md
-  contenido_equivalente_a: v1.2.1 + enmienda 1 (M-1)
-  git_commit: a8ba5d7447e12e8de361e656f71c83abfc6a1e45   # a8ba5d7 (enmienda 1)
-  git_blob_id: 16db002eb744a93670843b1f0351126fc328aa8d   # SHA-1 de objeto Git; NO es SHA-256
-  sha256_contenido_blob: c0eae212314ed395f48d32e63ed54871e351321cf99b2667fbdcbb8ba8815127   # protocolo §4.5.4 (K6)
+  contenido_equivalente_a: v1.2.1 + enmienda 1 (M-1) + enmienda 2 (ASE)
+  git_commit: f7f14e819feca074044455a035e50e3455726e4a   # f7f14e8 (enmienda 2)
+  git_blob_id: fbbdfe21e002b7dd121ae6666d8d8067bf073a82   # SHA-1 de objeto Git; NO es SHA-256
+  sha256_contenido_blob: c0488d3700ab39a61f9a2909ddf65c5e2be979718dff302596f86e2ef6ef2c4c   # protocolo §4.5.4 (K6)
   sha256_bytes_archivo_borrador_aprobado: 5cea05ba950c6dcb1b9b9cc094bee3977989d5c3394a8924c3e927bceac88a23   # borrador_protocolo_G2_v1_2_1.md (fuera del repositorio)
   aprobacion_tecnica_autor: "2026-11-21"
   conformidad_academica_asesor: PENDIENTE
