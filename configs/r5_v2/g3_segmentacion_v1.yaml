@@ -1,0 +1,107 @@
+# Configuración G3a `g3_segmentacion_v1`: segmentador U-Net por fold y máscaras fuera de fold (OOF) de las 820 elegibles.
+#
+# Estado: candidato a congelamiento por la autora (protocolo: src/r5_v2/protocolo_g3a_v1.md). NO autoriza entrenar con imágenes reales.
+# Referencias sin circularidad: el protocolo NO contiene hashes; este YAML registra el commit y el hash del protocolo (commit posterior).
+# Partición provisional (phash_le8_v1, exploratoria, post hoc); conformidad académica del asesor: PENDIENTE.
+# La partición y su verificación K1-K4 se leen del YAML congelado de G2 (solo lectura): no se duplican aquí sus hashes.
+
+esquema: g3_segmentacion_v1_config/1
+
+protocolo:
+  id: g3_segmentacion_v1
+  ruta: src/r5_v2/protocolo_g3a_v1.md
+  estado: "congelado al registrarse commit y hash del protocolo (commit posterior al del protocolo)"
+  git_commit: null                  # commit que introdujo el protocolo; lo registra la autora en el commit 2
+  sha256_contenido_blob: null       # SHA-256 de los bytes del blob del protocolo en ese commit; lo registra la autora en el commit 2
+  conformidad_academica_asesor: PENDIENTE
+  trazabilidad: "pendiente de registro"
+
+estudio:
+  tarea: "segmentación de la lesión (U-Net por fold) para generar máscaras OOF; insumo de R5.2/R5.3 y de G3b"
+  mapeo: v2
+  particion: phash_le8_v1
+  leyenda: "partición provisional (phash_le8_v1, exploratoria, post hoc); conformidad académica pendiente"
+
+referencia_g2:                      # configuración congelada de G2 (solo lectura): partición, K1-K4 y carpeta de imágenes
+  config: configs/r4_v2/g2_baseline_v1.yaml
+  sha256_contenido_blob: 6626f34e654db0ca119e2e1fab11bd12f68d3791481c55cc49c2e1e557fb17ff   # SHA-256 de los bytes del blob en HEAD (commit bc63f03)
+
+diseno:
+  folds: [0, 1, 2, 3, 4]
+  fold_validacion_interna: "(k + 1) mod n_folds; solo elige el checkpoint"
+  entrenamiento: "folds fuera de {k, v}"
+  id_segmentador: "unet__s{seed}__f{fold}"
+  imagenes_dir: data/processed/MMOTU_OTU_2D_experimental       # solo train/ y validation/ de desarrollo; las máscaras viven en .../masks/
+  sufijo_mascara: _binary                                      # <id>_binary.<ext> (convención de src/segmentation/dataset.py)
+  raiz_resultados: results/r5_v2/phash_le8_v1/g3_segmentacion_v1/
+  raiz_datos_derivados: data/processed/r5_v2/phash_le8_v1/mascaras_pred_oof/   # derivado, no versionado
+  modos:
+    verificar_datos: {entrena: false, escribe_solo_resultados: true}
+    humo: {fold: 0, epocas_min: 1, epocas_max: 2, cuenta_como_resultado: false}
+    completa: {folds: 5, epocas: 50}
+
+receta:                             # heredada de notebooks/R5_input_representation/01_unet_baseline.ipynb (celdas de código) y src/segmentation/unet.py
+  optimizador: Adam
+  learning_rate: 0.0001
+  perdida: BCEWithLogitsLoss
+  batch_size: 4
+  image_size: [256, 256]
+  imagen: "RGB, remuestreo bilineal, [0,1]"
+  mascara: "vecino más próximo"
+  binarizacion_referencia: "> 0"    # explícita; el dataset histórico no binariza
+  umbral: 0.5
+  epochs: 50
+  aumento_de_datos: null
+  parada_anticipada: null
+  semilla: 42                       # la misma para los cinco folds; un solo U-Net por fold (no se captura la variabilidad entre semillas)
+  num_workers: 0
+  eps_dice: 1.0e-7
+  checkpoint:
+    metrica: val_dice_medio_por_imagen_fold_interno
+    regla: "máximo estricto del Dice medio por imagen (256x256, umbral 0.5, eps 1e-7) en el fold interno v; un empate conserva la época más temprana"
+  desviaciones_respecto_al_notebook:
+    - "validación interna = fold v de desarrollo (el notebook usaba validation/ histórico)"
+    - "checkpoint escrito una vez al final, sin estado del optimizador"
+    - "máscara de referencia binarizada con > 0"
+
+roi:                                # PROVISIONAL: decisión de la autora pendiente (B-híbrida vs B-original; keep_largest de C). No resuelto por el código
+  estado: "provisional, decisión de la autora pendiente"
+  funcion: src/segmentation/roi.py::extract_roi_from_mask   # sin editar; este módulo NO genera recortes PNG (G3b)
+  umbral: 0.5                       # fijado en roi.py
+  margen: 0.10
+  keep_largest: true                # la C histórica usaba false (sin fallback)
+  fallback_a_imagen_completa: true
+  min_component_area_fraction: 0.001   # = MIN_COMPONENT_AREA_FRACTION de roi.py
+  aplica_a: [mascara_predicha_reescalada_a_resolucion_original, mascara_de_referencia]
+
+verificacion:
+  area_relativa_minima: 0.001       # solo se reporta (no bloquea)
+
+metricas_seg:                       # descriptivas; sin IC (el bootstrap agrupado con los índices b de G2 es posterior y está pendiente)
+  dice_menor_que: 0.1
+  cobertura_menor_que: 0.5
+
+integridad:                         # comprobación sencilla propia (no es K6 de G2)
+  rutas_sin_cambios: [src/r5_v2, src/segmentation, src/r4_v2, configs/r5_v2, configs/r4_v2]
+  archivos_con_huella:
+    - configs/r5_v2/g3_segmentacion_v1.yaml
+    - src/r5_v2/protocolo_g3a_v1.md
+    - configs/r4_v2/g2_baseline_v1.yaml
+    - src/r5_v2/__init__.py
+    - src/r5_v2/comun.py
+    - src/r5_v2/mascaras.py
+    - src/r5_v2/metricas_seg.py
+    - src/r5_v2/segmentacion.py
+    - src/r5_v2/ejecutar_g3a.py
+    - src/segmentation/__init__.py
+    - src/segmentation/unet.py
+    - src/segmentation/roi.py
+    - src/r4_v2/common.py
+    - src/r4_v2/particion.py
+    - src/r4_v2/modos.py
+    - src/r4_v2/entrenamiento.py
+
+acceso_test:
+  estado: cerrado
+  nuevos_accesos: prohibidos
+  nota: "solo train/ y validation/ de desarrollo; las 180 normales (categoría 5) quedan fuera; el bloqueo no borra los accesos históricos declarados en G5/R8"
