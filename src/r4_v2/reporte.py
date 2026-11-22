@@ -274,6 +274,7 @@ def generar_reporte(root, config, particion: Particion, raiz_resultados, salida,
     meta = {"protocolo": PROTOCOLO_ID, "mapeo": MAPEO_ID, "particion": PARTICION_ID, "leyenda": LEYENDA_PROVISIONAL,
             "git_commit_head": inicio["git_commit_head"], "rama": inicio["rama"],
             "protocolo_versionado": inicio["protocolo_versionado"], "entrada": inicio["entrada"],
+            "modulos_virtuales_tolerados": inicio.get("modulos_virtuales_tolerados", []),
             "integridad": {rel: {c: r[c] for c in ("git_blob_id", "sha256_contenido_blob", "sha256_bytes_archivo")}
                            for rel, r in sorted(inicio["archivos"].items())},
             "diferencias_inicio_fin": diferencias, "invalida_integridad": bool(diferencias) or bool(fin["bloqueos"]),

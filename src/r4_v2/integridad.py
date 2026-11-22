@@ -23,6 +23,15 @@ from .common import (GuardError, PROTOCOLO_REL, git, git_lista_z, git_ok, git_te
 
 PYTHON_MINIMO = (3, 8)
 
+# Módulos VIRTUALES de PyTorch tolerados en la lista dinámica (lista cerrada, en código; evidencia: diagnóstico real en Falcon con
+# Python 3.10.12 / torch 2.5.1+cu121: `torch.classes.__file__ == "_classes.py"` y `torch.ops.__file__ == "_ops.py"`, ambos con
+# `__spec__` None u `origin` None). No son archivos: son objetos `ModuleType` con un `__file__` simbólico sin directorio. Un módulo solo
+# se tolera si cumple TODAS las condiciones de `modulo_virtual_tolerado`; cualquier otro nombre sigue el tratamiento normal.
+MODULOS_VIRTUALES_TOLERADOS = {
+    "torch.classes": "módulo virtual de PyTorch (torch._classes._Classes): __file__ simbólico '_classes.py' y sin __spec__.origin",
+    "torch.ops": "módulo virtual de PyTorch (torch._ops._Ops): __file__ simbólico '_ops.py' y sin __spec__.origin",
+}
+
 # Lista fija CERRADA de §4.5.1 (i)-(v), definida EN CÓDIGO: el alcance de K6 no depende de lo que diga el YAML del árbol de trabajo.
 # La lista de la configuración debe ser exactamente igual (como conjunto): cualquier diferencia, en más o en menos, bloquea.
 LISTA_FIJA_CERRADA = (
@@ -102,6 +111,38 @@ def origen_de_modulo(mod) -> Path | None:
     if not origen or origen in ("built-in", "frozen") or (str(origen).startswith("<") and str(origen).endswith(">")):
         return None                                                  # p. ej. '<stdin>': no es un archivo
     return Path(origen)
+
+
+def _hay_archivo_homonimo(root, nombre_archivo: str) -> bool:
+    """True si existe (en el árbol de trabajo, en el directorio actual, en el índice o sin seguimiento) un archivo propio con ese nombre,
+    en cualquier carpeta del repositorio: entonces pudo ser el realmente cargado y NO se tolera el módulo virtual."""
+    if (Path(root) / nombre_archivo).exists() or (Path.cwd() / nombre_archivo).exists():
+        return True
+    for ruta in git_lista_z(root, "ls-files", "-z", "--cached", "--others", "--exclude-standard"):
+        if ruta.replace("\\", "/").split("/")[-1] == nombre_archivo:
+            return True
+    return False
+
+
+def modulo_virtual_tolerado(nombre: str, mod, root) -> dict | None:
+    """Criterio estructural estricto (todas las condiciones a la vez). Devuelve el registro del módulo tolerado o None.
+
+    1. el nombre está en la lista cerrada del código (`MODULOS_VIRTUALES_TOLERADOS`) y no es `src` ni `src.*`;
+    2. `__spec__` es None o su `origin` es None/ausente (no hay archivo de origen declarado por el importador);
+    3. `__file__` es una cadena no vacía SIN directorio (sin separadores ni unidad: un simple nombre de archivo);
+    4. no existe en el repositorio ningún archivo con ese nombre que pudiera haber sido el cargado de verdad.
+    """
+    if nombre not in MODULOS_VIRTUALES_TOLERADOS or nombre == "src" or nombre.startswith("src."):
+        return None
+    spec = getattr(mod, "__spec__", None)
+    if spec is not None and getattr(spec, "origin", None) is not None:
+        return None
+    archivo = getattr(mod, "__file__", None)
+    if not isinstance(archivo, str) or not archivo or any(c in archivo for c in ("/", "\\", ":")) or Path(archivo).name != archivo:
+        return None
+    if _hay_archivo_homonimo(root, archivo):
+        return None
+    return {"modulo": nombre, "__file__": archivo, "motivo": MODULOS_VIRTUALES_TOLERADOS[nombre]}
 
 
 def _nombre_del_cargador(mod) -> str:
@@ -217,13 +258,17 @@ def verificar_integridad(root, config, *, modo: str, entorno: EntornoPython | No
     if permitida:
         fijas.discard(PROTOCOLO_REL)
         alcance = [a for a in alcance if a != PROTOCOLO_REL]
-    dinamicas, paquetes, modulos_repo = set(), {}, []
+    dinamicas, paquetes, modulos_repo, virtuales = set(), {}, [], []
     entorno_dirs = _dirs_del_entorno()
     modulos = dict(entorno.modules)
     if entorno.main is not None:
         modulos.setdefault("__main__", entorno.main)
     for nombre, mod in sorted(modulos.items()):
         if mod is None:
+            continue
+        virtual = modulo_virtual_tolerado(nombre, mod, root)
+        if virtual is not None:                                                      # no es un archivo del repositorio: no se hashea
+            virtuales.append(virtual)
             continue
         origen = origen_de_modulo(mod)
         if origen is None:
@@ -255,6 +300,7 @@ def verificar_integridad(root, config, *, modo: str, entorno: EntornoPython | No
             dinamicas.add(nb_rel)
     union = sorted(fijas | dinamicas)
     res["modulos_en_repo"] = sorted(modulos_repo)
+    res["modulos_virtuales_tolerados"] = sorted(virtuales, key=lambda v: v["modulo"])
     res["paquetes_espacio_de_nombres"] = paquetes
     res["sys_path_en_repo"] = sorted(r for r in (_relativa(root, p) for p in entorno.sys_path if p) if r is not None)
 
@@ -381,6 +427,7 @@ def exigir_integridad(res: dict) -> dict:
 def huella(res: dict) -> dict:
     """Parte comparable de la verificación: HEAD, módulos y hashes de cada archivo."""
     return {"git_commit_head": res.get("git_commit_head"), "modulos_en_repo": res.get("modulos_en_repo"),
+            "modulos_virtuales_tolerados": res.get("modulos_virtuales_tolerados", []),
             "archivos": {rel: [r["git_blob_id"], r["sha256_contenido_blob"], r["sha256_bytes_archivo"]]
                          for rel, r in res.get("archivos", {}).items()}}
 
@@ -393,6 +440,8 @@ def comparar_instantaneas(inicio: dict, fin: dict) -> list:
         dif.append("git_commit_head")
     if a["modulos_en_repo"] != b["modulos_en_repo"]:
         dif.append("modulos_en_repo")
+    if a["modulos_virtuales_tolerados"] != b["modulos_virtuales_tolerados"]:
+        dif.append("modulos_virtuales_tolerados")
     for rel in sorted(set(a["archivos"]) | set(b["archivos"])):
         if a["archivos"].get(rel) != b["archivos"].get(rel):
             dif.append(f"archivo:{rel}")

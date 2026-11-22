@@ -2499,3 +2499,197 @@ def test_n1_subproceso_real_guarda_distinta_usa_otro_codigo_y_no_genera_nada(rep
     rc, out, err, _ = lanzar_reporte(repo_de_reporte, "k5")                                      # el destino ya existe: K5
     assert rc == RP.CODIGO_SALIDA_GUARDA == 3 and "K5" in err
     assert rc != RP.CODIGO_SALIDA_INTEGRIDAD_INVALIDA
+
+
+# ============================================================================ 13. módulos virtuales de PyTorch (falso positivo de K6 en Falcon)
+# Diagnóstico real (Falcon, Python 3.10.12, torch 2.5.1+cu121): torch.classes.__file__ == "_classes.py" y torch.ops.__file__ == "_ops.py",
+# ambos con __spec__.origin None. Causa: `origen_de_modulo` cae en `__file__`; como es relativo, `verificar_integridad` lo resolvía contra
+# el directorio actual (la raíz del repositorio) y lo trataba como un archivo del repo: `ausente` y `no_rastreado`.
+def modulo_virtual(nombre, archivo, spec="ninguno"):
+    m = types.ModuleType(nombre)
+    m.__file__ = archivo
+    m.__spec__ = None if spec == "ninguno" else types.SimpleNamespace(origin=spec, loader=None, cached=None)
+    return m
+
+
+def entorno_virtuales(repo, tmp_path, monkeypatch, *modulos, **kw):
+    """Entorno cuyos módulos se insertan de verdad en sys.modules (con limpieza segura) y se leen con EntornoPython.actual()."""
+    for m in modulos:
+        monkeypatch.setitem(sys.modules, m.__name__, m)
+    actual = I.EntornoPython.actual()
+    assert all(actual.modules[m.__name__] is m for m in modulos)
+    return entorno_ok(repo, tmp_path, modulos=[actual.modules[m.__name__] for m in modulos], **kw)
+
+
+def torch_virtuales():
+    return modulo_virtual("torch.classes", "_classes.py"), modulo_virtual("torch.ops", "_ops.py", spec=None)
+
+
+def test_v1_torch_classes_y_ops_no_son_archivos_del_repo_y_quedan_registrados(tmp_path, monkeypatch):
+    repo = crear_repo(tmp_path)
+    monkeypatch.chdir(repo)                                                                   # como en Falcon: cwd = raíz del repositorio
+    ent = entorno_virtuales(repo, tmp_path, monkeypatch, *torch_virtuales())
+    res = verificar(repo, tmp_path, entorno=ent)
+    assert res["ok"], res["bloqueos"]
+    assert not {"ausente", "no_rastreado"} & set(codigos(res))
+    assert res["modulos_virtuales_tolerados"] == [
+        {"modulo": "torch.classes", "__file__": "_classes.py", "motivo": I.MODULOS_VIRTUALES_TOLERADOS["torch.classes"]},
+        {"modulo": "torch.ops", "__file__": "_ops.py", "motivo": I.MODULOS_VIRTUALES_TOLERADOS["torch.ops"]}]
+    assert "_classes.py" not in res["archivos"] and "_ops.py" not in res["archivos"]         # no se hashean como archivos del repo
+    assert not {"torch.classes", "torch.ops"} & set(res["modulos_en_repo"])
+    for reg in res["modulos_virtuales_tolerados"]:
+        assert set(reg) == {"modulo", "__file__", "motivo"} and "sha256" not in json.dumps(reg)
+
+
+def test_v1_la_causa_raiz_era_resolver_el_file_relativo_contra_el_cwd(tmp_path, monkeypatch):
+    repo = crear_repo(tmp_path)
+    monkeypatch.chdir(repo)
+    m = modulo_virtual("torch.foo", "_classes.py")                                          # mismo __file__, nombre fuera de la lista
+    assert I.origen_de_modulo(m) == Path("_classes.py")                                      # origen relativo sin directorio
+    res = verificar(repo, tmp_path, entorno=entorno_virtuales(repo, tmp_path, monkeypatch, m))
+    assert {"ausente", "no_rastreado"} <= set(codigos(res))                                  # el falso positivo original, ahora solo fuera de la lista
+    assert res["modulos_virtuales_tolerados"] == []
+
+
+def test_v1_sin_spec_y_con_spec_de_origen_nulo_se_toleran_igual(tmp_path, monkeypatch):
+    repo = crear_repo(tmp_path)
+    monkeypatch.chdir(repo)
+    for spec in ("ninguno", None):
+        m = modulo_virtual("torch.ops", "_ops.py", spec=spec)
+        res = verificar(repo, tmp_path, entorno=entorno_virtuales(repo, tmp_path, monkeypatch, m))
+        assert res["ok"] and [v["modulo"] for v in res["modulos_virtuales_tolerados"]] == ["torch.ops"]
+
+
+@pytest.mark.parametrize("nombre, archivo", [
+    ("src.x", "x.py"), ("src", "x.py"), ("torch.foo", "foo.py"), ("numpy.bar", "bar.py"), ("torch", "torch.py"),
+    ("torch.classes.sub", "_classes.py"), ("torch._ops", "_ops.py"), ("yaml.x", "_ops.py"), ("sklearn.y", "_classes.py")])
+def test_v2_modulos_fuera_de_la_lista_con_file_relativo_sin_origen_siguen_bloqueando(tmp_path, monkeypatch, nombre, archivo):
+    repo = crear_repo(tmp_path)
+    monkeypatch.chdir(repo)
+    res = verificar(repo, tmp_path, entorno=entorno_virtuales(repo, tmp_path, monkeypatch, modulo_virtual(nombre, archivo)))
+    assert {"ausente", "no_rastreado"} <= set(codigos(res)) and res["modulos_virtuales_tolerados"] == []
+
+
+@pytest.mark.parametrize("nombre, archivo, spec", [
+    ("torch.classes", "sub/_classes.py", "ninguno"),             # __file__ con directorio
+    ("torch.classes", "src/_classes.py", "ninguno"),
+    ("torch.ops", "pkg\\_ops.py", "ninguno"),                    # separador de Windows
+    ("torch.ops", "C:_ops.py", "ninguno"),                       # unidad
+    ("torch.classes", "_classes.py", "_classes.py"),             # __spec__.origin no nulo (relativo) y archivo ausente
+    ("torch.ops", "_ops.py", "src/r4_v2/inexistente.py"),        # __spec__.origin no nulo y archivo ausente
+    ("torch.ops", "", "ninguno"), ("torch.ops", None, "ninguno")])
+def test_v3_torch_classes_ops_con_otra_estructura_no_se_toleran(tmp_path, monkeypatch, nombre, archivo, spec):
+    repo = crear_repo(tmp_path)
+    monkeypatch.chdir(repo)
+    m = modulo_virtual(nombre, archivo, spec=spec)
+    assert I.modulo_virtual_tolerado(nombre, m, repo) is None
+    res = verificar(repo, tmp_path, entorno=entorno_virtuales(repo, tmp_path, monkeypatch, m))
+    assert res["modulos_virtuales_tolerados"] == []
+    if archivo:                                                                              # dentro del repo y ausente: bloquea
+        assert "ausente" in codigos(res) or "no_rastreado" in codigos(res) or archivo in ("C:_ops.py", "pkg\\_ops.py")
+
+
+def test_v4_si_el_repo_tiene_un_archivo_homonimo_no_se_tolera_y_se_verifica_normalmente(tmp_path, monkeypatch):
+    repo = crear_repo(tmp_path, archivos={"_ops.py": "X = 1\n"})                              # homónimo en la raíz, rastreado
+    monkeypatch.chdir(repo)
+    ops = modulo_virtual("torch.ops", "_ops.py")
+    limpio = verificar(repo, tmp_path, entorno=entorno_virtuales(repo, tmp_path, monkeypatch, ops))
+    assert limpio["modulos_virtuales_tolerados"] == [], limpio["modulos_virtuales_tolerados"]
+    assert limpio["ok"] and "_ops.py" in limpio["archivos"], limpio["bloqueos"]    # verificado como archivo del repo
+    escribir(repo, "_ops.py", "X = 2\n")                                                      # no coincide con HEAD
+    res = verificar(repo, tmp_path, entorno=entorno_virtuales(repo, tmp_path, monkeypatch, ops))
+    assert "B_contenido_difiere" in codigos(res) and res["modulos_virtuales_tolerados"] == []
+
+
+def test_v4_homonimo_en_el_arbol_verificado_o_sin_seguimiento_tampoco_se_tolera(tmp_path, monkeypatch):
+    repo = crear_repo(tmp_path, archivos={"src/r4_v2/_classes.py": "Y = 1\n"})                # homónimo en una subcarpeta rastreada
+    monkeypatch.chdir(repo)
+    clases = modulo_virtual("torch.classes", "_classes.py")
+    assert I.modulo_virtual_tolerado("torch.classes", clases, repo) is None
+    res = verificar(repo, tmp_path, entorno=entorno_virtuales(repo, tmp_path, monkeypatch, clases))
+    assert "ausente" in codigos(res)                                                         # se resuelve contra el cwd y falta: bloquea
+    repo2 = crear_repo(tmp_path, "repo2")
+    escribir(repo2, "tests/_ops.py", "Z = 1\n")                                               # homónimo sin seguimiento
+    ops = modulo_virtual("torch.ops", "_ops.py", spec=None)
+    assert I.modulo_virtual_tolerado("torch.ops", ops, repo2) is None
+
+
+def test_v5_modulos_del_repo_con_ruta_relativa_legitima_siguen_protegidos(tmp_path, monkeypatch):
+    repo = crear_repo(tmp_path)
+    monkeypatch.chdir(repo)
+
+    def con_origen_relativo(nombre, archivo):
+        m = types.ModuleType(nombre)
+        m.__file__ = archivo
+        m.__spec__ = types.SimpleNamespace(origin=archivo, loader=_SourceFileLoader(), cached=None)
+        return m
+    legitimo = con_origen_relativo("raiz_mod", "raiz_mod.py")
+    res = verificar(repo, tmp_path, entorno=entorno_virtuales(repo, tmp_path, monkeypatch, legitimo))
+    assert res["ok"] and "raiz_mod.py" in res["archivos"] and "raiz_mod" in res["modulos_en_repo"]       # verificado por contenido
+    escribir(repo, "raiz_mod.py", "R = 2\n")                                                  # modificado: bloquea
+    assert "B_contenido_difiere" in codigos(verificar(repo, tmp_path, entorno=entorno_virtuales(repo, tmp_path, monkeypatch, legitimo)))
+    escribir(repo, "suelto.py", "S = 1\n")                                                    # sin seguimiento: bloquea
+    nuevo = con_origen_relativo("suelto", "suelto.py")
+    assert {"no_rastreado", "sin_seguimiento"} <= set(codigos(verificar(repo, tmp_path, entorno=entorno_virtuales(repo, tmp_path, monkeypatch, nuevo))))
+    # el punto de entrada con __file__ relativo (Python < 3.9 con scripts) sigue verificándose
+    principal = types.ModuleType("__main__")
+    principal.__file__ = "raiz_mod.py"
+    principal.__spec__ = None
+    res = verificar(repo, tmp_path, entorno=entorno_ok(repo, tmp_path, main=principal))
+    assert "B_contenido_difiere" in codigos(res)
+
+
+def test_v6_los_virtuales_tolerados_entran_en_la_comparacion_inicio_fin(tmp_path, monkeypatch):
+    repo = crear_repo(tmp_path)
+    monkeypatch.chdir(repo)
+    ini = verificar(repo, tmp_path)
+    fin = verificar(repo, tmp_path, entorno=entorno_virtuales(repo, tmp_path, monkeypatch, *torch_virtuales()))
+    assert I.comparar_instantaneas(ini, fin) == ["modulos_virtuales_tolerados"]
+    assert I.comparar_instantaneas(fin, fin) == []
+
+
+def test_v7_run_config_y_reporte_registran_los_modulos_virtuales(tmp_path, config_base, monkeypatch, banco):
+    repo = crear_repo(tmp_path)
+    monkeypatch.chdir(repo)
+    cfg = config_para_repo(repo, config_base)
+    ent = lambda: entorno_virtuales(repo, tmp_path, monkeypatch, *torch_virtuales())
+    r = MO.ejecutar_referencia(repo, cfg, verificar=lambda: I.verificar_integridad(repo, cfg, modo="referencia", entorno=ent()),
+                               instanciar=instanciar_falso, resolver=resolver_falso(tmp_path), versiones=lambda: VERSIONES,
+                               raiz_modo=MO.raiz_del_modo(repo, cfg, "referencia"), atestaciones={"autorizacion_ejecucion": "E"})
+    assert r["estado"] == "completada"
+    rc = json.loads((r["dir"] / "run_config.json").read_text(encoding="utf-8"))
+    for clave in ("verificacion_inicio", "verificacion_fin"):
+        assert [v["modulo"] for v in rc[clave]["modulos_virtuales_tolerados"]] == ["torch.classes", "torch.ops"]
+    assert rc["invalida_integridad"] is False
+    # reporte
+    base = verificacion_falsa()
+
+    def con_virtuales():
+        return {**base(), "modulos_virtuales_tolerados": [{"modulo": "torch.ops", "__file__": "_ops.py", "motivo": "m"}]}
+    meta = RP.generar_reporte(banco.root, banco.config, banco.part, banco.root / "results", tmp_path / "rep", verificar=con_virtuales,
+                              n_remuestreos=20, con_figuras=False)
+    assert meta["modulos_virtuales_tolerados"] == [{"modulo": "torch.ops", "__file__": "_ops.py", "motivo": "m"}]
+
+
+def test_v8_la_lista_cerrada_solo_contiene_torch_classes_y_torch_ops():
+    assert set(I.MODULOS_VIRTUALES_TOLERADOS) == {"torch.classes", "torch.ops"}               # ampliarla exige evidencia real y una prueba nueva
+    assert not any(n == "src" or n.startswith("src.") for n in I.MODULOS_VIRTUALES_TOLERADOS)
+    assert all(isinstance(motivo, str) and motivo for motivo in I.MODULOS_VIRTUALES_TOLERADOS.values())
+
+
+def test_v4_homonimo_ignorado_por_git_en_la_raiz_o_en_el_cwd_tampoco_se_tolera(tmp_path, monkeypatch):
+    repo = crear_repo(tmp_path)
+    escribir(repo, ".gitignore", "__pycache__/" + chr(10) + "_ops.py" + chr(10))
+    commit_all(repo, "ignora _ops.py")
+    escribir(repo, "_ops.py", "X = 1" + chr(10))                                        # existe en la raíz, pero git lo ignora (no sale en ls-files)
+    assert C.git_lista_z(repo, "ls-files", "-z", "--cached", "--others", "--exclude-standard").count("_ops.py") == 0
+    monkeypatch.chdir(repo)
+    ops = modulo_virtual("torch.ops", "_ops.py")
+    assert I.modulo_virtual_tolerado("torch.ops", ops, repo) is None
+    res = verificar(repo, tmp_path, entorno=entorno_virtuales(repo, tmp_path, monkeypatch, ops))
+    assert res["modulos_virtuales_tolerados"] == [] and not res["ok"]                  # se trata como archivo del repo y bloquea
+    otro = tmp_path / "otro_cwd"
+    otro.mkdir()
+    escribir(otro, "_classes.py", "Y = 1" + chr(10))                                    # homónimo solo en el directorio actual (fuera del repo)
+    monkeypatch.chdir(otro)
+    assert I.modulo_virtual_tolerado("torch.classes", modulo_virtual("torch.classes", "_classes.py"), crear_repo(tmp_path, "r3")) is None
