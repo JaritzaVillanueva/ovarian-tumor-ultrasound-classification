@@ -1,0 +1,129 @@
+# Configuración G3b `g3_condiciones_v1`: condiciones de entrada B (máscara predicha OOF) y C (máscara de referencia) frente a A (imagen completa de G2).
+#
+# Estado: candidato a congelamiento (protocolo: src/r5_v2/protocolo_g3b_v1.md). NO autoriza entrenar ni generar recortes con imágenes reales.
+# Decisiones de la autora aplicadas (2026-11-22): B-híbrida es la B principal; B_oof deshabilitada (análisis secundario opcional); ROI idéntico para B y C
+# (keep_largest true, margen 0.10, área mínima 0.001, fallback a imagen completa); alcance inicial C semilla 42 (15) + B-híbrida semilla 42 (15) = 30 corridas;
+# las semillas 43 y 44 de B quedan PENDIENTES de decisión posterior (sin afirmar robustez multisemilla de R6 con una sola semilla).
+# Referencias sin circularidad: el protocolo no contiene hashes; este YAML registra el commit y el hash del protocolo (commit posterior).
+# La receta de clasificación NO se duplica aquí: es la de G2 (configs/r4_v2/g2_baseline_v1.yaml, fijada por blob); la única variable declarada es el origen de la imagen.
+# Partición provisional (phash_le8_v1, exploratoria, post hoc); conformidad académica del asesor: PENDIENTE.
+
+esquema: g3_condiciones_v1_config/1
+
+protocolo:
+  id: g3_condiciones_v1
+  ruta: src/r5_v2/protocolo_g3b_v1.md
+  estado: "congelado al registrarse commit y hash del protocolo (commit posterior al del protocolo)"
+  git_commit: null
+  sha256_contenido_blob: null
+  conformidad_academica_asesor: PENDIENTE
+  trazabilidad: "pendiente de registro"
+
+estudio:
+  tarea: "clasificación binaria de lesiones con la entrada B (ROI de la máscara predicha OOF) o C (ROI de la máscara de referencia), receta de G2"
+  mapeo: v2
+  particion: phash_le8_v1
+  leyenda: "partición provisional (phash_le8_v1, exploratoria, post hoc); conformidad académica pendiente"
+
+referencia_g2:                      # solo lectura: partición, K1-K4, receta, referencia de pesos y corridas A
+  config: configs/r4_v2/g2_baseline_v1.yaml
+  sha256_contenido_blob: 6626f34e654db0ca119e2e1fab11bd12f68d3791481c55cc49c2e1e557fb17ff
+  indices_b_dir: results/r4_v2/phash_le8_v1/g2_baseline_v1/reporte      # indices_b_estratificado_s<semilla>.npz de G2, si existen (se verifican por igualdad)
+
+referencia_g3a:                     # solo lectura: máscaras OOF consolidadas (modo `completa`)
+  config: configs/r5_v2/g3_segmentacion_v1.yaml
+  sha256_contenido_blob: 775bbc9fee15fd11f9072e745ef7e4e3c32ce793dac550ff5ffa1c1f875c0ac5   # blob en HEAD c21dc48
+
+diseno:
+  arquitecturas: [resnet50, densenet121, convnext_tiny]
+  folds: [0, 1, 2, 3, 4]
+  raiz_resultados: results/r5_v2/phash_le8_v1/g3b_condiciones_v1/
+  raiz_datos_derivados: data/processed/r5_v2/phash_le8_v1/recortes/   # derivado, no versionado; subcarpetas gt/ y oof_pred/
+  id_corrida: "{arch}__s{seed}__f{fold}"            # igual que G2 (el ejecutor reutiliza r4_v2.entrenamiento.ejecutar_corrida)
+  modos:
+    recortes: {entrena: false, exige_bandera: "--aceptar-mascaras-g3a CONFIRMADO:D-NNN", umbrales_de_calidad: ninguno}
+    humo: {arquitectura: resnet50, semilla: 42, fold: 0, epocas_min: 1, epocas_max: 2, epocas: 1, cuenta_como_resultado: false}
+    completa: {reanudable: true, exige_humo_previo_de_la_misma_condicion: true}
+
+condiciones:                        # provisional: la autora confirma. Los nombres fijan la semántica (se valida en validar_config)
+  B_hibrida:
+    descripcion: "entrenamiento con ROI de la máscara de referencia; validación/predicción (fold k) con ROI de la máscara predicha OOF del U-Net del fold k"
+    fuente_roi_entrenamiento: gt
+    fuente_roi_validacion: oof_pred
+    semillas: [42]                  # alcance inicial; 43 y 44 pendientes de decisión posterior (R6 las necesita para la media entre semillas): --semillas
+    habilitada: true
+  C:
+    descripcion: "ROI de la máscara de referencia en entrenamiento y validación"
+    fuente_roi_entrenamiento: gt
+    fuente_roi_validacion: gt
+    semillas: [42]
+    habilitada: true
+  B_oof:                            # variante opcional «B-OOF»: NO se ejecuta por defecto
+    descripcion: "entrenamiento y validación con ROI de la máscara predicha OOF (cada imagen, con el U-Net de su fold)"
+    fuente_roi_entrenamiento: oof_pred
+    fuente_roi_validacion: oof_pred
+    semillas: [42]
+    habilitada: false               # análisis secundario opcional; riesgo: los U-Net de otros folds se entrenaron con imágenes del fold k (fuga indirecta débil); ver protocolo
+
+roi:                                # idéntico para B y C (valores de G3a); decidido por la autora el 2026-11-22
+  estado: "decidido por la autora (2026-11-22): keep_largest true, margen 0.10, área mínima 0.001, fallback a imagen completa"
+  funcion: src/segmentation/roi.py::extract_roi_from_mask   # sin editar
+  umbral: 0.5
+  margen: 0.10
+  keep_largest: true
+  fallback_a_imagen_completa: true
+  min_component_area_fraction: 0.001
+
+recortes:
+  formato: png                      # sin pérdida; el clasificador los trata exactamente como la imagen completa de A (misma transformación)
+  manifiesto: manifiesto_recortes.csv
+  sentinela: recortes_completo.json
+  segmentador_semilla: 42           # U-Net de G3a: unet__s42__f{k}
+
+reporte:
+  carpeta: reporte_condiciones
+  bootstrap: "n, semillas e intervalo = sección `bootstrap` del YAML de G2 (mismos índices b); se verifica igualdad con los .npz de G2 si existen"
+
+integridad:                         # comprobación sencilla propia (estilo G3a; no es K6 de G2)
+  rutas_sin_cambios: [src/r5_v2, src/segmentation, src/r4_v2, src/classification, configs/r5_v2, configs/r4_v2]
+  archivos_con_huella:
+    - configs/r5_v2/g3_condiciones_v1.yaml
+    - src/r5_v2/protocolo_g3b_v1.md
+    - configs/r4_v2/g2_baseline_v1.yaml
+    - configs/r4_v2/referencia_pesos_preentrenados_v1.json
+    - configs/r5_v2/g3_segmentacion_v1.yaml
+    - src/r5_v2/__init__.py
+    - src/r5_v2/comun.py
+    - src/r5_v2/mascaras.py
+    - src/r5_v2/metricas_seg.py
+    - src/r5_v2/g3b_comun.py
+    - src/r5_v2/g3b_recortes.py
+    - src/r5_v2/g3b_ejecutar.py
+    - src/r5_v2/g3b_reporte_condiciones.py
+    - src/segmentation/__init__.py
+    - src/segmentation/roi.py
+    - src/r4_v2/__init__.py
+    - src/r4_v2/common.py
+    - src/r4_v2/particion.py
+    - src/r4_v2/modos.py
+    - src/r4_v2/integridad.py
+    - src/r4_v2/entrenamiento.py
+    - src/r4_v2/dataset_lesiones.py
+    - src/r4_v2/pesos.py
+    - src/r4_v2/metricas.py
+    - src/r4_v2/bootstrap.py
+    - src/r4_v2/agregacion.py
+    - src/classification/__init__.py
+    - src/classification/models.py
+    - src/classification/transforms.py
+    - src/classification/dataloader.py
+    - src/classification/evaluate.py
+    - src/classification/losses.py
+    - src/classification/utils.py
+    - src/classification/train.py
+    - src/classification/training_options.py
+
+acceso_test:
+  estado: cerrado
+  nuevos_accesos: prohibidos
+  nota: "solo train/ y validation/ de desarrollo; las 180 normales (categoría 5) quedan fuera; el bloqueo no borra los accesos históricos declarados en G5/R8"
