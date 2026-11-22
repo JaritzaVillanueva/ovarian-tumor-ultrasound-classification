@@ -1,0 +1,30 @@
+{
+  "arquitecturas": {
+    "convnext_tiny": {
+      "enum_pesos": "ConvNeXt_Tiny_Weights.IMAGENET1K_V1",
+      "nombre_archivo_cache": "convnext_tiny-983f1562.pth",
+      "sha256_bytes_archivo": "983f1562536e84ff750a1576fb08e54de751dbf2e17c0d8a4a13704341fdcd3d",
+      "tamano_bytes": 114419221,
+      "url": "https://download.pytorch.org/models/convnext_tiny-983f1562.pth"
+    },
+    "densenet121": {
+      "enum_pesos": "DenseNet121_Weights.IMAGENET1K_V1",
+      "nombre_archivo_cache": "densenet121-a639ec97.pth",
+      "sha256_bytes_archivo": "a639ec97d7c33b07ae66f0b5fb7d0192f95a3b11b7576c66c0126c2a727c4395",
+      "tamano_bytes": 32342954,
+      "url": "https://download.pytorch.org/models/densenet121-a639ec97.pth"
+    },
+    "resnet50": {
+      "enum_pesos": "ResNet50_Weights.IMAGENET1K_V2",
+      "nombre_archivo_cache": "resnet50-11ad3fa6.pth",
+      "sha256_bytes_archivo": "11ad3fa62ca79e40addfd354a8ec4b7c75143b3038b8d2a807fbc68deab379ca",
+      "tamano_bytes": 102540417,
+      "url": "https://download.pytorch.org/models/resnet50-11ad3fa6.pth"
+    }
+  },
+  "esquema": "referencia_pesos_preentrenados_v1",
+  "fecha": "2026-11-22",
+  "modo_origen": "referencia",
+  "torch_version": "2.5.1+cu121",
+  "torchvision_version": "0.20.1+cu121"
+}
