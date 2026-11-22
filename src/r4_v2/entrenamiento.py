@@ -180,7 +180,8 @@ def ejecutar_corrida(root, config, particion: Particion, *, modo: str, arq: str,
                                                                  "fecha": _ahora(), "estado": "en_curso"})
     cfg = {
         "esquema": "run_config_g2_baseline_v1/1", "protocolo_id": PROTOCOLO_ID, "mapeo": MAPEO_ID, "particion": PARTICION_ID,
-        "condicion": config["estudio"]["condicion"], "leyenda": LEYENDA_PROVISIONAL, "modo": modo, "id_corrida": rid,
+        "condicion": config["estudio"]["condicion"], "leyenda": LEYENDA_PROVISIONAL,
+        "conformidad_academica_asesor": config["protocolo"]["conformidad_academica_asesor"], "modo": modo, "id_corrida": rid,
         "arquitectura": arq, "semilla": semilla, "fold": fold, "intento": intento, "fecha_inicio": _ahora(),
         "sha256_bytes_archivo_particion": particion.sha256_bytes_archivo,
         "protocolo_versionado": inicio["protocolo_versionado"], "git_commit_head": inicio["git_commit_head"],

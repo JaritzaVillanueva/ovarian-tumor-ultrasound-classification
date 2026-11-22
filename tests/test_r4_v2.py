@@ -1663,9 +1663,8 @@ def test_k8_comparacion_con_la_referencia(tmp_path):
 def test_atestaciones_por_modo_y_sin_otorgar_conformidad():
     ok = {"auditoria_independiente": "CONFIRMADO:AUD-001", "autorizacion_ejecucion": "CONFIRMADO:AUT-001"}
     assert set(MO.exigir_atestaciones("referencia", ok)) == set(ok)                           # referencia no exige conformidad ni partición [P; X10]
-    for modo in ("humo", "completa"):
-        with pytest.raises(C.GuardError, match="conformidad_asesor"):
-            MO.exigir_atestaciones(modo, ok)
+    for modo in ("humo", "completa"):                                                          # enmienda 2: la conformidad ya no se exige
+        assert set(MO.exigir_atestaciones(modo, ok)) == set(ok)
         assert "conformidad_asesor" in MO.exigir_atestaciones(modo, {**ok, "conformidad_asesor": "CONFIRMADO:ASE-001"})
     for falta in ok:
         with pytest.raises(C.GuardError):
@@ -2130,11 +2129,15 @@ MARCADORES_INVALIDOS = ["PENDIENTE", "pendiente", "Pendiente", "no", "No", "NO",
 @pytest.mark.parametrize("campo", ["conformidad_asesor", "auditoria_independiente", "autorizacion_ejecucion"])
 def test_i3_marcadores_y_cadenas_arbitrarias_no_habilitan_humo_ni_completa(modo, campo):
     assert set(MO.exigir_atestaciones(modo, FORMATO_OK)) == set(FORMATO_OK)                   # el formato válido sí pasa
+    opcional = campo == "conformidad_asesor"                                                  # enmienda 2: vacía/ausente se ignora
     for malo in MARCADORES_INVALIDOS:
+        if opcional and (malo is None or malo == ""):
+            continue
         with pytest.raises(C.GuardError, match=campo):
             MO.exigir_atestaciones(modo, {**FORMATO_OK, campo: malo})
-    with pytest.raises(C.GuardError, match=campo):                                            # clave ausente
-        MO.exigir_atestaciones(modo, {k: v for k, v in FORMATO_OK.items() if k != campo})
+    if not opcional:
+        with pytest.raises(C.GuardError, match=campo):                                        # clave ausente
+            MO.exigir_atestaciones(modo, {k: v for k, v in FORMATO_OK.items() if k != campo})
 
 
 def test_i3_cada_atestacion_exige_su_propio_prefijo_y_el_caso_del_informe_de_auditoria():
@@ -2150,8 +2153,8 @@ def test_i3_cada_atestacion_exige_su_propio_prefijo_y_el_caso_del_informe_de_aud
         assert MO.exigir_atestaciones("completa", {**FORMATO_OK, "autorizacion_ejecucion": valida})
     with pytest.raises(C.GuardError):                                                         # `referencia` tampoco acepta marcadores
         MO.exigir_atestaciones("referencia", {"auditoria_independiente": "pendiente", "autorizacion_ejecucion": "CONFIRMADO:D-029"})
-    with pytest.raises(C.GuardError, match="PENDIENTE hasta"):
-        MO.exigir_atestaciones("humo", {})                                                    # el mensaje no otorga la conformidad
+    with pytest.raises(C.GuardError, match="No se otorgan ni se infieren"):
+        MO.exigir_atestaciones("humo", {})                                                    # el mensaje no otorga nada
 
 
 def test_i3_el_ejecutor_se_detiene_con_atestaciones_pendientes_y_no_crea_nada(tmp_path, config_base, capsys):
@@ -2159,7 +2162,7 @@ def test_i3_el_ejecutor_se_detiene_con_atestaciones_pendientes_y_no_crea_nada(tm
     repo, cfg = banco_ejecutor(tmp_path, config_base)
     inj = inyecciones(repo, tmp_path, entrenar=entrenador_sintetico())
     for modo in ("humo", "completa"):
-        for valor in ("PENDIENTE", "pendiente", "no", "", "x"):
+        for valor in ("PENDIENTE", "pendiente", "no", " ", "x", "CONFIRMADO:ASE-1"):         # "" se ignora (enmienda 2)
             args = ["--modo", modo, "--autorizacion-ejecucion", "CONFIRMADO:D-901", "--auditoria-independiente", "CONFIRMADO:AUD-901",
                     "--conformidad-asesor", valor]
             assert EJ.main(args, **inj) == 3
@@ -2693,3 +2696,69 @@ def test_v4_homonimo_ignorado_por_git_en_la_raiz_o_en_el_cwd_tampoco_se_tolera(t
     escribir(otro, "_classes.py", "Y = 1" + chr(10))                                    # homónimo solo en el directorio actual (fuera del repo)
     monkeypatch.chdir(otro)
     assert I.modulo_virtual_tolerado("torch.classes", modulo_virtual("torch.classes", "_classes.py"), crear_repo(tmp_path, "r3")) is None
+
+
+# ============================================================================ 14. enmienda 2 (ASE): la conformidad del asesor ya no bloquea humo/completa
+ATEST_SIN_ASE = ["--autorizacion-ejecucion", "CONFIRMADO:D-901", "--auditoria-independiente", "CONFIRMADO:AUD-901"]
+
+
+@pytest.mark.parametrize("modo", ["humo", "completa"])
+def test_e2_humo_y_completa_pasan_con_aud_y_aut_validos_y_sin_ase(modo):
+    ok = {"auditoria_independiente": "CONFIRMADO:AUD-001", "autorizacion_ejecucion": "CONFIRMADO:AUT-001"}
+    assert MO.ATESTACIONES[modo] == ("auditoria_independiente", "autorizacion_ejecucion")
+    assert MO.exigir_atestaciones(modo, ok) == ok
+    assert MO.exigir_atestaciones(modo, {**ok, "conformidad_asesor": ""}) == ok               # vacía: se ignora y no se registra
+    assert MO.exigir_atestaciones(modo, {**ok, "conformidad_asesor": None}) == ok
+    for campo in ok:                                                                          # AUD y AUT siguen siendo obligatorias y válidas
+        for malo in (None, "", "PENDIENTE", "no", "CONFIRMADO:ASE-001"):
+            with pytest.raises(C.GuardError, match=campo):
+                MO.exigir_atestaciones(modo, {**ok, campo: malo})
+        with pytest.raises(C.GuardError, match=campo):
+            MO.exigir_atestaciones(modo, {k: v for k, v in ok.items() if k != campo})
+
+
+@pytest.mark.parametrize("modo", ["referencia", "humo", "completa"])
+def test_e2_ase_opcional_invalida_se_rechaza_y_valida_se_registra_sin_habilitar_nada(modo):
+    ok = {"auditoria_independiente": "CONFIRMADO:AUD-001", "autorizacion_ejecucion": "CONFIRMADO:AUT-001"}
+    for malo in ("PENDIENTE", "pendiente", "no", " ", "x", "CONFIRMADO:ASE-1", "CONFIRMADO:AUD-001", "confirmado:ASE-001", 1, True):
+        with pytest.raises(C.GuardError, match="conformidad_asesor"):
+            MO.exigir_atestaciones(modo, {**ok, "conformidad_asesor": malo})
+    assert MO.exigir_atestaciones(modo, {**ok, "conformidad_asesor": "CONFIRMADO:ASE-007"})["conformidad_asesor"] == "CONFIRMADO:ASE-007"
+    for falta in ok:                                                                          # una ASE válida NO sustituye a AUD ni a AUT
+        with pytest.raises(C.GuardError, match=falta):
+            MO.exigir_atestaciones(modo, {"conformidad_asesor": "CONFIRMADO:ASE-007", **{k: v for k, v in ok.items() if k != falta}})
+
+
+def test_e2_referencia_conserva_sus_atestaciones():
+    assert MO.ATESTACIONES["referencia"] == ("auditoria_independiente", "autorizacion_ejecucion")
+    assert MO.ATESTACIONES_OPCIONALES == ("conformidad_asesor",)
+
+
+def test_e2_el_ejecutor_lanza_humo_sin_conformidad_y_run_config_dice_pendiente(tmp_path, config_base, capsys):
+    from src.r4_v2 import ejecutar_g2 as EJ
+    repo, cfg = banco_ejecutor(tmp_path, config_base)
+    inj = inyecciones(repo, tmp_path, entrenar=entrenador_sintetico())
+    assert EJ.main(["--modo", "referencia", *ATEST], **inj) == 0
+    escribir(repo, W.REFERENCIA_REL, next((repo / "results").rglob("*.candidato.json")).read_bytes())
+    commit_all(repo, "referencia verificada por el autor")
+    raiz = repo / "results/r4_v2/phash_le8_v1/g2_baseline_v1"
+    rc_ref = json.loads(next(raiz.glob("referencia/intento_*/run_config.json")).read_text(encoding="utf-8"))
+    assert rc_ref["conformidad_academica_asesor"] == "PENDIENTE" and rc_ref["leyenda"] == "partición provisional; conformidad académica pendiente"
+    assert EJ.main(["--modo", "humo", "--epocas-humo", "1", *ATEST_SIN_ASE], **inj) == 0                       # sin --conformidad-asesor
+    rc = json.loads(next(raiz.glob("humo/*/intento_01/run_config.json")).read_text(encoding="utf-8"))
+    assert rc["estado"] == "completada" and rc["conformidad_academica_asesor"] == "PENDIENTE"
+    assert rc["conformidad_academica_asesor"] == cfg["protocolo"]["conformidad_academica_asesor"]             # tomado del YAML, no inventado
+    assert "conformidad_asesor" not in rc["atestaciones_del_autor"] and rc["leyenda"] == "partición provisional; conformidad académica pendiente"
+    capsys.readouterr()
+    assert EJ.main(["--modo", "humo", "--epocas-humo", "1", "--humo-fold", "1", *ATEST_SIN_ASE, "--conformidad-asesor", "PENDIENTE"], **inj) == 3
+    assert "conformidad_asesor" in capsys.readouterr().err                                                    # una ASE inválida se rechaza
+
+
+def test_e2_los_consumidores_de_run_config_no_se_rompen(banco, tmp_path):
+    rc = json.loads((banco.raiz / "resnet50__s42__f0" / "intento_01" / "run_config.json").read_text(encoding="utf-8"))
+    assert rc["conformidad_academica_asesor"] == "PENDIENTE"
+    assert len(AG.cargar_corridas(banco.raiz, banco.config, banco.part)) == 45                                # agregacion lee run_config
+    humo = tmp_path / "humo"
+    lanzar_corrida(banco.root, banco.config, banco.part, humo, "resnet50", 42, 0, modo="humo", epocas_max=1)
+    assert MO.exigir_humo_previo(humo, sha256_bytes_archivo_particion=banco.part.sha256_bytes_archivo,
+                                 sha256_contenido_blob_config="c" * 64, sha256_contenido_blob_referencia="r" * 64).name == "intento_01"

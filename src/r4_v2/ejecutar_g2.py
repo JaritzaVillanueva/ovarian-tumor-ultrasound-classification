@@ -4,7 +4,8 @@ Uso (solo por el autor, en el entorno autorizado, con las banderas de bytecode d
 
     python -B -X pycache_prefix=<directorio nuevo y vacío fuera del repositorio> -m src.r4_v2.ejecutar_g2 --modo referencia ...
 
-NO entrena por sí solo ni sin autorización: cada modo exige las atestaciones del autor (que se registran, no se verifican), la
+NO entrena por sí solo ni sin autorización: cada modo exige las atestaciones del autor (auditoría independiente y autorización de ejecución; se registran, no se verifican; la
+conformidad del asesor ya NO se exige, enmienda 2, y sigue PENDIENTE), la
 integridad §4.5 (K6) y, en `humo`/`completa`, la partición verificada (K1-K4) y la referencia de pesos (K8). Un agente no ejecuta esto.
 No consulta el test oficial ni las 180 normales; no invoca la calibración del umbral (la ejecuta G4).
 """
@@ -29,7 +30,7 @@ def construir_parser() -> argparse.ArgumentParser:
     p.add_argument("--modo", required=True, choices=MODOS)
     p.add_argument("--autorizacion-ejecucion", default="", help="atestación positiva: CONFIRMADO:AUT-NNN o CONFIRMADO:D-NNN")
     p.add_argument("--auditoria-independiente", default="", help="atestación positiva: CONFIRMADO:AUD-NNN")
-    p.add_argument("--conformidad-asesor", default="", help="atestación positiva REAL: CONFIRMADO:ASE-NNN (humo/completa)")
+    p.add_argument("--conformidad-asesor", default="", help="OPCIONAL, informativa: vacía = se ignora; si se da, CONFIRMADO:ASE-NNN. No habilita nada (la conformidad sigue PENDIENTE)")
     p.add_argument("--notebook", default=None, help="ruta (relativa al repositorio) del notebook orquestador, si se lanzó desde uno")
     p.add_argument("--excepcion-protocolo-no-versionado", default=None, help="solo referencia: motivo documentado por el autor")
     p.add_argument("--sha256-borrador-aprobado", default=None, help="sha256_bytes_archivo del borrador aprobado: 64 hex en minúsculas (con la excepción)")

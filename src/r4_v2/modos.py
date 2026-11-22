@@ -1,8 +1,10 @@
 """Modos de ejecución (protocolo §4.7): `referencia` -> `humo` -> `completa` (orden fijo).
 
-Las precondiciones que el código NO puede comprobar (conformidad real del asesor, auditoría independiente, autorización de
-ejecución del autor) se exigen como ATESTACIONES explícitas que se registran en `run_config`; el código no las verifica ni las
-otorga. La precondición (2) y la partición (3) no se exigen a `referencia` (propuesta [P] del protocolo; X10: el autor puede exigirlas).
+Las precondiciones que el código NO puede comprobar (auditoría independiente y autorización de ejecución del autor) se exigen como
+ATESTACIONES explícitas que se registran en `run_config`; el código no las verifica ni las otorga. Por la enmienda 2 del protocolo
+(2026-11-22), la conformidad del asesor académico (precondición (2)) YA NO es condición de ejecución de `humo` ni `completa`: sigue
+PENDIENTE (se registra así en `run_config`) y `--conformidad-asesor` es solo informativo y opcional; nunca habilita nada. La partición (3)
+no se exige a `referencia` (propuesta [P] del protocolo; X10: el autor puede exigirla).
 """
 
 from __future__ import annotations
@@ -19,12 +21,12 @@ from .common import (GuardError, LEYENDA_PROVISIONAL, MAPEO_ID, MODOS, PARTICION
 from .entrenamiento import crear_intento, estado_de_intento, id_corrida
 
 # Formato de una atestación POSITIVA del autor (documentado aquí y probado): `CONFIRMADO:<PREFIJO>-<NNN>`.
-#   conformidad_asesor      -> CONFIRMADO:ASE-NNN  (registro de la conformidad REAL del asesor académico)
+#   conformidad_asesor      -> CONFIRMADO:ASE-NNN  (OPCIONAL e informativa: si se da, debe tener este formato; no habilita nada)
 #   auditoria_independiente -> CONFIRMADO:AUD-NNN  (registro de la auditoría independiente de la implementación)
 #   autorizacion_ejecucion  -> CONFIRMADO:AUT-NNN  o CONFIRMADO:D-NNN (autorización explícita del autor / decisión de trazabilidad)
 # NNN = exactamente tres dígitos. Sensible a mayúsculas, sin espacios ni normalización: «pendiente», «PENDIENTE», «no», «sí», vacíos,
 # `CONFIRMADO` sin identificador y cualquier otra cadena se rechazan. El código NO puede verificar que el registro exista ni que la
-# conformidad sea real: solo exige y registra la atestación del autor; la comprobación del registro es del autor y del auditor.
+# conformidad sea real: solo exige (AUD y AUT) y registra la atestación del autor; la comprobación del registro es del autor y del auditor.
 FORMATO_ATESTACION = {
     "conformidad_asesor": re.compile(r"CONFIRMADO:ASE-[0-9]{3}"),
     "auditoria_independiente": re.compile(r"CONFIRMADO:AUD-[0-9]{3}"),
@@ -33,9 +35,10 @@ FORMATO_ATESTACION = {
 
 ATESTACIONES = {
     "referencia": ("auditoria_independiente", "autorizacion_ejecucion"),
-    "humo": ("conformidad_asesor", "auditoria_independiente", "autorizacion_ejecucion"),
-    "completa": ("conformidad_asesor", "auditoria_independiente", "autorizacion_ejecucion"),
+    "humo": ("auditoria_independiente", "autorizacion_ejecucion"),
+    "completa": ("auditoria_independiente", "autorizacion_ejecucion"),
 }
+ATESTACIONES_OPCIONALES = ("conformidad_asesor",)   # vacía/ausente: se ignora; no vacía: debe cumplir el formato y se registra tal cual
 
 
 def exigir_atestaciones(modo: str, atestaciones: dict) -> dict:
@@ -49,9 +52,17 @@ def exigir_atestaciones(modo: str, atestaciones: dict) -> dict:
     if invalidas:
         formatos = {a: FORMATO_ATESTACION[a].pattern for a in invalidas}
         raise GuardError(f"precondiciones del modo '{modo}' sin atestación positiva válida del autor: {invalidas}. Formato exigido "
-                         f"{formatos}. No se otorgan ni se infieren (la conformidad del asesor sigue PENDIENTE hasta que conste de "
-                         "forma real)")
-    return {a: atestaciones[a] for a in ATESTACIONES[modo]}
+                         f"{formatos}. No se otorgan ni se infieren")
+    resultado = {a: atestaciones[a] for a in ATESTACIONES[modo]}
+    for a in ATESTACIONES_OPCIONALES:
+        valor = (atestaciones or {}).get(a)
+        if valor is None or valor == "":
+            continue                                                                  # ausente/vacía: se ignora (sigue PENDIENTE)
+        if not isinstance(valor, str) or not FORMATO_ATESTACION[a].fullmatch(valor):
+            raise GuardError(f"{a} opcional con formato inválido: debe estar vacía o ser {FORMATO_ATESTACION[a].pattern!r}; "
+                             "nunca habilita ni sustituye ninguna otra atestación")
+        resultado[a] = valor
+    return resultado
 
 
 def raiz_del_modo(root, config, modo: str, crear: bool = True) -> Path:
@@ -139,7 +150,8 @@ def ejecutar_referencia(root, config, *, verificar, instanciar, resolver, versio
         coincide = None
     escribir_json_nuevo(dir_intento / "run_config.json", {
         "esquema": "run_config_g2_baseline_v1/1", "protocolo_id": PROTOCOLO_ID, "mapeo": MAPEO_ID, "particion": PARTICION_ID,
-        "leyenda": LEYENDA_PROVISIONAL, "modo": "referencia", "estado": estado, "motivo": motivo,
+        "leyenda": LEYENDA_PROVISIONAL, "conformidad_academica_asesor": config["protocolo"]["conformidad_academica_asesor"],
+        "modo": "referencia", "estado": estado, "motivo": motivo,
         "git_commit_head": inicio["git_commit_head"], "rama": inicio["rama"], "protocolo_versionado": inicio["protocolo_versionado"],
         "excepcion_protocolo": inicio["excepcion_protocolo"], "entrada": inicio["entrada"],
         "pesos_preentrenados": registros, **v,
