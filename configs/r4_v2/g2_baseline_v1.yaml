@@ -1,0 +1,209 @@
+# Configuración G2 línea base v1 (protocolo `g2_baseline_v1`).
+#
+# Copia de los hiperparámetros y reglas del protocolo congelado; el ejecutor NO lee los YAML históricos de
+# configs/classification/. Todo valor de este archivo proviene del protocolo o de los YAML históricos
+# que se citan en `receta.heredada_de`; no contiene resultados experimentales ni hashes de pesos preentrenados.
+#
+# Estado: preparada para su commit por el autor. NO autoriza entrenar con imágenes reales.
+# Conformidad académica del asesor: PENDIENTE. No contiene ni reemplaza ninguna aprobación académica.
+
+esquema: g2_baseline_v1_config/1
+
+protocolo:
+  id: g2_baseline_v1
+  ruta: src/r4_v2/protocolo_g2_baseline_v1.md
+  contenido_equivalente_a: v1.2.1
+  git_commit: d4c26696d0f0b284f71718270d248419852b192f   # d4c2669
+  git_blob_id: ad8dfb39568bdfffeb65f84549441cbebc7c322a   # SHA-1 de objeto Git; NO es SHA-256
+  sha256_contenido_blob: 1161b2f5972fed4a0ced224f434f9711ec12f0bfd7eb45c4181bb01c7b46c5fe   # protocolo §4.5.4 (K6)
+  sha256_bytes_archivo_borrador_aprobado: 5cea05ba950c6dcb1b9b9cc094bee3977989d5c3394a8924c3e927bceac88a23   # borrador_protocolo_G2_v1_2_1.md (fuera del repositorio)
+  aprobacion_tecnica_autor: "2026-11-21"
+  conformidad_academica_asesor: PENDIENTE
+  trazabilidad: "D-028 pendiente de registro"
+
+estudio:
+  tarea: "clasificación binaria de lesiones ováricas en ecografía 2D: lesión no maligna vs lesión maligna"
+  mapeo: v2
+  particion: phash_le8_v1
+  condicion: A                      # imagen completa; las condiciones B y C corresponden a G3
+  etiqueta_negativa: lesion_no_maligna
+  etiqueta_positiva: lesion_maligna
+
+mapeo_etiquetas:
+  fuente: original_class            # label_v2 se recalcula SOLO desde original_class
+  clase_0_lesion_no_maligna: [0, 1, 2, 3, 4, 6]
+  clase_1_lesion_maligna: [7]
+  excluida_ovario_normal: [5]
+
+particion:
+  id: phash_le8_v1
+  estado: "configuración de trabajo provisional del autor (D-027); conformidad académica pendiente; no se regenera ni sustituye"
+  transferencia: "privada; verificación por SHA-256 de los bytes originales, sin normalizar finales de línea; no requiere publicación (protocolo §4.2-§4.3)"
+  csv:
+    ruta: configs/splits/v2_auto/cv_folds_phash_le8_v1.csv
+    sha256_bytes_archivo: b28badc4181fb0068f1e6ae47567ab69368bfb81bdd18542b128a8e48e5a145e
+  aristas:
+    ruta: configs/splits/v2_auto/aristas_phash_le8_v1.csv
+    sha256_bytes_archivo: c76654f46e2bad0d8fefbd66e09651c28c879c36f0e1e0ecb1abd27341cb9a47
+  resumen:
+    ruta: configs/splits/v2_auto/resumen_phash_le8_v1.json
+    sha256_bytes_archivo: d86150c8a3f8b57266dc1685d7cb298265567c2c28d34a08c430bb9d0235da4d
+  columnas_requeridas: [image_id, image_name, original_class, label_v2, class_v2, e1_split, image_path, group_id, group_size, fold]
+  columnas_rechazadas: [binary_label, binary_class]       # mapeo histórico (K4)
+  rutas_rechazadas:
+    - "configs/splits/mmotu_experimental_split*.csv"      # manifiestos mixtos: contienen filas de test
+    - "configs/splits/cv_folds_e2.csv"                    # solo desarrollo, pero mapeo y folds históricos
+    - "cualquier componente de ruta 'test' (sin distinguir mayúsculas)"
+  verificaciones_bloqueantes:                             # K1-K3 del protocolo §4.4
+    n_filas: 820
+    n_lesion_no_maligna: 782
+    n_lesion_maligna: 38
+    categorias_permitidas: [0, 1, 2, 3, 4, 6, 7]          # ninguna categoría 5
+    folds: [0, 1, 2, 3, 4]
+    minimo_positivas_por_fold: 4                          # regla operativa heredada, no prueba estadística
+    ningun_group_id_en_mas_de_un_fold: true
+    cada_grupo_con_una_sola_label_v2: true
+  observaciones_reportadas_no_criterio:                   # [D] D-027; se registran, NO bloquean (D-026, punto 6)
+    tamano_de_fold: 164
+    positivas_por_fold: [8, 8, 8, 7, 7]
+    conexiones_phash_le8: 69
+    grupos_multiimagen: 51
+    imagenes_en_grupos_multiimagen: 113
+    grupos_mixtos: 0
+  limitaciones:
+    - "pHash <= 8: umbral exploratorio y post hoc (usó etiquetas de desarrollo), sin revisión humana ni selección por métricas CNN"
+    - "no equivale a separación por paciente; no se afirma independencia por paciente"
+    - "riesgo residual: 191 de 239 parejas con distancia 9-12 cruzan folds [D]"
+
+diseno:
+  arquitecturas: [resnet50, densenet121, convnext_tiny]
+  semillas: [42, 43, 44]
+  folds: [0, 1, 2, 3, 4]
+  n_corridas: 45                                          # 3 x 3 x 5
+  imagenes_dir: data/processed/MMOTU_OTU_2D_experimental  # condición A; solo train/ y validation/ de desarrollo
+  raiz_resultados: results/r4_v2/phash_le8_v1/g2_baseline_v1/
+  id_corrida: "{arch}__s{seed}__f{fold}"
+  semillas_no_se_descartan_por_rendimiento: true
+  modos:                                                  # protocolo §4.7; orden fijo
+    orden: [referencia, humo, completa]
+    referencia: {entrena: false, lee_datos: false, produce_metricas: false}
+    humo: {arquitecturas: 1, folds: 1, epocas_min: 1, epocas_max: 2, resultados_experimentales: false}
+    completa: {corridas: 45}
+
+receta:                                                   # común a las tres arquitecturas, heredada sin ajuste
+  heredada_de:
+    resnet50: {ruta: configs/classification/resnet50_baseline.yaml, git_blob_id: 398e6f968539a7381d3fb76b8a35005f8471d86c}
+    densenet121: {ruta: configs/classification/densenet121_baseline.yaml, git_blob_id: 25a2057717860cbec09e7ec4a8a17485b59459e5}
+    convnext_tiny: {ruta: configs/classification/convnext_tiny_baseline.yaml, git_blob_id: 734d4ed0fb6054bcd4487a6663aba7248080d558}
+  pretrained: true                                        # pesos resueltos por alias DEFAULT de torchvision (procedencia: protocolo §4.6)
+  freeze_backbone: false
+  num_classes: 2
+  optimizer: AdamW
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  batch_size: 32
+  epochs_max: 30
+  use_amp: true                                           # solo se aplica si hay CUDA
+  num_workers: 4
+  scheduler: null
+  ema: null
+  label_smoothing: 0.0
+  drop_path_rate: null
+  entrada:
+    image_size: 224
+    redimensionado: "ResizeWithPadding (relleno 0)"
+    normalizacion: {mean: [0.485, 0.456, 0.406], std: [0.229, 0.224, 0.225]}
+  aumento:                                                # 'standard' de src/classification/transforms.py (solo entrenamiento)
+    nombre: standard
+    volteo_horizontal_p: 0.5
+    afin: {degrees: 10, translate: [0.05, 0.05], scale: [0.9, 1.1]}
+    color_jitter: {brightness: 0.1, contrast: 0.1}
+  perdida_entrenamiento:
+    tipo: cross_entropy_ponderada
+    alpha_pesos_de_clase: 1.0                             # peso_c = total / (2 * n_c), calculado en cada fold de entrenamiento
+  perdida_validacion:
+    tipo: cross_entropy_sin_ponderar                      # nombre de salida explícito: val_loss_unweighted
+  checkpoint:
+    metrica: val_loss_unweighted
+    regla: "mínimo estricto de la pérdida de validación sin ponderar (sin min_delta; un empate conserva la época más temprana)"
+  early_stopping:
+    metrica: val_loss_unweighted
+    paciencia: 5                                          # herencia del YAML histórico; no es un resultado
+    min_delta: 0.001                                      # herencia del YAML histórico; no es un resultado
+  umbral_de_clasificacion_para_metricas: 0.5              # continuidad con el informe; NO es el umbral calibrado de G4
+  sesgo_de_seleccion: "checkpoint y parada se eligen con el mismo fold que se evalúa; el AP OOF es optimista en magnitud desconocida (protocolo §6.2)"
+  guardar_por_corrida: "probabilidad de malignidad del fold retenido en cada época, sin pérdida de precisión (float32 exacto)"
+  recarga_checkpoint:
+    alerta_diferencia_maxima_absoluta: 0.01               # propuesta sin respaldo empírico; alerta, NO bloqueo (protocolo §6.4)
+
+metricas:
+  primaria: "AP OOF agregado por semilla (820 predicciones) y media entre semillas"
+  secundarias: [roc_auc, sensibilidad_a_0.5, especificidad_a_0.5, falsos_positivos, falsos_negativos]
+  descriptivas_roc_agregada:
+    sensibilidad_en_especificidad_fija: [0.90, 0.95]      # puntos descriptivos; no son S* ni un umbral
+  complementarias: [ap_por_fold_media_entre_semillas, ap_ensamble_de_semillas_por_fold]
+  sensibilidad_del_checkpoint:                            # descriptiva, preespecificada (protocolo §6.3); no altera la regla primaria
+    - minimo_perdida_ponderada_con_pesos_del_fold
+    - roc_auc_maximo
+
+bootstrap:                                                # protocolo §8.1
+  unidad: group_id
+  estratificado_por_clase_del_grupo: true
+  n_remuestreos: 10000
+  semilla: 20261121                                       # sugerida en el protocolo §8.1; queda FIJADA al commit de esta configuración
+  semilla_de_comprobacion: 20261122                       # segunda semilla; se reporta la diferencia máxima entre extremos del IC, sin umbral de aceptación
+  mismo_remuestreo_para_todas_las_arquitecturas_y_semillas: true
+  semillas_de_entrenamiento_remuestreadas: false
+  intervalo: {nivel: 0.95, metodo: percentiles, percentiles: [2.5, 97.5]}
+  sensibilidad_no_estratificada: true
+  guardar_indices_b: true                                 # o regenerables por semilla; se reutilizan en G3 y G4
+  reportar_remuestreos_sin_una_clase: true
+
+calibracion_umbral:                                       # especificada en protocolo §10; NO ejecutada en G2
+  estado: "especificada; G2 no calcula ningún umbral sobre datos reales; G4 ejecuta la calibración y congela el valor para R8"
+  convencion_positiva: "probabilidad_maligna >= umbral"
+  sensibilidad_objetivo_S_star: null                      # propuesta 0.90 de CLAUDE.md §5: NO congelada
+  techo_corridas_g4: null                                 # propuesta 75 de CLAUDE.md §5: NO congelada
+  normales_y_test: "no intervienen"
+
+integridad:                                               # protocolo §4.5-§4.7
+  aplica_a_modos: [referencia, humo, completa]
+  rutas_verificadas_lista_fija:
+    - src/r4_v2/protocolo_g2_baseline_v1.md
+    - configs/r4_v2/
+    - src/r4_v2/
+    - src/classification/__init__.py
+    - src/classification/models.py
+    - src/classification/transforms.py
+    - src/classification/dataloader.py
+    - src/classification/evaluate.py
+    - src/classification/losses.py
+    - src/classification/utils.py
+    - src/classification/train.py
+    - src/classification/training_options.py
+    - .gitattributes
+  lista_dinamica: "todo módulo de sys.modules con origen dentro del repositorio, el punto de entrada y el notebook orquestador (si existe)"
+  nombres_de_campos_hash: [git_blob_id, sha256_contenido_blob, sha256_bytes_archivo]
+  bytecode:
+    banderas_exigidas: ["-B", "-X pycache_prefix=<directorio nuevo, vacío y fuera del repositorio>"]
+    python_minimo: [3, 8]
+    rechazar_entrada_sin_archivo: true                    # python -c, REPL, stdin y ejecución en proceso desde un kernel
+  referencia_pesos:
+    ruta: configs/r4_v2/referencia_pesos_preentrenados_v1.json
+    estado: "no existe todavía; la genera el modo 'referencia' y la verifica y versiona el autor (protocolo §4.6)"
+    hash_esperado: null                                   # NO se inventa ningún hash de pesos preentrenados
+  humo_y_completa_se_detienen_si: "la referencia de pesos falta, no está rastreada, está modificada o no coincide (K8)"
+
+acceso_test:
+  estado: cerrado
+  nuevos_accesos: prohibidos
+  nota: "los accesos exploratorios históricos al test constan en el informe (P335) y se declaran en G5/R8; este bloqueo no los borra"
+
+iov_referencia:                                           # los IOV NO se modifican; esta configuración solo los referencia
+  informe: Version-Informes/20213699_28_10_2026.docx      # fuera del repositorio
+  estado: "se conservan como referencia; recalcular con el nuevo mapeo y la nueva partición no los cambia; toda modificación formal exige justificación y aprobación expresa del autor"
+  cubiertos_por_g2:
+    R4.1: "«Las 3 arquitecturas se entrenan con la misma receta y las mismas particiones.»"
+    R4.2: "«Cada arquitectura se ejecuta con 3 semillas.»"
+    R4.3: "«Se reportan AP y ROC-AUC como métricas de discriminación, junto con sensibilidad y especificidad.»"
+    R4.4: "«Cada métrica se reporta para 3 semillas e incluye IC 95 % por bootstrap.»"
