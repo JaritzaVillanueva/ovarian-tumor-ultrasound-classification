@@ -49,6 +49,10 @@ HEX64 = re.compile(r"[0-9a-f]{64}")
 COLUMNAS_MANIFIESTO = ("image_id", "image_name", "source_split", "original_class", "experimental_split")
 CLAVES_FILA_INFERENCIA = ("image_id", "image_name", "image_path")                    # NINGUNA etiqueta, clase original ni pliegue
 RUTAS_VIGILADAS = ("src/r8_v2", "src/r7_v2", "src/r5_v2", "src/r4_v2", "src/classification", "configs/r8_v2", "configs/r4_v2", "configs/r7_v2", "configs/splits")
+ARTEFACTOS_PARTICION_V2 = {                                                                    # generados en Falcon (G1), no versionados; SHA-256 reportados por la autora (CLAUDE.md §11.1)
+    "configs/splits/v2_auto/cv_folds_phash_le8_v1.csv": "b28badc4181fb0068f1e6ae47567ab69368bfb81bdd18542b128a8e48e5a145e",     # el mismo pin del YAML congelado (archivos_de_procedencia)
+    "configs/splits/v2_auto/aristas_phash_le8_v1.csv": "c76654f46e2bad0d8fefbd66e09651c28c879c36f0e1e0ecb1abd27341cb9a47",
+    "configs/splits/v2_auto/resumen_phash_le8_v1.json": "d86150c8a3f8b57266dc1685d7cb298265567c2c28d34a08c430bb9d0235da4d"}
 ARCHIVOS_EJECUTOR = ("src/r8_v2/__init__.py", "src/r8_v2/evaluacion_final.py", "src/r8_v2/estadistica.py", "src/r8_v2/declaracion.py", "src/r8_v2/congelamiento.py", PROTOCOLO_REL,
                      PROTOCOLO_HISTORICO_REL)
 IOV = {
@@ -87,13 +91,28 @@ def _hex(valor, que: str) -> str:
     return valor
 
 
-def verificar_integridad_r8(root) -> dict:
-    """HEAD, árbol limpio en las rutas vigiladas (incluye el manifiesto), ejecutor y protocolos versionados. No lee el contenido del manifiesto del test."""
+def verificar_integridad_r8(root, artefactos=None) -> dict:
+    """HEAD, árbol limpio en las rutas vigiladas (incluye el manifiesto), ejecutor y protocolos versionados. No lee el contenido del manifiesto del test.
+
+    Único relajamiento: los tres artefactos GENERADOS de la partición v2 (`ARTEFACTOS_PARTICION_V2`), que en Falcon no están versionados (CLAUDE.md §11.1), se aceptan como archivos no
+    rastreados (`??`) SOLO si su SHA-256 coincide con el fijado; cualquier otro archivo no rastreado, cualquier modificación de un archivo rastreado o un hash distinto siguen bloqueando."""
     root = Path(root)
+    artefactos = ARTEFACTOS_PARTICION_V2 if artefactos is None else artefactos
     head = git_texto(root, "rev-parse", "HEAD", obligatorio=True)
-    status = [x for x in git_ok(root, "status", "--porcelain", "--untracked-files=all", "--", *RUTAS_VIGILADAS).decode("utf-8", "replace").splitlines() if x.strip()]
-    bloqueos = [{"codigo": "arbol_sucio", "detalle": x} for x in status]
-    archivos = {}
+    bruto = [x for x in git_ok(root, "status", "--porcelain", "--untracked-files=all", "--", *RUTAS_VIGILADAS).decode("utf-8", "replace").splitlines() if x.strip()]
+    status, bloqueos, archivos = [], [], {}
+    for x in bruto:
+        if x[:2] == "??" and x[3:].strip().strip('"') in artefactos:
+            continue                                                                       # se comprueba su SHA-256 abajo; si no coincide, bloquea
+        status.append(x)
+        bloqueos.append({"codigo": "arbol_sucio", "detalle": x})
+    for rel, esperado in artefactos.items():
+        p = root / rel
+        if p.is_file():
+            sha = sha256_archivo(p)
+            archivos[rel] = {"sha256_bytes_archivo": sha, "sha256_contenido_blob": None}
+            if sha != esperado:
+                bloqueos.append({"codigo": "artefacto_de_particion_con_hash_distinto", "detalle": rel})
     for rel in ARCHIVOS_EJECUTOR:
         h = huella_archivo(root, rel)
         archivos[rel] = h

@@ -622,3 +622,126 @@ def test_particion_de_desarrollo_alterada_o_ausente_bloquea_antes_de_abrir_el_te
     with pytest.raises(GuardError, match="falta la partición"):
         banco.ejecutar()
     assert sin_salida(banco)
+
+
+# ============================================================================ Compuerta de integridad: artefactos GENERADOS de la partición v2 (caso real observado en D-065, exit=3)
+ARTEFACTOS_REALES = ("configs/splits/v2_auto/cv_folds_phash_le8_v1.csv", "configs/splits/v2_auto/aristas_phash_le8_v1.csv", "configs/splits/v2_auto/resumen_phash_le8_v1.json")
+
+
+def _repo_base(tmp_path):
+    if subprocess.run(["git", "--version"], capture_output=True).returncode != 0:
+        pytest.skip("git no disponible")
+    _git(tmp_path, "init", "-q")
+    for rel in E.ARCHIVOS_EJECUTOR + (E.MANIFIESTO_TEST_REL,):
+        (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / rel).write_text("x\n", encoding="utf-8", newline="\n")
+    _git(tmp_path, "add", "-A")
+    _git(tmp_path, "commit", "-q", "-m", "base")
+
+
+def _artefactos_sinteticos(tmp_path, nombres=ARTEFACTOS_REALES):
+    out = {}
+    for k, rel in enumerate(nombres):
+        (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / rel).write_bytes(f"artefacto sintetico {k}\n".encode())
+        out[rel] = sha((tmp_path / rel).read_bytes())
+    return out
+
+
+def test_los_tres_artefactos_generados_no_rastreados_se_aceptan_con_su_hash(tmp_path):
+    _repo_base(tmp_path)
+    art = _artefactos_sinteticos(tmp_path)
+    r = E.verificar_integridad_r8(tmp_path, art)
+    assert r["bloqueos"] == [] and r["status_porcelain"] == [] and {k: v["sha256_bytes_archivo"] for k, v in r["archivos"].items() if k in art} == art
+
+
+def test_artefacto_generado_con_hash_distinto_bloquea(tmp_path):
+    _repo_base(tmp_path)
+    art = _artefactos_sinteticos(tmp_path)
+    (tmp_path / ARTEFACTOS_REALES[1]).write_bytes(b"regenerado o alterado\n")
+    assert [b["codigo"] for b in E.verificar_integridad_r8(tmp_path, art)["bloqueos"]] == ["artefacto_de_particion_con_hash_distinto"]
+
+
+def test_archivos_inesperados_o_modificaciones_siguen_bloqueando(tmp_path):
+    _repo_base(tmp_path)
+    art = _artefactos_sinteticos(tmp_path)
+    (tmp_path / "configs/splits/v2_auto/otro.csv").write_text("x\n", encoding="utf-8")                      # no reconocido, en el mismo directorio
+    (tmp_path / "src/r8_v2/nuevo.py").write_text("x\n", encoding="utf-8")                                      # no reconocido, en código
+    (tmp_path / E.PROTOCOLO_REL).write_text("alterado\n", encoding="utf-8", newline="\n")                     # rastreado y modificado
+    det = sorted(b["detalle"] for b in E.verificar_integridad_r8(tmp_path, art)["bloqueos"] if b["codigo"] == "arbol_sucio")
+    assert det == sorted(["?? configs/splits/v2_auto/otro.csv", "?? src/r8_v2/nuevo.py", f" M {E.PROTOCOLO_REL}"])
+
+
+def test_artefacto_reconocido_pero_rastreado_y_modificado_bloquea(tmp_path):
+    _repo_base(tmp_path)
+    art = _artefactos_sinteticos(tmp_path)
+    _git(tmp_path, "add", "-A")
+    _git(tmp_path, "commit", "-q", "-m", "artefactos versionados")
+    assert E.verificar_integridad_r8(tmp_path, art)["bloqueos"] == []                                    # versionados y sin cambios: aceptados
+    (tmp_path / ARTEFACTOS_REALES[0]).write_bytes(b"modificado\n")
+    codigos = [b["codigo"] for b in E.verificar_integridad_r8(tmp_path, art)["bloqueos"]]
+    assert "arbol_sucio" in codigos and "artefacto_de_particion_con_hash_distinto" in codigos
+
+
+def test_artefactos_reales_con_contenido_distinto_bloquean_con_las_constantes_del_ejecutor(tmp_path):
+    _repo_base(tmp_path)
+    _artefactos_sinteticos(tmp_path)                                                                      # mismos nombres reales, contenido inventado
+    assert {b["codigo"] for b in E.verificar_integridad_r8(tmp_path)["bloqueos"]} == {"artefacto_de_particion_con_hash_distinto"}
+
+
+def test_constantes_de_los_artefactos_de_la_particion():
+    import re
+    assert tuple(E.ARTEFACTOS_PARTICION_V2) == ARTEFACTOS_REALES and all(re.fullmatch(r"[0-9a-f]{64}", h) for h in E.ARTEFACTOS_PARTICION_V2.values())
+    yaml_cfg = TC.C.cargar_config(REPO / TC.C.CONFIG_REL)
+    assert E.ARTEFACTOS_PARTICION_V2[TC.C.REL_PARTICION] == yaml_cfg["archivos_de_procedencia"][TC.C.REL_PARTICION]      # el pin de la partición congelada es el mismo
+
+
+def _banco_en_git(banco, monkeypatch):
+    """El banco sintético como repositorio Git real: ejecutor y protocolos versionados; la partición y los otros dos artefactos generados, SIN versionar (como en Falcon)."""
+    if subprocess.run(["git", "--version"], capture_output=True).returncode != 0:
+        pytest.skip("git no disponible")
+    root = banco.root
+    for rel in E.ARCHIVOS_EJECUTOR:
+        if not (root / rel).exists():
+            (root / rel).parent.mkdir(parents=True, exist_ok=True)
+            (root / rel).write_bytes((REPO / rel).read_bytes())
+    art = {TC.C.REL_PARTICION: sha((root / TC.C.REL_PARTICION).read_bytes())}
+    for rel, k in ((ARTEFACTOS_REALES[1], 1), (ARTEFACTOS_REALES[2], 2)):
+        (root / rel).write_bytes(f"artefacto sintetico {k}\n".encode())
+        art[rel] = sha((root / rel).read_bytes())
+    monkeypatch.setattr(E, "ARTEFACTOS_PARTICION_V2", art)
+    _git(root, "init", "-q")
+    _git(root, "add", "-A", "--", "src", "configs/r4_v2", "configs/r8_v2", "results/classification", E.MANIFIESTO_TEST_REL)
+    _git(root, "commit", "-q", "-m", "base")
+    return {k: v for k, v in banco.kw().items() if k != "verificar"}, art
+
+
+def test_comprobar_supera_la_integridad_real_con_los_artefactos_generados_sin_versionar(banco, monkeypatch):
+    kw, _ = _banco_en_git(banco, monkeypatch)
+    r = E.comprobar(banco.root, **kw)
+    assert r["estado"] == "listo_para_ejecutar" and sin_salida(banco)
+
+
+def test_ejecutar_supera_la_integridad_real_con_los_artefactos_generados_sin_versionar(banco, monkeypatch):
+    kw, _ = _banco_en_git(banco, monkeypatch)
+    r = E.ejecutar(banco.root, confirmacion=E.CONFIRMACION, predecir=banco.espia.predecir, **kw)
+    assert r["reporte_aceptado"] and (banco.salida / "estado_final.json").is_file()
+
+
+@pytest.mark.parametrize("modo", ["comprobar", "ejecutar"])
+@pytest.mark.parametrize("cambio", ["archivo_inesperado", "artefacto_alterado", "codigo_modificado"])
+def test_la_integridad_real_sigue_bloqueando_en_ambos_modos(banco, monkeypatch, sin_test, modo, cambio):
+    kw, art = _banco_en_git(banco, monkeypatch)
+    root = banco.root
+    if cambio == "archivo_inesperado":
+        (root / "configs/splits/v2_auto/otro.csv").write_text("x\n", encoding="utf-8")
+    elif cambio == "artefacto_alterado":
+        (root / ARTEFACTOS_REALES[2]).write_bytes(b"regenerado\n")
+    else:
+        (root / "src/r8_v2/estadistica.py").write_bytes((root / "src/r8_v2/estadistica.py").read_bytes() + b"\n# alterado\n")
+    with pytest.raises(GuardError, match="integridad"):
+        if modo == "comprobar":
+            E.comprobar(root, **kw)
+        else:
+            E.ejecutar(root, confirmacion=E.CONFIRMACION, predecir=banco.espia.predecir, **kw)
+    assert sin_salida(banco) and banco.espia.llamadas == []
