@@ -6,6 +6,9 @@ Comando: py -3.13 -B -m pytest tests/gui -q -p no:cacheprovider
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -235,3 +238,17 @@ def test_cli_codigos_de_salida(tmp_path, capsys):
     assert "Modo demostración: modelo no disponible" in capsys.readouterr().err
     assert cli.main(["verificar"], root=tmp_path, sistema=ok) == 3                                       # sin autorización
     assert cli.main(["integracion-desarrollo", "--autorizacion", "CONFIRMADO"], root=tmp_path, sistema=ok) == 3
+
+
+def test_la_logica_y_la_cli_se_importan_y_funcionan_sin_tkinter():
+    """Portabilidad Windows/Falcon: ni la CLI, ni el controlador, ni el sistema, ni la validación importan tkinter (solo `app_tk`)."""
+    repo = Path(__file__).resolve().parents[2]
+    codigo = ("import sys; sys.modules['tkinter'] = None; sys.modules['PIL.ImageTk'] = None\n"
+              "import src.gui.cli, src.gui.controlador, src.gui.sistema, src.gui.validacion_imagen, src.gui.textos\n"
+              "assert 'src.gui.app_tk' not in sys.modules\n"
+              "from src.gui.controlador import Controlador\n"
+              "print('ok')")
+    r = subprocess.run([sys.executable, "-B", "-c", codigo], cwd=repo, capture_output=True, text=True)
+    assert r.returncode == 0 and r.stdout.strip() == "ok", r.stderr[-400:]
+    r2 = subprocess.run([sys.executable, "-B", "-c", "import sys; sys.modules['tkinter'] = None\nimport src.gui.app_tk"], cwd=repo, capture_output=True, text=True)
+    assert r2.returncode != 0                                                                        # solo la ventana exige tkinter

@@ -4,7 +4,6 @@ Comando: py -3.13 -B -m pytest tests/gui -q -p no:cacheprovider
 
 from __future__ import annotations
 
-import inspect
 import re
 from pathlib import Path
 
@@ -13,7 +12,7 @@ import pytest
 PIL = pytest.importorskip("PIL")
 from PIL import Image  # noqa: E402
 
-from src.gui import app_tk, cli, controlador, sistema, textos as T, validacion_imagen as V  # noqa: E402
+from src.gui import cli, controlador, sistema, textos as T, validacion_imagen as V  # noqa: E402     # NO se importa app_tk: requiere tkinter (ausente en Falcon)
 
 
 # ============================================================================ textos: alcance, etiquetas y rendimiento (decisiones aprobadas)
@@ -54,16 +53,23 @@ def test_orden_de_las_advertencias_y_modo_maqueta():
     assert T.MODO_MAQUETA == "Modo demostración: modelo no disponible" and "no se muestran resultados simulados" in T.MAQUETA_DETALLE
 
 
+GUI_DIR = Path(__file__).resolve().parents[2] / "src" / "gui"
+
+
+def fuentes(*nombres):
+    """Texto fuente de los módulos de la interfaz, leído SIN importarlos (así `app_tk` se inspecciona también donde no hay tkinter)."""
+    return {n: (GUI_DIR / f"{n}.py").read_text(encoding="utf-8") for n in nombres}
+
+
 def test_la_interfaz_no_contiene_codigo_de_metricas_ni_entrenamiento():
     prohibidos = ("average_precision", "roc_auc", "roc_curve", "calibrar", "optimizer", ".fit(", "backward(", "train(", "calcular_resultados", "bootstrap")
-    for mod in (V, sistema, controlador, cli, app_tk):
-        fuente = inspect.getsource(mod).lower()
-        assert not any(p.lower() in fuente for p in prohibidos), (mod.__name__, [p for p in prohibidos if p.lower() in fuente])
+    for nombre, texto in fuentes("validacion_imagen", "sistema", "controlador", "cli", "app_tk").items():
+        fuente = texto.lower()
+        assert not any(p.lower() in fuente for p in prohibidos), (nombre, [p for p in prohibidos if p.lower() in fuente])
 
 
 def test_sin_umbral_de_abstencion_ni_umbral_alternativo():
-    for mod in (sistema, controlador, cli, app_tk):
-        fuente = inspect.getsource(mod)
+    for nombre, fuente in fuentes("sistema", "controlador", "cli", "app_tk").items():
         assert "abst" not in fuente.lower() and not re.search(r"0\.5\b", fuente.replace("0.5.", ""))      # sin umbral 0.5 ni de abstención
 
 
