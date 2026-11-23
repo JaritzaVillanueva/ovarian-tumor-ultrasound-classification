@@ -11,8 +11,8 @@ protocolo:
   id: umbral_sistema_v1
   ruta: src/r7_v2/protocolo_umbral_v1.md
   estado: "borrador; se congela al registrarse commit y hash del protocolo (commit posterior)"
-  git_commit: null
-  sha256_contenido_blob: null
+  git_commit: 38fa8f0349f6c3bd2313f6ad8f6682669841260d
+  sha256_contenido_blob: ef156c976062ad1eafcec4114b3af2b05578ad0b953e8145627412c567904b1d
   conformidad_academica_asesor: PENDIENTE
   trazabilidad: "D-048"
 
