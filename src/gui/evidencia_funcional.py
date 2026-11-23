@@ -39,7 +39,8 @@ from src.gui.controlador import Controlador
 from src.gui.sistema import SHA256_DECLARACION, SISTEMA_ID, SistemaNoDisponible, cargar_sistema
 from src.gui.validacion_imagen import ImagenInvalida
 
-TOKEN_DECISION = "D-076"
+TOKEN_DECISION = "D-076"                                                            # presentación v1 (protocolo de validación funcional)
+TOKEN_POR_INTERFAZ = {"v1": "D-076", "v2": "D-078"}                                 # la presentación v2 (rediseño visual) se valida bajo su propia decisión
 SALIDA_REL = "results/r9_gui/evidencia_funcional"
 BASE_DESARROLLO = ("data", "processed", "MMOTU_OTU_2D_experimental")
 SPLITS_DESARROLLO = ("train", "validation")
@@ -145,8 +146,8 @@ def _resumen_resultado(r) -> dict:
 
 # ============================================================================ ejecución de los casos
 class Ejecucion:
-    def __init__(self, salida: Path, app: AppTk, controlador: Controlador, *, capturas: bool, root, tensor_g2=None):
-        self.salida, self.app, self.c, self.capturas, self.root, self.tensor_g2 = Path(salida), app, controlador, capturas, root, tensor_g2
+    def __init__(self, salida: Path, app: AppTk, controlador: Controlador, *, capturas: bool, root, tensor_g2=None, clase_app=AppTk):
+        self.salida, self.app, self.c, self.capturas, self.root, self.tensor_g2, self.clase_app = Path(salida), app, controlador, capturas, root, tensor_g2, clase_app
         self.casos: list[dict] = []
 
     # ---- utilidades
@@ -241,8 +242,8 @@ class Ejecucion:
         with tempfile.TemporaryDirectory() as vacio:
             c = Controlador(cargar=lambda: cargar_sistema(vacio))                  # fallo REAL de verificación: no hay declaración ni checkpoints en esa raíz
             c.iniciar()
-        app = AppTk(ventana, c, usar_hilo=False)
-        ventana.geometry(f"1040x{min(940, raiz_tk.winfo_screenheight() - 70)}+10+10")
+        app = self.clase_app(ventana, c, usar_hilo=False)
+        ventana.geometry(f"1040x{min(940, raiz_tk.winfo_screenheight() - 70)}+10+10" if self.clase_app is AppTk else "+10+10")
         try:
             carga = app.cargar_imagen(ruta_valida)
             clasifica = app._clasificar_sync()
@@ -254,6 +255,9 @@ class Ejecucion:
             ventana.destroy()
 
     def avisos(self):
+        if hasattr(self.app, "mostrar_informacion"):                                 # presentación v2: los avisos están en la pestaña «Información metodológica»
+            self.app.mostrar_informacion()
+            self.app.raiz.update()
         self.app.avisos.yview_moveto(1.0)
         self.app.raiz.update()
         texto = self.app.avisos.get("1.0", "end")
@@ -262,15 +266,15 @@ class Ejecucion:
         return f"{len(T.advertencias())} avisos en la ventana (incluye la nota numérica y el aviso de no uso clínico): {todos}", todos and T.NOTA_NUMERICA[:40] in texto, {"captura": cap}
 
 
-def ejecutar(root, salida: Path, raiz_tk, controlador: Controlador, *, imagenes_desarrollo, capturas: bool = True, tensor_g2=None, usar_hilo: bool = True) -> dict:
+def ejecutar(root, salida: Path, raiz_tk, controlador: Controlador, *, imagenes_desarrollo, capturas: bool = True, tensor_g2=None, usar_hilo: bool = True, clase_app=AppTk) -> dict:
     root, salida = Path(root), Path(salida)
     if not controlador.listo:
         raise SistemaNoDisponible(f"el sistema congelado no está disponible: {controlador.motivo}")
-    app = AppTk(raiz_tk, controlador, usar_hilo=usar_hilo)
+    app = clase_app(raiz_tk, controlador, usar_hilo=usar_hilo)
     pantalla = (raiz_tk.winfo_screenwidth(), raiz_tk.winfo_screenheight())
-    raiz_tk.geometry(f"1040x{min(940, pantalla[1] - 70)}+10+10")
+    raiz_tk.geometry(f"1040x{min(940, pantalla[1] - 70)}+10+10" if clase_app is AppTk else "+10+10")      # la presentación v2 fija su propio tamaño; solo se coloca arriba a la izquierda
     raiz_tk.update()
-    ej = Ejecucion(salida, app, controlador, capturas=capturas, root=root, tensor_g2=tensor_g2)
+    ej = Ejecucion(salida, app, controlador, capturas=capturas, root=root, tensor_g2=tensor_g2, clase_app=clase_app)
     sintetica = imagen_sintetica(salida / "sintetica_01.png")
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
@@ -322,6 +326,7 @@ def main(argv=None, *, root=None, controlador: Controlador | None = None, tensor
     ap.add_argument("--imagen-desarrollo", action="append", default=None, help="imagen de desarrollo (repetible); por defecto, las dos primeras de train/images por nombre")
     ap.add_argument("--sin-capturas", action="store_true", help="no captura la pantalla (solo pruebas); NO produce evidencia visual")
     ap.add_argument("--sufijo", default="")
+    ap.add_argument("--interfaz", choices=("v1", "v2"), default="v1", help="presentación a probar: v1 (app_tk, conservada) o v2 (app_tk_v2, rediseño visual); use --sufijo distinto para no mezclar evidencias")
     args = ap.parse_args(argv)
     if callable(getattr(sys.stdout, "reconfigure", None)):                          # consolas de Windows en cp1252: los mensajes llevan tildes y símbolos
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -330,8 +335,9 @@ def main(argv=None, *, root=None, controlador: Controlador | None = None, tensor
     propia = False
     try:
         token = U.exigir_autorizacion(args.autorizacion)
-        if token.split(":")[1] != TOKEN_DECISION:
-            raise GuardError(f"esta herramienta solo se ejecuta bajo CONFIRMADO:{TOKEN_DECISION}")
+        decision = TOKEN_POR_INTERFAZ[args.interfaz]
+        if token.split(":")[1] != decision:
+            raise GuardError(f"con --interfaz {args.interfaz} esta herramienta solo se ejecuta bajo CONFIRMADO:{decision}")
         devs = [ruta_desarrollo(root, r) for r in (args.imagen_desarrollo or imagenes_desarrollo_por_defecto(root))]
         if controlador is None:
             controlador = Controlador()
@@ -342,7 +348,7 @@ def main(argv=None, *, root=None, controlador: Controlador | None = None, tensor
         if tensor_g2 is None:
             config_g2 = cargar_config_g2(root / C.cargar_config(root / C.CONFIG_REL)["referencia_g2"]["config"])
             tensor_g2 = lambda ruta: tensor_de_g2(root, config_g2, ruta)  # noqa: E731
-        destino = directorio_nuevo(exigir_salida_segura(root, root / SALIDA_REL / f"{TOKEN_DECISION}{args.sufijo}", "results/r9_gui"))
+        destino = directorio_nuevo(exigir_salida_segura(root, root / SALIDA_REL / f"{decision}{args.sufijo}", "results/r9_gui"))
         propia = raiz_tk is None
         if propia:
             try:                                                                    # coordenadas físicas coherentes con la captura en pantallas con escala > 100 %
@@ -351,9 +357,14 @@ def main(argv=None, *, root=None, controlador: Controlador | None = None, tensor
             except Exception:                                                       # noqa: BLE001 - no es Windows o ya está establecido
                 pass
             raiz_tk = tk.Tk()
-        reg = ejecutar(root, destino, raiz_tk, controlador, imagenes_desarrollo=devs, capturas=not args.sin_capturas, tensor_g2=tensor_g2)
+        if args.interfaz == "v2":
+            from src.gui.app_tk_v2 import AppTkV2
+            clase_app = AppTkV2
+        else:
+            clase_app = AppTk
+        reg = ejecutar(root, destino, raiz_tk, controlador, imagenes_desarrollo=devs, capturas=not args.sin_capturas, tensor_g2=tensor_g2, clase_app=clase_app)
         s = controlador.sistema
-        reg.update({"autorizacion": token, "fecha": U.ahora(), "version_interfaz": T.VERSION_PROTOTIPO, "sistema": SISTEMA_ID,
+        reg.update({"autorizacion": token, "fecha": U.ahora(), "version_interfaz": T.VERSION_PROTOTIPO, "presentacion": args.interfaz, "sistema": SISTEMA_ID,
                     "sha256_declaracion": SHA256_DECLARACION, "umbral": s.t_hat_texto, "n_miembros": len(s.miembros),
                     "imagenes_desarrollo": [str(Path(d).relative_to(root).as_posix()) for d in devs], "imagen_sintetica": "sintetica_01.png (generada; no clínica)",
                     "entorno": {**SF._versiones(), "sistema_operativo": platform.platform(), "dispositivo": str(s.device), "advertencias_entorno": list(s.advertencias_entorno)},
