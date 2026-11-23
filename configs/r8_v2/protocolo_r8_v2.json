@@ -1,0 +1,113 @@
+{
+  "esquema": "protocolo_r8_v2/1",
+  "etapa": "R8 - evaluacion final unica del sistema congelado sistema_congelado_v1 (mapeo v2, particion provisional phash_le8_v1)",
+  "estado": "propuesto para congelamiento; NO ejecutado; no contiene su propio hash: el ejecutor lo recibe como referencia externa (--sha256-protocolo) y lo compara con el archivo",
+  "conformidad_academica_asesor": "PENDIENTE",
+  "historico": {
+    "protocolo_original": {
+      "ruta": "results/classification/r7_optimizacion/cierre_seleccion/protocolo_r8_congelado.json",
+      "sha256_contenido": "bfdc5ea4a7d45fde2e13b3ac5ff281b55b37a144eb4e90e591150e2be7e5060c",
+      "nota": "conservado intacto (mapeo anterior, ConvNeXt-Tiny, B0/B2); el ejecutor comprueba su SHA-256; sus cifras no se reutilizan como validacion del nuevo mapeo"
+    },
+    "contraste_b2_vs_b0": {
+      "estado": "contraste historico documentado; no ejecutable en v2; no eliminado ni redefinido; no se reinterpreta como cumplido",
+      "motivo": "pertenece al mapeo anterior (ConvNeXt-Tiny, seis checkpoints historicos, clase positiva 6+7); en v2 no se adopto ninguna optimizacion (G4 cerrada con la base conservada), por lo que no existe configuracion optimizada que contrastar con la base"
+    }
+  },
+  "sistema": {
+    "identificador": "sistema_congelado_v1",
+    "arquitectura": "densenet121",
+    "representacion": "A",
+    "n_miembros": 15,
+    "agregacion": "promedio aritmetico simple de las 15 probabilidades de la clase maligna",
+    "t_hat": "0.08456226376195748",
+    "regla": "p >= t_hat",
+    "declaracion": {
+      "decision": "D-060",
+      "ruta": "configs/r8_v2/declaracion_congelamiento_v1.json",
+      "sha256_contenido": "2dd79df4815b676e1bfe5c880ebb1040548bf57d21de3bbf91652842a8598cf1",
+      "exigencia": "el ejecutor recibe este SHA-256 tambien como referencia externa (--sha256-declaracion), lo compara con el de este protocolo y con el del archivo, y verifica la declaracion completa (artefactos, 15 miembros, codigo de inferencia, checkpoints y reporte real) antes de cualquier inferencia"
+    },
+    "limitacion": "t_hat se calibro con el OOF de tres modelos por imagen y no esta validado para el ensamble de quince; es una regla experimental previa a R8 y no garantiza una sensibilidad del 90 %"
+  },
+  "datos": {
+    "manifiesto": "configs/splits/mmotu_experimental_split_standard.csv",
+    "imagenes_dir": "data/processed/MMOTU_OTU_2D_experimental",
+    "subconjunto": "test",
+    "mapeo": {
+      "clase_0_lesion_no_maligna": [0, 1, 2, 3, 4, 6],
+      "clase_1_lesion_maligna": [7],
+      "excluida_ovario_normal": [5]
+    },
+    "recuentos_documentados": {
+      "elegibles_clase_0": 367,
+      "elegibles_clase_1": 15,
+      "normales_excluidas": 87
+    },
+    "recuentos_documentados_nota": "documentados históricamente; si difieren se detiene antes de inferir (enmienda y decisión de la autora)"
+  },
+  "estadistica": {
+    "evaluacion_unica": true,
+    "semilla_bootstrap": 20261123,
+    "n_bootstrap": 10000,
+    "nivel_ic": 0.95,
+    "ic_ap_roc_auc": "bootstrap percentil estratificado por imagen",
+    "ic_sensibilidad_especificidad": "binomial exacto de Clopper-Pearson",
+    "umbral_primario": "0.08456226376195748",
+    "regla": "p >= t_hat",
+    "umbral_secundario_descriptivo": 0.5,
+    "analisis_por_numero_de_modelos": false,
+    "comparacion_b2_vs_b0": "contraste historico documentado; no ejecutable en v2"
+  },
+  "procedimiento": {
+    "orden": [
+      "compuertas (autorizacion, referencias externas, protocolo, declaracion, integridad, carga de los 15 checkpoints) sin abrir el test",
+      "bloqueo de ejecucion unica (creacion exclusiva del directorio de resultados)",
+      "seleccion de imagenes elegibles del test (categoria 5 excluida; nunca se predice)",
+      "inferencia SIN etiquetas con los 15 miembros; promedio simple; regla p >= t_hat",
+      "escritura y registro (SHA-256) de las predicciones ANTES de liberar las etiquetas",
+      "evaluacion: AP, ROC-AUC, sensibilidad, especificidad, matriz de confusion, FP, FN y VPP con umbral fijo; IC95"
+    ],
+    "bootstrap": "imagenes ordenadas por image_id dentro de cada clase; numpy.random.default_rng(semilla): primero la matriz de posiciones positivas (B, P) y despues la de negativas (B, N); percentiles 2.5 y 97.5 (interpolacion lineal)",
+    "prohibido_con_test": ["reentrenar", "recalibrar", "ajustar el umbral", "seleccionar o sustituir miembros, semillas o configuraciones", "definir metas numericas retrospectivas", "repetir la evaluacion"]
+  },
+  "iov_originales": {
+    "R8.1": {
+      "texto": "Las decisiones de selección y optimización se encuentran cerradas antes de realizar la evaluación final.",
+      "estado": "parcial; completo cuando este protocolo quede versionado y se registre la autorizacion de R8; G1-G3 sin cierre formal del autor; R6.2 parcial"
+    },
+    "R8.2": {
+      "texto": "Se reportan AP, AUC-ROC, sensibilidad y especificidad como métricas de evaluación final.",
+      "estado": "pendiente de la ejecucion de R8; matriz de confusion, FP, FN y VPP se añaden sin sustituirlas"
+    },
+    "R8.3": {
+      "texto": "Las métricas se acompañan de intervalos de confianza del 95 % según el procedimiento estadístico establecido.",
+      "estado": "pendiente de la ejecucion de R8; el IC por imagen supone independencia no demostrada (sin group_id en test)"
+    },
+    "R8.4": {
+      "texto": "Se declara el uso previo del conjunto de prueba en las pruebas preliminares y se reportan las métricas finales una sola vez con la configuración congelada.",
+      "estado": "pendiente de la ejecucion de R8 y de G5; bloqueo de ejecucion unica; la declaracion de accesos historicos no reabre el test"
+    }
+  },
+  "limitaciones_a_declarar": [
+    "sin identificadores de paciente ni group_id en test: no se asume independencia entre imagenes; el IC por imagen puede ser optimista",
+    "pocas imagenes malignas de prueba: el IC de la sensibilidad es muy amplio",
+    "t_hat calibrado con el OOF de tres modelos; no validado para el ensamble de quince; no garantiza sensibilidad del 90 %",
+    "un unico subtipo maligno en el dataset: no demuestra generalizacion a todos los canceres ovaricos",
+    "acceso exploratorio previo al conjunto de prueba (documentado); no se afirma independencia absoluta del test historico",
+    "particion de desarrollo provisional (exploratoria, post hoc); conformidad academica del asesor pendiente; sin uso clinico validado",
+    "el VPP depende de la prevalencia del test y no es transferible a otras poblaciones",
+    "las 87 normales documentadas quedan fuera de esta evaluacion; su control es posterior y requiere autorizacion independiente"
+  ],
+  "autorizacion_requerida": {
+    "independiente_y_especifica": true,
+    "ejecutor_oficial": "la autora, en Falcon",
+    "decision": "decision separada, registrada en trazabilidad, que cite el SHA-256 de este protocolo y el de la declaracion D-060",
+    "confirmacion_literal": "EJECUTAR_R8_UNA_SOLA_VEZ"
+  },
+  "salidas": {
+    "directorio": "results/r8_v2/phash_le8_v1/evaluacion_final_v1",
+    "archivos": ["ejecucion.lock.json", "predicciones_por_miembro.csv", "predicciones_ensamble.csv", "registro_inferencia.json", "evaluacion_por_imagen.csv", "metricas_primarias.csv", "resultados_r8.json", "estado_final.json"],
+    "segunda_ejecucion": "bloqueada; solo una decision documentada de la autora puede levantar el bloqueo"
+  }
+}
