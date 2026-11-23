@@ -36,3 +36,5 @@ Thumbs.db
 
 # Documentos
 docs/
+# Capturas de pantalla con imágenes de DESARROLLO (R9, D-076): revisar antes de versionar o publicar
+results/r9_gui/evidencia_funcional/*/dev_*.png

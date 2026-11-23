@@ -42,6 +42,12 @@ def test_puntuacion_no_calibrada_y_umbral_exacto():
     assert T.T_HAT_TEXTO == "0.08456226376195748"
 
 
+def test_nota_numerica_reconoce_la_diferencia_por_lotes_sin_prometer_estabilidad_de_la_clase():
+    n = T.NOTA_NUMERICA
+    assert "una sola imagen" in n and "por lotes" in n and "No se garantiza" in n and "próxima al umbral" in n and "no se evaluó su efecto sobre el promedio" in n
+    assert "calibrad" not in n.lower() and "nunca" not in n.lower() and "siempre" not in n.lower()
+
+
 def test_rendimiento_de_r8_con_las_cifras_aprobadas():
     r = T.RENDIMIENTO
     for x in ("0.60", "0.32–0.84", "0.921", "0.237", "15 positivas", "367 negativas", "no se alcanzó", "Sin validación clínica", "único subtipo maligno", "0.882"):
@@ -49,7 +55,7 @@ def test_rendimiento_de_r8_con_las_cifras_aprobadas():
 
 
 def test_orden_de_las_advertencias_y_modo_maqueta():
-    assert T.advertencias() == [T.AVISO_PRINCIPAL, T.ALCANCE, T.NOTA_ETIQUETAS, T.NOTA_PUNTUACION, T.RENDIMIENTO]
+    assert T.advertencias() == [T.AVISO_PRINCIPAL, T.ALCANCE, T.NOTA_ETIQUETAS, T.NOTA_PUNTUACION, T.NOTA_NUMERICA, T.RENDIMIENTO]
     assert T.MODO_MAQUETA == "Modo demostración: modelo no disponible" and "no se muestran resultados simulados" in T.MAQUETA_DETALLE
 
 

@@ -168,6 +168,73 @@ def test_exige_la_verificacion_de_la_declaracion_aunque_se_inyecte_un_cargador(b
         cargar(banco, verificar_declaracion=rota)
 
 
+def test_f3_con_torch_una_imagen_por_inferencia_quince_modelos_promedio_y_umbral_exacto():
+    """Extremo a extremo con modelos torch reales (pequeños) y `_predecir_torch`: lote de una imagen en cada uno de los 15, un solo preprocesamiento, promedio independiente y regla `>=` con el umbral exacto."""
+    torch = pytest.importorskip("torch")
+    from src.gui.sistema import _predecir_torch
+    ms = miembros_falsos()
+    modelos = {}
+    for i, m in enumerate(ms):
+        torch.manual_seed(100 + i)
+        modelos[m["id_corrida"]] = torch.nn.Sequential(torch.nn.Flatten(), torch.nn.Linear(3 * 4 * 4, 2)).eval()
+    formas, preprocesos = [], []
+
+    def preprocesar(im):
+        preprocesos.append(1)
+        return torch.from_numpy(np.asarray(im.resize((4, 4)), dtype=np.float32) / 255.0).permute(2, 0, 1).unsqueeze(0).contiguous()
+
+    def predecir(modelo, tensor, device):
+        formas.append(tuple(tensor.shape))
+        return _predecir_torch(modelo, tensor, device)
+    s = SistemaCongelado(miembros=ms, modelos=modelos, preprocesar=preprocesar, predecir=predecir, device="cpu", t_hat_texto=SF.T_HAT)
+    img = Image.new("RGB", (40, 30), (120, 60, 200))
+    r = s.clasificar(img)
+    assert len(preprocesos) == 1 and formas == [(1, 3, 4, 4)] * 15
+    x = preprocesar(img)
+    esperado = [float(torch.softmax(modelos[m["id_corrida"]](x), dim=1)[0, 1].detach().numpy().astype(np.float32)) for m in sorted(ms, key=lambda m: m["id_corrida"])]
+    assert r.puntuacion == pytest.approx(float(np.mean(np.asarray(esperado, dtype=np.float64))), abs=1e-12) and r.positivo == (r.puntuacion >= T_HAT)
+    assert r.umbral == T_HAT and r.umbral_texto == "0.08456226376195748" and r.n_miembros == 15 and r.clase == ("MALIGNO" if r.positivo else "BENIGNO")
+    assert s.clasificar(img).probabilidades_por_miembro == r.probabilidades_por_miembro                    # repetible bit a bit en el mismo proceso
+
+
+def test_el_resultado_no_ofrece_umbrales_alternativos_ni_calibracion():
+    campos = set(sistema_falso(0.2).clasificar(Image.new("RGB", (40, 40))).__dict__)
+    assert not any(x in " ".join(campos) for x in ("calibr", "abst", "umbral_alt", "incertidumbre"))
+    assert {"puntuacion", "clase", "umbral", "umbral_texto", "regla", "n_miembros", "probabilidades_por_miembro"} <= campos
+
+
+# ============================================================================ verificación previa de los 15 checkpoints (Windows/Falcon; sin torch ni inferencia)
+def vc(banco, *extra, token="CONFIRMADO:D-076"):
+    return cli.main(["verificar-checkpoints", "--autorizacion", token, "--sha256-declaracion", banco.sha_decl, *extra], root=banco.root)
+
+
+def test_verificar_checkpoints_correcto_informa_15_de_15(banco, capsys):
+    assert vc(banco) == 0
+    out = capsys.readouterr().out
+    assert out.count("OK ") >= 15 and "15/15" in out and "Sin carga de modelos ni inferencia" in out
+
+
+def test_verificar_checkpoints_informa_los_15_aunque_uno_este_alterado_o_ausente(banco, capsys):
+    d = banco.decl
+    (banco.root / d["miembros"][2]["ruta_checkpoint"]).write_bytes(b"alterado")
+    (banco.root / d["miembros"][5]["ruta_checkpoint"]).unlink()
+    assert vc(banco) == 3
+    c = capsys.readouterr()
+    assert "13/15" in c.out and c.out.count("DISTINTO") == 1 and c.out.count("AUSENTE") == 1 and "DETENIDO" in c.err
+
+
+def test_verificar_checkpoints_exige_autorizacion_y_declaracion_correcta(banco, capsys):
+    assert vc(banco, token="") == 3 and vc(banco, token="CONFIRMADO") == 3
+    assert cli.main(["verificar-checkpoints", "--autorizacion", "CONFIRMADO:D-076", "--sha256-declaracion", "0" * 64], root=banco.root) == 3
+    assert "15/15" not in capsys.readouterr().out
+
+
+def test_verificar_checkpoints_no_carga_modelos(banco, monkeypatch):
+    import src.gui.cli as cli_mod
+    monkeypatch.setattr(cli_mod, "cargar_sistema", lambda *a, **k: (_ for _ in ()).throw(AssertionError("no debe cargar el sistema")))
+    assert vc(banco) == 0
+
+
 # ============================================================================ controlador: modo demostración sin inferencia
 def test_modo_demostracion_sin_resultados_simulados(tmp_path):
     def falla():

@@ -19,6 +19,9 @@ NOTA_ETIQUETAS = ("BENIGNO = clase negativa del mapeo v2 (lesión no maligna: ca
                   "MALIGNO = clase positiva del mapeo v2 (categoría original 7: carcinoma seroso de alto grado en este conjunto de datos). Estas salidas no equivalen a un diagnóstico histopatológico.")
 NOTA_PUNTUACION = (f"La puntuación es el promedio aritmético simple de las 15 probabilidades de los modelos; NO es una probabilidad calibrada. Regla: MALIGNO si puntuación ≥ umbral ({T_HAT_TEXTO}); "
                    "BENIGNO en otro caso. El umbral es una regla experimental fijada antes de la evaluación final, calibrada con un ensamble de tres modelos y no validada para el ensamble de quince.")
+NOTA_NUMERICA = ("La clasificación procesa una sola imagen por vez. El cómputo por imagen individual puede diferir numéricamente, en pequeña magnitud, de las probabilidades guardadas en desarrollo, "
+                 "que se generaron por lotes (en una muestra de desarrollo se observaron diferencias del orden de 1e-3, máximo 1.05e-3, en la probabilidad de un modelo individual; no se evaluó su efecto sobre el promedio de los quince). "
+                 "No se garantiza que tales diferencias no puedan modificar la clase de una imagen cuya puntuación esté muy próxima al umbral.")
 RENDIMIENTO = ("Evaluación final única (R8; 382 imágenes elegibles: 367 negativas y 15 positivas), con este mismo umbral: sensibilidad 0.60 (IC 95 % 0.32–0.84), especificidad 0.921 (IC 95 % 0.888–0.946), "
                "valor predictivo positivo 0.237 (prevalencia de la muestra 3.9 %), ROC-AUC 0.882. El objetivo exploratorio de sensibilidad de 0.90 no se alcanzó. Con solo 15 positivas la incertidumbre es amplia; "
                "no hay identificadores de paciente y el conjunto contiene un único subtipo maligno. Sin validación clínica.")
@@ -30,4 +33,4 @@ ACERCA_DE = (f"Interfaz {VERSION_PROTOTIPO}. Sistema: congelado según la declar
 
 def advertencias() -> list[str]:
     """Bloque de avisos que debe mostrarse siempre junto a cualquier resultado, en este orden."""
-    return [AVISO_PRINCIPAL, ALCANCE, NOTA_ETIQUETAS, NOTA_PUNTUACION, RENDIMIENTO]
+    return [AVISO_PRINCIPAL, ALCANCE, NOTA_ETIQUETAS, NOTA_PUNTUACION, NOTA_NUMERICA, RENDIMIENTO]

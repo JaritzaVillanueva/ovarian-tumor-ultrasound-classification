@@ -140,6 +140,20 @@ def test_ventana_imagen_invalida_muestra_un_error_claro(raiz_tk, tmp_path):
     assert str(app.b_clasificar.cget("state")) == "disabled"
 
 
+def test_ventana_un_error_de_carga_no_deja_visible_la_clase_de_la_imagen_anterior(raiz_tk, tmp_path):
+    pytest.importorskip("PIL.ImageTk")
+    from src.gui.app_tk import AppTk
+    c = Controlador(cargar=lambda: sistema_falso(0.3))
+    c.iniciar()
+    app = AppTk(raiz_tk, c, usar_hilo=False)
+    assert app.cargar_imagen(imagen(tmp_path)) and app._clasificar_sync() and app.clase.cget("text") == "MALIGNO"
+    anterior = c.imagen
+    (tmp_path / "x.png").write_bytes(b"no es imagen")
+    assert app.cargar_imagen(tmp_path / "x.png") is False
+    assert app.clase.cget("text") == "—" and "dañado" in app.detalle.cget("text") and c.imagen is anterior and str(app.b_clasificar.cget("state")) == "disabled"
+    assert app.cargar_imagen(imagen(tmp_path, "otra.png")) and app._ultimo_error == "" and str(app.b_clasificar.cget("state")) == "normal"      # recuperación sin residuos del error
+
+
 def test_ventana_en_modo_demostracion_no_infiere(raiz_tk, tmp_path):
     pytest.importorskip("PIL.ImageTk")
     from src.gui.app_tk import AppTk

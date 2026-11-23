@@ -83,7 +83,10 @@ class AppTk:
         except ImagenInvalida as exc:
             self._error(str(exc))
             self.b_clasificar.configure(state="disabled")
+            if self.c.listo:
+                self.clase.configure(text="—", fg="black", font=("Segoe UI", 30, "bold"))       # no dejar visible la clase de una imagen anterior junto al error de otro archivo
             return False
+        self._ultimo_error = ""
         from PIL import ImageTk
         vista = self.c.imagen.copy()
         vista.thumbnail((ANCHO_IMAGEN, ALTO_IMAGEN))

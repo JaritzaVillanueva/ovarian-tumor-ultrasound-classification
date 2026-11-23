@@ -3,6 +3,7 @@
   python -B -m src.gui.cli clasificar --imagen RUTA [--json]
   python -B -m src.gui.cli verificar --autorizacion CONFIRMADO:D-NNN
   python -B -m src.gui.cli integracion-desarrollo --autorizacion CONFIRMADO:D-NNN [--n-por-fold 2]
+  python -B -m src.gui.cli verificar-checkpoints --autorizacion CONFIRMADO:D-NNN [--sha256-declaracion 64HEX]   # solo SHA-256 de los 15 checkpoints; sin torch, sin inferencia
 
 `integracion-desarrollo` comprueba, SOLO con imágenes de desarrollo y sin etiquetas, que la ruta de la interfaz (validación, RGB, preprocesamiento de G2, softmax) reproduce las probabilidades guardadas
 de cada miembro en su propio pliegue. NO calcula métricas, NO usa etiquetas, NO evalúa el ensamble sobre desarrollo y NO sirve para reajustar nada. Nunca abre el test.
@@ -16,14 +17,15 @@ import json
 import sys
 from pathlib import Path
 
-from src.r4_v2.common import RAIZ_REPO, GuardError, directorio_nuevo, escribir_json_nuevo, exigir_salida_segura
+from src.r4_v2.common import RAIZ_REPO, GuardError, directorio_nuevo, escribir_json_nuevo, exigir_ruta_no_prohibida, exigir_salida_segura, sha256_archivo
 from src.r4_v2.common import cargar_config as cargar_config_g2
 from src.r4_v2.particion import cargar_particion, filas_de_fold, resolver_imagen
 from src.r7_v2 import sistema_final as SF
 from src.r7_v2 import umbral_sistema as U
 from src.r8_v2 import congelamiento as C
+from src.r8_v2 import declaracion as DC
 from src.gui import textos as T
-from src.gui.sistema import SistemaNoDisponible, cargar_sistema
+from src.gui.sistema import SHA256_DECLARACION, SistemaNoDisponible, cargar_sistema
 from src.gui.validacion_imagen import ImagenInvalida, validar_y_cargar
 
 SALIDA_REL = "results/r9_gui/integracion_desarrollo"
@@ -51,6 +53,34 @@ def integracion_desarrollo(root, config_g2, particion, miembros_filas, probabili
             "metricas_calculadas": False, "etiquetas_usadas": False, "ensamble_evaluado_sobre_desarrollo": False}
 
 
+def tabla_checkpoints(root, miembros) -> list[dict]:
+    """SHA-256 recalculado de cada checkpoint frente al del manifiesto versionado. Informa los 15 (no se detiene en el primero); no carga modelos ni infiere."""
+    filas = []
+    for m in miembros:
+        exigir_ruta_no_prohibida(m["ruta_checkpoint"])
+        ruta = Path(root) / m["ruta_checkpoint"]
+        esperado = m["sha256_bytes_archivo_checkpoint"]
+        observado = sha256_archivo(ruta) if ruta.is_file() else None
+        estado = "AUSENTE" if observado is None else ("OK" if observado == esperado else "DISTINTO")
+        filas.append({"id_corrida": m["id_corrida"], "estado": estado, "sha256_esperado": esperado, "sha256_observado": observado,
+                      "tamano_bytes": ruta.stat().st_size if observado is not None else None, "ruta": m["ruta_checkpoint"]})
+    return filas
+
+
+def _verificar_checkpoints(root, token: str, sha256_declaracion: str) -> int:
+    DC.exigir_declaracion(root, sha256_declaracion, comprobar_checkpoints=False, comprobar_reporte=False)          # declaración, manifiesto y código de inferencia; los checkpoints se tabulan abajo
+    config = C.cargar_config(root / C.CONFIG_REL)
+    filas = tabla_checkpoints(root, C.validar_miembros(C.leer_tabla(root / C.MIEMBROS_REL), config))
+    for f in filas:
+        print(f"{f['estado']:<8} {f['id_corrida']:<24} {f['tamano_bytes'] if f['tamano_bytes'] is not None else '-':>10}  esperado {f['sha256_esperado']}  observado {f['sha256_observado']}")
+    buenos = sum(f["estado"] == "OK" for f in filas)
+    print(f"CHECKPOINTS ({token}): {buenos}/{len(filas)} con SHA-256 igual al del manifiesto versionado. Declaración verificada (SHA-256 {sha256_declaracion[:12]}…). Sin carga de modelos ni inferencia.")
+    if buenos != len(filas):
+        print("DETENIDO: no se debe ejecutar la interfaz con checkpoints ausentes o distintos de los congelados.", file=sys.stderr)
+        return 3
+    return 0
+
+
 def _imprimir_resultado(r, como_json: bool) -> None:
     if como_json:
         print(json.dumps({"clase": r.clase, "puntuacion": r.puntuacion, "umbral": r.umbral_texto, "regla": r.regla, "n_miembros": r.n_miembros, "sha256_declaracion": r.sha256_declaracion,
@@ -73,11 +103,19 @@ def main(argv=None, *, root=None, sistema=None) -> int:
         s.add_argument("--autorizacion", default="", help="CONFIRMADO:D-NNN (decisión de ejecución)")
         if nombre != "verificar":
             s.add_argument("--n-por-fold", type=int, default=2)
+    vc = sub.add_parser("verificar-checkpoints")
+    vc.add_argument("--autorizacion", default="", help="CONFIRMADO:D-NNN (decisión de ejecución)")
+    vc.add_argument("--sha256-declaracion", default=SHA256_DECLARACION, help="SHA-256 de la declaración D-060 (vía externa a ella; por defecto, el fijado en la interfaz)")
     args = ap.parse_args(argv)
+    if callable(getattr(sys.stdout, "reconfigure", None)):                          # consolas de Windows en cp1252: los textos llevan tildes y símbolos (≥)
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
     root = Path(root or RAIZ_REPO).resolve()
     try:
         if args.modo != "clasificar":
             token = U.exigir_autorizacion(args.autorizacion)
+        if args.modo == "verificar-checkpoints":
+            return _verificar_checkpoints(root, token, args.sha256_declaracion)
         sistema = sistema or cargar_sistema(root, exigir_reporte=(args.modo == "verificar"))
         if args.modo == "verificar":
             print(f"SISTEMA VERIFICADO ({token}): {sistema.t_hat_texto}, {len(sistema.miembros)} miembros, declaración y reporte D-058 comprobados.")
