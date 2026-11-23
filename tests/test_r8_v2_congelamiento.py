@@ -124,14 +124,55 @@ def sin_salida(root):
 
 
 # ============================================================================ configuración y protocolo reales
+def problemas_protocolo_registrado(protocolo: dict, contenido: bytes) -> list[str]:
+    """Esquema de dos commits ya completado: commit (40 hex) y SHA-256 del contenido del protocolo (64 hex) deben estar registrados, y el SHA-256 debe ser el del contenido real
+    (fin de línea normalizado a LF: el blob de Git se calcula sobre el texto versionado, y `core.autocrlf` puede alterar la copia de trabajo). Sin Git."""
+    p = []
+    commit, digest = protocolo.get("git_commit"), protocolo.get("sha256_contenido_blob")
+    if not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{40}", commit) or set(commit) == {"0"}:
+        p.append("git_commit ausente o con formato inválido (se esperan 40 hex en minúsculas)")
+    if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest):
+        p.append("sha256_contenido_blob ausente o con formato inválido (se esperan 64 hex en minúsculas)")
+    elif digest != sha(contenido.replace(b"\r\n", b"\n")):
+        p.append("sha256_contenido_blob no coincide con el contenido real del protocolo")
+    return p
+
+
 def test_config_real_valida_y_no_declara_congelamiento():
     c = C.cargar_config(REPO / C.CONFIG_REL)
-    assert c["sistema"]["congelado"] is False and c["sistema"]["n_miembros"] == 15
+    assert c["sistema"]["congelado"] is False and c["sistema"]["n_miembros"] == 15           # sigue falso: no hay declaración formal de congelamiento
     assert c["sistema"]["umbral"]["t_hat"] == "0.08456226376195748" == T_HAT
     assert repr(float(c["sistema"]["umbral"]["t_hat"])) == T_HAT
-    assert c["protocolo"]["git_commit"] is None and c["protocolo"]["sha256_contenido_blob"] is None      # esquema de dos commits: se registran después
+    assert problemas_protocolo_registrado(c["protocolo"], (REPO / C.PROTOCOLO_REL).read_bytes()) == []   # esquema de dos commits completado (commit 3)
     assert c["miembros"]["sha256_bytes_archivo"] == c["archivos_de_procedencia"][C.REL_MANIFIESTO_CSV]
     assert c["acceso_test"]["estado"] == "cerrado"
+
+
+def test_comprobacion_del_protocolo_registrado_discrimina():
+    contenido = b"protocolo sintetico\nlinea 2\n"
+    ok = {"git_commit": "0123456789abcdef0123456789abcdef01234567", "sha256_contenido_blob": sha(contenido)}
+    assert problemas_protocolo_registrado(ok, contenido) == []
+    assert problemas_protocolo_registrado(ok, contenido.replace(b"\n", b"\r\n")) == []           # fin de línea convertido por Git: mismo contenido versionado
+    for malo in ({"git_commit": None, "sha256_contenido_blob": None}, {**ok, "git_commit": None}, {**ok, "sha256_contenido_blob": None}, {**ok, "git_commit": "009f1bb"},
+                 {**ok, "git_commit": "0" * 40}, {**ok, "git_commit": ok["git_commit"].upper()}, {**ok, "sha256_contenido_blob": "g" * 64}, {**ok, "sha256_contenido_blob": "1" * 64}):
+        assert problemas_protocolo_registrado(malo, contenido), malo
+    assert problemas_protocolo_registrado(ok, contenido + b"x")                                  # contenido alterado
+
+
+def test_commit_registrado_corresponde_al_blob_del_protocolo_si_git_lo_tiene():
+    """Correspondencia con Git real SOLO si el commit está disponible en el clon (si no, se omite: las pruebas sintéticas no dependen de Git)."""
+    import shutil
+    import subprocess
+    p = C.cargar_config(REPO / C.CONFIG_REL)["protocolo"]
+    if shutil.which("git") is None or not p.get("git_commit"):
+        pytest.skip("git no disponible o commit no registrado")
+    try:
+        r = subprocess.run(["git", "-C", str(REPO), "cat-file", "blob", f"{p['git_commit']}:{p['ruta']}"], capture_output=True, timeout=30)
+    except (OSError, subprocess.TimeoutExpired):
+        pytest.skip("git no ejecutable")
+    if r.returncode != 0:
+        pytest.skip("el commit registrado no está disponible en este clon")
+    assert sha(r.stdout) == p["sha256_contenido_blob"]
 
 
 def test_protocolo_real_coherente_y_sin_hash_propio():
