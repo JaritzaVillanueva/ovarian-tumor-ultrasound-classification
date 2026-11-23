@@ -12,8 +12,8 @@ protocolo:
   id: sistema_congelado_v1
   ruta: src/r8_v2/protocolo_sistema_congelado_v1.md
   estado: "preparado para congelamiento; el protocolo se versiona al registrarse commit y hash (commit posterior); la declaración formal es una decisión separada"
-  git_commit: null
-  sha256_contenido_blob: null
+  git_commit: 009f1bbd711138d9094d89cc3bd90fcc7bc146d7
+  sha256_contenido_blob: b30727fd17252d6df68cf98d85953101cc1ad17611a012929bd23b85d019035c
   conformidad_academica_asesor: PENDIENTE
   trazabilidad: "D-057"
 
