@@ -1,0 +1,169 @@
+# Configuración G4 `g4_optimizacion_v1`: estrategias exploratorias de pérdida sobre la base A|densenet121 de G2 (un solo factor por estrategia).
+#
+# Estado: borrador para congelamiento por la autora. NO autoriza entrenar. Reglas de decisión confirmadas el 2026-11-22.
+# Sin circularidad: el protocolo no contiene su propio hash; este YAML registrará commit y SHA-256 del protocolo en un commit posterior (como G3a/G3b).
+# La receta de clasificación NO se duplica aquí: es la de G2 (configs/r4_v2/g2_baseline_v1.yaml, fijada por blob); la única variable declarada es la pérdida
+# de entrenamiento (CE ponderada con alpha, o Focal ponderada con gamma). Validación SIN ponderar, checkpoint y parada exactamente como G2.
+# Partición provisional (phash_le8_v1, exploratoria, post hoc); conformidad académica del asesor: PENDIENTE. Test cerrado; 180 normales fuera.
+
+esquema: g4_optimizacion_v1_config/1
+
+protocolo:
+  id: g4_optimizacion_v1
+  ruta: src/r7_v2/protocolo_g4_v1.md
+  estado: "borrador; se congela al registrarse commit y hash del protocolo (commit posterior)"
+  git_commit: null
+  sha256_contenido_blob: null
+  conformidad_academica_asesor: PENDIENTE
+  trazabilidad: "pendiente de registro"
+
+estudio:
+  tarea: "clasificación binaria de lesiones (no maligna vs maligna), estrategias de pérdida sobre la base A|densenet121"
+  mapeo: v2
+  particion: phash_le8_v1
+  leyenda: "partición provisional (phash_le8_v1, exploratoria, post hoc); conformidad académica pendiente"
+
+referencia_g2:                      # solo lectura: partición, K1-K4, receta, referencia de pesos y corridas A
+  config: configs/r4_v2/g2_baseline_v1.yaml
+  sha256_contenido_blob: 6626f34e654db0ca119e2e1fab11bd12f68d3791481c55cc49c2e1e557fb17ff
+  indices_b_dir: results/r4_v2/phash_le8_v1/g2_baseline_v1/reporte
+
+referencia_r6:                      # DEBE existir y elegir A|densenet121 para toda ejecución real de G4 (y el reporte); si falta o elige otra, se bloquea
+  salida: results/r7_v2/phash_le8_v1/seleccion_r6/seleccion_r6.json
+  elegida: {condicion: A, arquitectura: densenet121}
+
+base:                               # 15 corridas de G2, SIN reentrenar
+  condicion: A
+  arquitectura: densenet121
+  semillas: [42, 43, 44]
+  folds: [0, 1, 2, 3, 4]
+
+diseno:
+  folds: [0, 1, 2, 3, 4]
+  raiz_resultados: results/r7_v2/phash_le8_v1/g4_optimizacion_v1/
+  id_corrida: "{arch}__s{seed}__f{fold}"         # igual que G2; ruta: <config_id>/completa/<id_corrida>/intento_NN/
+  fase_a_semilla: 42
+  semillas_confirmacion: [43, 44]
+  humo: {config_por_defecto: S2_g200, semilla: 42, fold: 0, epocas: 1, cuenta_como_resultado: false, consume_intento_del_tope: true}
+
+estrategias:                        # ORDEN FIJO; el código exige exactamente esta lista (no se salta ni se reordena)
+  - {orden: 1, id: S1_a050, familia: S1, alpha: 0.5, gamma: null}
+  - {orden: 2, id: S2_g200, familia: S2, alpha: 1.0, gamma: 2.0}
+  - {orden: 3, id: S1_a025, familia: S1, alpha: 0.25, gamma: null}
+  - {orden: 4, id: S2_g100, familia: S2, alpha: 1.0, gamma: 1.0}
+  - {orden: 5, id: S1_a075, familia: S1, alpha: 0.75, gamma: null}
+  - {orden: 6, id: S2_g050, familia: S2, alpha: 1.0, gamma: 0.5}
+
+presupuesto:                        # decisión de la autora (L1; resuelve X5); CLAUDE.md §5 NO se modifica
+  lectura: "L1: hasta 75 corridas NUEVAS de G4, sin contar las 45 de G2 ni las 30 de G3b"
+  tope_intentos: 75                 # LÍMITE DURO: cuenta cada intento iniciado (fallidos, reintentos y humo); no se amplía sin enmienda
+  planificadas: {A: 30, B: 20, C: 25}
+  regla_de_reparto_C: "presupuesto de C = 75 - intentos consumidos al terminar B (nunca se amplía el tope)"
+  ledger: presupuesto_ledger.jsonl  # append-only, bajo raiz_resultados
+
+promocion:                          # fase A -> B (independiente del punto de operación)
+  metrica: "AP OOF semilla 42 sin redondear"
+  contraste: "emparejado con la base A|densenet121, misma semilla y folds"
+  max_promovidas: 2
+  condicion: "delta_ap > 0"
+  orden: "mayor delta_ap; empate por el orden predefinido"
+  fase_a_incompleta: "promocion_provisional=true; no se declara la mejor de las seis; fase_b exige --aceptar-fase-a-incompleta"
+
+agente:                             # mecanismo preparado; NO se ejecuta con datos reales sin D-NNN específica
+  evidencia_fase_b: reporte_fase_b/evidencia_fase_b.json   # lo emite el reporte fase_b (esquema evidencia_fase_b_g4/1)
+  carpeta_propuestas: propuestas_agente
+  max_propuestas: 3
+  limites: {S1: {parametro: alpha, minimo: 0.0, maximo: 1.0}, S2: {parametro: gamma, minimo: 0.0, maximo: 3.0}}
+  decimales_maximos: 2
+  combina_familias: false
+  semilla_propuestas: 42
+  semillas_confirmacion: [43, 44]
+
+reglas_de_decision:                 # CONFIRMADAS por la autora (2026-11-22). El código las LEE y las valida contra constantes y contra el protocolo (anti-deriva)
+  estado: "confirmadas por la autora; cualquier cambio exige enmienda ANTES de congelar la configuración, nunca retroactiva"
+  s_star: "0.90"                    # constante exploratoria: objetivo, no garantía; cadena para aritmética exacta (calibracion.como_fraccion)
+  punto_de_operacion:
+    transferencia: "umbral calibrado con calibrar_umbral en 4 folds y evaluado en el 5.º; puntuación = media de las semillas disponibles de la configuración"
+    bootstrap: "agrupado por group_id, estratificado, MISMOS índices b de G2, umbral RECALCULADO en cada remuestreo"
+    nivel_ic: 0.95
+    vpp: "con la prevalencia del conjunto de desarrollo; solo válido para esa prevalencia; no transferible a otras poblaciones"
+    conteos_absolutos: "FP sobre las no malignas y FN sobre las malignas, siempre"
+  veto:
+    comparacion: "pareada (configuración - base), mismos b y misma partición, IC95 % percentil SIN ajustar"
+    deterioro_respaldado: "límite superior del IC95 % pareado < 0 en la sensibilidad transferida O en la especificidad (cualquiera)"
+    prevalece_sobre_mejora: true
+    formal_solo_con_semillas: 3
+    una_semilla: "exploratoria; sin veto formal"
+    ic_sin_ajustar: true
+    clasificacion: [deterioro respaldado, mejora respaldada, no distinguible]
+  evidencia_ap:
+    nivel_i: "candidata prometedora: delta AP de la semilla 42 > 0"
+    nivel_ii: "mejora mejor respaldada: 3 semillas completas; (a) delta AP medio > 0 y > 0 en cada semilla; (b) IC95 % excluye 0 en el bootstrap estratificado Y en el no estratificado"
+    nivel_iii: "sin mejora suficientemente respaldada"
+  multiplicidad:
+    alfa: 0.05
+    nivel_ajustado: "1 - 0.05/K"
+    k: "configuraciones efectivamente evaluadas, incluidas las del agente"
+    etiqueta: "respaldo exploratorio en desarrollo; el ajuste no corrige el sesgo de la búsqueda adaptativa ni es confirmación independiente"
+  reemplazo_base:
+    requiere: [mejor_respaldada_ap, sin_deterioro_respaldado]
+    con_i_y_sin_ii: "mejora de discriminación con deterioro del punto de operación"
+  seleccion_final:                  # determinista; no altera (i), (ii) ni el veto (solo ordena a las que cumplen ambos)
+    campo: configuracion_final_seleccionada
+    regla: "entre las configuraciones con 3 semillas completas que cumplen (i) mejora mejor respaldada en AP y (ii) no tienen deterioro respaldado, se selecciona la de mayor delta AP medio frente a la base (3 semillas, AP sin redondear); empate exacto: orden predefinido (S1_a050, S2_g200, S1_a025, S2_g100, S1_a075, S2_g050; luego las propuestas del agente por número de propuesta); sin elegibles: se conserva la base"
+    orden_predefinido: [S1_a050, S2_g200, S1_a025, S2_g100, S1_a075, S2_g050]
+  agente:
+    compara_con: [base, candidata_convencional_de_la_familia]
+    atribuible_si: "frente a la candidata convencional cumple mejor_respaldada_ap y no tiene deterioro respaldado; superar solo la base NO basta"
+    promocion_a_confirmacion:       # regla EXPLORATORIA (no es evidencia confirmatoria); atribuible_al_agente sigue dependiendo de la comparación completa con 3 semillas
+      naturaleza: exploratoria
+      semilla: 42
+      una_sola: true
+      regla: "promoción exploratoria, no evidencia confirmatoria: para confirmar una propuesta del agente con las semillas 43 y 44 su delta AP en la semilla 42 debe ser positivo frente a la base Y frente a la candidata convencional que refina; si varias cumplen se confirma UNA (presupuesto de 10 intentos): la de mayor delta AP frente a la candidata convencional en la semilla 42; empate exacto: menor número de propuesta"
+  criterios_absolutos:              # NINGUNO: cualquier criterio absoluto entra solo por enmienda antes de congelar
+    especificidad_minima: null
+    fp_maximo: null
+    viabilidad_clinica: no_determinada
+
+integridad:                         # comprobación sencilla propia (estilo G3a/G3b; no es K6 de G2)
+  rutas_sin_cambios: [src/r7_v2, src/r5_v2, src/r4_v2, src/classification, src/segmentation, configs/r4_v2, configs/r5_v2, configs/r7_v2]
+  archivos_con_huella:
+    - configs/r7_v2/g4_optimizacion_v1.yaml
+    - src/r7_v2/protocolo_g4_v1.md
+    - configs/r4_v2/g2_baseline_v1.yaml
+    - configs/r4_v2/referencia_pesos_preentrenados_v1.json
+    - src/r7_v2/__init__.py
+    - src/r7_v2/g4_comun.py
+    - src/r7_v2/g4_presupuesto.py
+    - src/r7_v2/g4_agente.py
+    - src/r7_v2/g4_entrenador.py
+    - src/r7_v2/g4_ejecutar.py
+    - src/r7_v2/g4_reporte.py
+    - src/r5_v2/g3b_comun.py
+    - src/r5_v2/comun.py
+    - src/r4_v2/__init__.py
+    - src/r4_v2/common.py
+    - src/r4_v2/particion.py
+    - src/r4_v2/modos.py
+    - src/r4_v2/integridad.py
+    - src/r4_v2/entrenamiento.py
+    - src/r4_v2/dataset_lesiones.py
+    - src/r4_v2/pesos.py
+    - src/r4_v2/metricas.py
+    - src/r4_v2/bootstrap.py
+    - src/r4_v2/agregacion.py
+    - src/r4_v2/calibracion.py
+    - src/classification/__init__.py
+    - src/classification/models.py
+    - src/classification/transforms.py
+    - src/classification/dataloader.py
+    - src/classification/evaluate.py
+    - src/classification/losses.py
+    - src/classification/utils.py
+    - src/classification/train.py
+    - src/classification/training_options.py
+
+acceso_test:
+  estado: cerrado
+  nuevos_accesos: prohibidos
+  nota: "solo train/ y validation/ de desarrollo; las 180 normales (categoría 5) quedan fuera; el bloqueo no borra los accesos históricos declarados en G5/R8"
