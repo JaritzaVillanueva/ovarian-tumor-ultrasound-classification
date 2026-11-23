@@ -247,6 +247,100 @@ def test_las_salidas_registran_autorizacion_y_que_no_hay_etiquetas_ni_metricas(t
     assert j["entorno"] == {"dispositivo": "cpu", "cudnn_allow_tf32": None}
 
 
+# ============================================================================ etapa c1 (D-075): solo C1a y C1b con el lote histórico de G2
+AUT75 = "CONFIRMADO:D-075"
+
+
+def test_etapa_c1_reproduce_el_oof_con_el_lote_historico_aunque_el_lote_1_difiera():
+    ctx = contexto()
+    assert D.etapa_ab(ctx)["resumen"]["B2_dif_maxima_B_oof"] > 1e-5                                    # el modelo sintético depende del tamaño de lote (como en «lote 1»)
+    r = D.etapa_c1(ctx)
+    res = r["resumen"]
+    assert r["etapa"] == "c1" and res["C1a_dif_maxima_global"] == 0.0 and res["C1b_dif_maxima_global"] <= 1e-7 and res["C1b_dif_maxima_vs_C1a_global"] <= 1e-7
+    assert any("= 0.0" in x for x in r["interpretacion"])
+    assert [m["id_corrida"] for m in r["miembros"]] == [m["id_corrida"] for m in D.miembros_prioritarios(filas_miembros())]
+    assert all(len(m["imagenes"]) == D.N_IMAGENES for m in r["miembros"])
+
+
+def test_etapa_c1_no_ejecuta_c2_ni_el_pliegue_completo_ni_otros_tamanos():
+    ctx = contexto()
+    g2, apilados = [], []
+    original_g2, original_t = ctx.prob_g2, ctx.prob_tensores
+    ctx.prob_g2 = lambda modelo, filas, tam, sem: (g2.append((len(filas), tam)), original_g2(modelo, filas, tam, sem))[1]
+    ctx.prob_tensores = lambda modelo, ts: (apilados.append(len(ts)), original_t(modelo, ts))[1]
+    r = D.etapa_c1(ctx)
+    assert g2 and all(tam == D.LOTE_G2 and n <= D.LOTE_G2 for n, tam in g2) and apilados and max(apilados) <= D.LOTE_G2
+    assert len(g2) <= 2 * 6 and len(g2) == len(apilados)                                              # ≤ 2 lotes por miembro, un cómputo por lote distinto
+    assert "C2_dif_maxima_por_tamano" not in r["resumen"] and "tf32_desactivado" not in r and "C2" not in json.dumps(r["miembros"])
+
+
+def test_etapa_c1_detecta_una_diferencia_de_preprocesamiento_de_la_interfaz():
+    ctx = contexto()
+    ctx.tensor_gui = lambda pil: tensor3(pil).unsqueeze(0) + 1e-3
+    res = D.etapa_c1(ctx)["resumen"]
+    assert res["C1a_dif_maxima_global"] == 0.0 and res["C1b_dif_maxima_global"] > 1e-6 and res["C1b_dif_maxima_vs_C1a_global"] > 1e-6
+
+
+def test_etapa_c1_detecta_una_disposicion_de_lotes_distinta_a_la_de_g2():
+    ctx = contexto()
+    original = ctx.prob_g2
+    ctx.prob_g2 = lambda modelo, filas, tam, sem: original(modelo, filas, 8, sem)                       # lotes de 8 en lugar de los 32 históricos
+    r = D.etapa_c1(ctx)
+    assert r["resumen"]["C1a_dif_maxima_global"] > 1e-6 and any("NO reproduce el OOF" in x for x in r["interpretacion"])
+
+
+def test_etapa_c1_las_salidas_no_contienen_etiquetas_ni_metricas():
+    texto = json.dumps(D.etapa_c1(contexto())).lower()
+    assert not any(x in texto for x in ("label", "y_true", "group_id", "average_precision", "roc_auc", "sensibilidad", "especificidad", "auc"))
+
+
+def preparar_ab(tmp_path):
+    assert correr(tmp_path, "ab", "--autorizacion", AUT) == 0
+    resumen = tmp_path / D.SALIDA_REL / "D-074_ab" / "resumen_diagnostico.json"
+    return resumen, hashlib.sha256(resumen.read_bytes()).hexdigest()
+
+
+def test_cli_c1_exige_el_token_d075_y_las_demas_etapas_no_lo_aceptan(tmp_path):
+    resumen, sha = preparar_ab(tmp_path)
+    args = ("--resumen-ab", str(resumen), "--sha256-resumen-ab", sha)
+    for malo in ("", "CONFIRMADO", "CONFIRMADO:D-074", "CONFIRMADO:D-072", "CONFIRMADO:D-076"):
+        assert correr(tmp_path, "c1", "--autorizacion", malo, *args) == 3
+    assert not (tmp_path / D.SALIDA_REL / "D-075_c1").exists()
+    for etapa in ("plan", "ab", "c"):
+        assert correr(tmp_path, etapa, "--autorizacion", AUT75, *args, "--sufijo", "_x") == 3
+    assert correr(tmp_path, "c1", "--autorizacion", AUT75, *args) == 0
+
+
+def test_cli_c1_exige_el_resumen_de_ab_con_su_sha256(tmp_path):
+    assert correr(tmp_path, "c1", "--autorizacion", AUT75) == 3
+    resumen, sha = preparar_ab(tmp_path)
+    assert correr(tmp_path, "c1", "--autorizacion", AUT75, "--resumen-ab", str(resumen), "--sha256-resumen-ab", "0" * 64) == 3
+    assert correr(tmp_path, "c1", "--autorizacion", AUT75, "--resumen-ab", str(tmp_path / "no.json"), "--sha256-resumen-ab", sha) == 3
+    assert correr(tmp_path, "plan", "--autorizacion", AUT) == 0
+    plan_json = tmp_path / D.SALIDA_REL / "D-074_plan" / "resumen_diagnostico.json"
+    assert correr(tmp_path, "c1", "--autorizacion", AUT75, "--resumen-ab", str(plan_json), "--sha256-resumen-ab", hashlib.sha256(plan_json.read_bytes()).hexdigest()) == 3
+    assert not (tmp_path / D.SALIDA_REL / "D-075_c1").exists()
+
+
+def test_cli_c1_rechaza_tf32_escribe_directorio_nuevo_y_no_toca_ab_ni_d072(tmp_path, monkeypatch):
+    monkeypatch.setattr(torch.backends.cudnn, "allow_tf32", True)
+    d072 = tmp_path / "results" / "r9_gui" / "integracion_desarrollo" / "D-072"
+    d072.mkdir(parents=True)
+    (d072 / "resumen_integracion.json").write_text('{"ok": false}', encoding="utf-8")
+    resumen, sha = preparar_ab(tmp_path)
+    antes_ab, antes_d072 = resumen.read_bytes(), (d072 / "resumen_integracion.json").read_bytes()
+    args = ("--resumen-ab", str(resumen), "--sha256-resumen-ab", sha)
+    assert correr(tmp_path, "c1", "--autorizacion", AUT75, *args, "--tf32", "desactivado") == 3
+    assert correr(tmp_path, "c1", "--autorizacion", AUT75, *args) == 0
+    salida = tmp_path / D.SALIDA_REL / "D-075_c1" / "resumen_diagnostico.json"
+    j = json.loads(salida.read_text(encoding="utf-8"))
+    assert j["etapa"] == "c1" and j["autorizacion"] == AUT75 and j["etiquetas_usadas"] is False and j["metricas_de_clasificacion_calculadas"] is False and j["inferencia_de_ensamble"] is False
+    assert torch.backends.cudnn.allow_tf32 is True                                                     # c1 no toca la bandera TF32
+    assert resumen.read_bytes() == antes_ab and (d072 / "resumen_integracion.json").read_bytes() == antes_d072
+    assert not (tmp_path / D.SALIDA_REL / "D-074_c").exists() and not (tmp_path / D.SALIDA_REL / "D-074_c_tf32_desactivado").exists()
+    assert correr(tmp_path, "c1", "--autorizacion", AUT75, *args) == 3                                  # no sobrescribe
+
+
 # ============================================================================ alcance del código del instrumento
 def test_el_instrumento_no_usa_etiquetas_ni_calcula_metricas_ni_toca_produccion():
     fuente = (Path(__file__).resolve().parents[2] / "src" / "gui" / "diagnostico_numerico.py").read_text(encoding="utf-8")

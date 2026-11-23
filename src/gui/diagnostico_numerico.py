@@ -14,6 +14,9 @@ Etapas (cada una exige `--autorizacion CONFIRMADO:D-074`):
         el objetivo primero y luego los siguientes del pliegue, cíclico). `--tf32 desactivado` repite con `torch.backends.cudnn.allow_tf32 = False` (variante numérica). Alcance justificado: NO se procesa
         el pliegue completo; basta el lote de G2 que contiene a cada imagen objetivo (≤ 2 lotes de ≤ 32 imágenes por miembro) porque la disposición de un lote la determinan su composición y su tamaño.
 
+  c1    (D-075; alcance MÍNIMO tras `ab`, con el SHA-256 de su resumen aportado por la autora) SOLO C1a y C1b con el lote histórico de G2 (el lote de 32 que contiene cada imagen objetivo). NO ejecuta
+        C2 (barrido de tamaños), ni la variante TF32, ni ninguna otra. Token propio `CONFIRMADO:D-075`; salida nueva `D-075_c1`. Las etapas `plan`, `ab` y `c` no se modifican.
+
 Reglas de interpretación (fijadas antes): B1 igualdad bit a bit ⇒ preprocesamiento idéntico (si no, defecto de R9 localizado); B2 |B − A| ≤ 1e-7 ⇒ misma ruta de inferencia con lote 1; si B ≈ A y ambos difieren
 del OOF, la discrepancia es propia de la condición «lote 1» y no del código de R9; C1a = 0.0 ⇒ la disposición de lotes de G2 reproduce el OOF; C1b = 0.0 ⇒ equivalencia exacta del preprocesamiento de la
 interfaz con G2 en esa disposición; C2/TF32 ⇒ dependencia de la forma del lote (y, si desaparece sin TF32, de TF32). Nada de esto cambia la tolerancia de D-072 ni valida el desempeño.
@@ -42,6 +45,7 @@ from src.gui.sistema import SHA256_DECLARACION, _predecir_torch
 from src.gui.validacion_imagen import validar_y_cargar
 
 TOKEN_DECISION = "D-074"
+TOKEN_POR_ETAPA = {"plan": "D-074", "ab": "D-074", "c": "D-074", "c1": "D-075"}                          # cada etapa solo se ejecuta bajo la decisión que la autoriza
 SALIDA_REL = "results/r9_gui/diagnostico_d074"
 REFERENCIA_D072 = {"densenet121__s42__f4": 0.0010489821434020996, "densenet121__s43__f0": 0.00028283149003982544, "densenet121__s43__f4": 0.0006171464920043945,
                    "densenet121__s44__f1": 0.00015097856521606445, "densenet121__s44__f4": 0.0006714761257171631}        # máximos por miembro reportados por la autora (D-072/D-073)
@@ -212,6 +216,37 @@ def etapa_c(ctx: Contexto, tf32_desactivado: bool = False) -> dict:
     return {"etapa": "c", "tf32_desactivado": tf32_desactivado, "miembros": salida, "resumen": res, "interpretacion": interp}
 
 
+# ============================================================================ etapa c1 (D-075): solo C1a y C1b con el lote histórico de G2
+def etapa_c1(ctx: Contexto) -> dict:
+    """C1a: ruta de G2 con el lote exacto de G2; C1b: preprocesamiento de la interfaz apilado en ese mismo lote. Nada más: sin barrido de tamaños (C2) ni variante TF32."""
+    salida = []
+    for m in miembros_prioritarios(ctx.filas_miembros):
+        val, modelo = ctx.val_de_fold(int(m["fold"])), ctx.cargar_modelo(m)
+        imgs, por_lote = [], {}
+        for f in imagenes_objetivo(val):
+            iid, p = str(f["image_id"]), posicion(val, f)
+            lote, s = lote_de_g2(val, p)
+            if s not in por_lote:                                                                           # dos objetivos del mismo lote comparten el cómputo
+                oofs = np.array([ctx.oof(m, str(x["image_id"])) for x in lote], dtype=np.float64)
+                c1a = np.asarray(ctx.prob_g2(modelo, lote, LOTE_G2, int(m["semilla"])), dtype=np.float32).astype(np.float64)                      # disposición exacta de G2
+                c1b = np.asarray(ctx.prob_tensores(modelo, [ctx.tensor_gui(ctx.imagen(x)) for x in lote]), dtype=np.float32).astype(np.float64)   # preprocesamiento de la interfaz
+                por_lote[s] = (oofs, c1a, c1b)
+            oofs, c1a, c1b = por_lote[s]
+            imgs.append({"image_id": iid, "posicion_en_pliegue": p, "lote_g2": {"inicio": s, "tamano": len(lote)},
+                         "C1a_dif_maxima_lote_g2_vs_oof": float(np.abs(c1a - oofs).max()), "C1a_dif_objetivo": float(abs(c1a[p - s] - oofs[p - s])),
+                         "C1b_dif_maxima_lote_interfaz_vs_oof": float(np.abs(c1b - oofs).max()), "C1b_dif_objetivo": float(abs(c1b[p - s] - oofs[p - s])),
+                         "C1b_dif_maxima_vs_C1a": float(np.abs(c1b - c1a).max())})
+        salida.append({"id_corrida": m["id_corrida"], "imagenes": imgs})
+    todas = [i for m in salida for i in m["imagenes"]]
+    res = {"C1a_dif_maxima_global": max(i["C1a_dif_maxima_lote_g2_vs_oof"] for i in todas), "C1b_dif_maxima_global": max(i["C1b_dif_maxima_lote_interfaz_vs_oof"] for i in todas),
+           "C1b_dif_maxima_vs_C1a_global": max(i["C1b_dif_maxima_vs_C1a"] for i in todas)}
+    interp = [f"C1a (lote de G2 con la ruta de G2): máx. {res['C1a_dif_maxima_global']!r} " + ("= 0.0: la disposición histórica de lotes reproduce el OOF." if res["C1a_dif_maxima_global"] == 0.0 else "≠ 0.0: la disposición de G2 NO reproduce el OOF; analizar."),
+              f"C1b (lote de G2 con el preprocesamiento de la interfaz): máx. {res['C1b_dif_maxima_global']!r} " +
+              ("= 0.0: equivalencia exacta del preprocesamiento de la interfaz con G2 en esa disposición." if res["C1b_dif_maxima_global"] == 0.0 else "≠ 0.0: ver detalle."),
+              f"C1b frente a C1a: máx. {res['C1b_dif_maxima_vs_C1a_global']!r}. No se ejecutó C2 ni la variante TF32 (alcance de D-075)."]
+    return {"etapa": "c1", "miembros": salida, "resumen": res, "interpretacion": interp}
+
+
 # ============================================================================ contexto real (Falcon) y CLI
 def contexto_real(root, comprobar_checkpoints: bool = True) -> Contexto:
     import torch
@@ -264,7 +299,7 @@ def escribir(root, nombre: str, contenido: dict, autorizacion: str) -> Path:
 
 def main(argv=None, *, root=None, ctx: Contexto | None = None) -> int:
     ap = argparse.ArgumentParser(description="R9: diagnóstico numérico D-074 (solo desarrollo). Prototipo académico; sin validez diagnóstica.")
-    ap.add_argument("etapa", choices=("plan", "ab", "c"))
+    ap.add_argument("etapa", choices=tuple(TOKEN_POR_ETAPA))
     ap.add_argument("--autorizacion", default="")
     ap.add_argument("--sufijo", default="")
     ap.add_argument("--tf32", choices=("por-defecto", "desactivado"), default="por-defecto")
@@ -274,11 +309,11 @@ def main(argv=None, *, root=None, ctx: Contexto | None = None) -> int:
     root = Path(root or RAIZ_REPO).resolve()
     try:
         token = U.exigir_autorizacion(args.autorizacion)
-        if token.split(":")[1] != TOKEN_DECISION:
-            raise GuardError(f"esta herramienta solo se ejecuta bajo CONFIRMADO:{TOKEN_DECISION}")
+        if token.split(":")[1] != TOKEN_POR_ETAPA[args.etapa]:
+            raise GuardError(f"la etapa {args.etapa} solo se ejecuta bajo CONFIRMADO:{TOKEN_POR_ETAPA[args.etapa]}")
         if args.tf32 == "desactivado" and args.etapa != "c":
-            raise GuardError("--tf32 desactivado solo se admite en la etapa c")
-        if args.etapa == "c":
+            raise GuardError("--tf32 desactivado solo se admite en la etapa c (no en c1: D-075 no autoriza la variante TF32)")
+        if args.etapa in ("c", "c1"):
             ruta = Path(args.resumen_ab or "")
             if not ruta.is_file() or sha256_archivo(ruta) != args.sha256_resumen_ab or json.loads(ruta.read_text(encoding="utf-8")).get("etapa") != "ab":
                 raise GuardError("la etapa c exige el resumen de la etapa ab y su SHA-256 (decisión de la autora tras revisarlo)")
@@ -286,9 +321,9 @@ def main(argv=None, *, root=None, ctx: Contexto | None = None) -> int:
         if args.etapa == "c" and args.tf32 == "desactivado":
             import torch
             torch.backends.cudnn.allow_tf32 = False
-        res = {"plan": lambda: plan(ctx), "ab": lambda: etapa_ab(ctx), "c": lambda: etapa_c(ctx, args.tf32 == "desactivado")}[args.etapa]()
+        res = {"plan": lambda: plan(ctx), "ab": lambda: etapa_ab(ctx), "c": lambda: etapa_c(ctx, args.tf32 == "desactivado"), "c1": lambda: etapa_c1(ctx)}[args.etapa]()
         res["entorno"] = ctx.entorno() if args.etapa != "plan" else None
-        nombre = f"{TOKEN_DECISION}_{args.etapa}" + ("_tf32_desactivado" if args.tf32 == "desactivado" else "") + args.sufijo
+        nombre = f"{TOKEN_POR_ETAPA[args.etapa]}_{args.etapa}" +("_tf32_desactivado" if args.tf32 == "desactivado" else "") + args.sufijo
         destino = escribir(root, nombre, res, token)
         print(json.dumps(res.get("resumen", {"plan": "ver resumen_diagnostico.json"}), indent=2, ensure_ascii=False))
         print("\n".join(res.get("interpretacion", [])))
