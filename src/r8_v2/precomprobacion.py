@@ -1,9 +1,11 @@
 """R8: PRECOMPROBACIÓN ESTRUCTURAL ACOTADA del test (solo lectura; la ejecuta la autora en Falcon con una autorización específica).
 
-Comprueba, sobre el manifiesto real, los tres supuestos del ejecutor `evaluacion_final` antes de gastar la ejecución única:
-  1. `source_split == "test"` en TODAS las filas con `experimental_split == "test"`;
+Comprueba, sobre el manifiesto real, los supuestos del ejecutor `evaluacion_final` antes de gastar la ejecución única:
+  1. ORIGEN MMOTU: `source_split` es el subconjunto de PROCEDENCIA en MMOTU (no la asignación de evaluación). Las filas con `experimental_split == "test"` deben proceder todas del subconjunto de
+     validación original de MMOTU («validation») y ninguna otra fila puede proceder de él (Enmienda 1 del protocolo R8 v2; la versión inicial supuso erróneamente «test»);
   2. los recuentos agregados del mapeo v2 coinciden con los documentados (367 negativas elegibles, 15 positivas elegibles, 87 normales excluidas), sin categorías desconocidas;
-  3. cada imagen ELEGIBLE existe en `data/processed/MMOTU_OTU_2D_experimental/test/images/` (solo `is_file`: no se abre ni se decodifica ninguna imagen).
+  3. cada imagen ELEGIBLE existe en `data/processed/MMOTU_OTU_2D_experimental/test/images/` (solo `is_file`: no se abre ni se decodifica ninguna imagen);
+  4. sin solapamiento por `image_id` ni `image_name` entre el test y el resto del manifiesto ni entre el test y la partición v2 de desarrollo (no es independencia por paciente).
 Además: columnas requeridas, `image_id`/`image_name` únicos y seguros.
 
 Alcance: NO infiere, NO calcula métricas, NO crea el bloqueo de ejecución única, NO escribe en `evaluacion_final_v1`. Lee el manifiesto una vez; el informe contiene SOLO recuentos agregados, booleanos y
@@ -44,9 +46,14 @@ def analizar(root) -> dict:
     mapa = {int(c): 0 for c in E.DATOS["mapeo"]["clase_0_lesion_no_maligna"]}
     mapa.update({int(c): 1 for c in E.DATOS["mapeo"]["clase_1_lesion_maligna"]})
     excluidas = {int(c) for c in E.DATOS["mapeo"]["excluida_ovario_normal"]}
+    origen = E.DATOS["origen_mmotu_de_las_filas_de_test"]
     n_test, source, neg, pos, norm, otros, ids, nombres, dup, inseguros, elegibles = 0, Counter(), 0, 0, 0, 0, set(), set(), 0, 0, []
+    fuera_ids, fuera_nombres, n_origen_fuera = set(), set(), 0
     for bruta in lector:
         if (bruta["experimental_split"] or "").strip().lower() != E.DATOS["subconjunto"]:
+            fuera_ids.add((bruta["image_id"] or "").strip())
+            fuera_nombres.add((bruta["image_name"] or "").strip())
+            n_origen_fuera += (bruta["source_split"] or "").strip().lower() == origen
             continue
         n_test += 1
         source[(bruta["source_split"] or "").strip().lower()] += 1
@@ -75,17 +82,26 @@ def analizar(root) -> dict:
             E.resolver_imagen_prueba(root, f)                                              # solo is_file y rutas restringidas; no abre la imagen
         except GuardError:
             faltantes.append(f["image_name"])
+    try:
+        dev_ids, dev_nombres, sha_dev = E.leer_ids_desarrollo(root)
+    except GuardError:
+        dev_ids = dev_nombres = sha_dev = None
+    solap_manifiesto = len(ids & fuera_ids) + len(nombres & fuera_nombres)
+    solap_dev = None if dev_ids is None else len(ids & dev_ids) + len(nombres & dev_nombres)
     recuentos = {"elegibles_clase_0": neg, "elegibles_clase_1": pos, "normales_excluidas": norm}
-    s1 = n_test > 0 and set(source) == {E.DATOS["subconjunto"]}
+    s1 = n_test > 0 and set(source) == {origen} and n_origen_fuera == 0
     s2 = recuentos == E.DATOS["recuentos_documentados"] and otros == 0
     s3 = bool(elegibles) and not faltantes and (root / E.IMAGENES_DIR / E.DATOS["subconjunto"] / "images").is_dir()
+    s4 = solap_manifiesto == 0 and solap_dev == 0
     basicos = dup == 0 and inseguros == 0
     return {"manifiesto_presente": True, "sha256_bytes_archivo_manifiesto": sha256_bytes(datos), "columnas_requeridas_presentes": True, "filas_con_experimental_split_test": n_test,
-            "supuesto_1_source_split_test": {"cumple": s1, "valores_de_source_split_en_filas_test": dict(source)},
+            "supuesto_1_origen_mmotu": {"cumple": s1, "esperado": origen, "valores_de_source_split_en_filas_test": dict(source), "filas_fuera_del_test_con_ese_origen": n_origen_fuera},
             "supuesto_2_recuentos": {"cumple": s2, "observados": recuentos, "documentados": E.DATOS["recuentos_documentados"], "filas_con_categoria_desconocida_o_no_entera": otros},
             "supuesto_3_imagenes": {"cumple": s3, "imagenes_elegibles": len(elegibles), "imagenes_faltantes": len(faltantes), "primeras_faltantes": faltantes[:MAX_NOMBRES_FALTANTES],
                                     "directorio_presente": (root / E.IMAGENES_DIR / E.DATOS["subconjunto"] / "images").is_dir()},
-            "ids_o_nombres_repetidos_o_vacios": dup, "nombres_inseguros": inseguros, "apto_para_ejecutar": bool(s1 and s2 and s3 and basicos)}
+            "supuesto_4_sin_solapamiento_con_desarrollo": {"cumple": s4, "solapamiento_con_resto_del_manifiesto": solap_manifiesto, "particion_v2_presente": dev_ids is not None,
+                                                           "solapamiento_con_particion_v2": solap_dev, "sha256_bytes_archivo_particion_v2": sha_dev},
+            "ids_o_nombres_repetidos_o_vacios": dup, "nombres_inseguros": inseguros, "apto_para_ejecutar": bool(s1 and s2 and s3 and s4 and basicos)}
 
 
 def precomprobar(root, *, autorizacion, sha256_protocolo, sufijo="", destino=None) -> dict:
@@ -100,7 +116,7 @@ def precomprobar(root, *, autorizacion, sha256_protocolo, sufijo="", destino=Non
         raise GuardError("la precomprobación no puede escribir dentro del directorio de la evaluación única (no crea el bloqueo)")
     r = analizar(root)
     destino = directorio_nuevo(destino)
-    resumen = U.a_json({"esquema": "precomprobacion_estructural_r8/1", "autorizacion": token, "sha256_protocolo": sha256_protocolo, "fecha": U.ahora(),
+    resumen = U.a_json({"esquema": "precomprobacion_estructural_r8/2", "autorizacion": token, "sha256_protocolo": sha256_protocolo, "fecha": U.ahora(),
                         "alcance": "solo lectura del manifiesto y existencia de archivos; sin inferencia, métricas ni bloqueo de ejecución única", "resultado": r})
     escribir_json_nuevo(destino / "resumen_precomprobacion.json", resumen)
     return {"dir": destino, "resultado": r}

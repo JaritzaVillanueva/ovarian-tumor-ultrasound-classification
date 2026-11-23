@@ -62,7 +62,7 @@ def armar(root: Path, *, mutar_filas=None, mutar_manifiesto=None, mutar_fidelida
     r6.write_text(json.dumps({"elegida": {"condicion": "A", "arquitectura": "densenet121"}}), encoding="utf-8")
     part = root / C.REL_PARTICION
     part.parent.mkdir(parents=True, exist_ok=True)
-    part.write_bytes(b"fold,group_id,label_v2\n0,g1,0\n")
+    part.write_bytes(b"image_id,image_name,fold,group_id,label_v2\nDEV_0,DEV_0.png,0,g1,0\nDEV_1,DEV_1.png,1,g2,1\n")
     sha_part = sha(part.read_bytes())
     filas = []
     for sem in SEMILLAS:

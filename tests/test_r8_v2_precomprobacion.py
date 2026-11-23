@@ -31,7 +31,7 @@ def correr(b, **kw):
 def ejecutor_acepta(root) -> bool:
     """¿Superaría el ejecutor la lectura del manifiesto y la resolución de todas las imágenes? (la misma lógica que usa tras el bloqueo)"""
     try:
-        filas, _, _ = E.leer_manifiesto_prueba(root)
+        filas, _, _ = E.leer_manifiesto_prueba(root, E.leer_ids_desarrollo(root)[:2])
         for f in filas:
             E.resolver_imagen_prueba(root, f)
         return True
@@ -48,7 +48,7 @@ def test_manifiesto_conforme_es_apto_y_no_crea_bloqueo(banco):
     r = correr(banco)
     x = r["resultado"]
     assert x["apto_para_ejecutar"] and ejecutor_acepta(banco.root)
-    assert x["supuesto_1_source_split_test"] == {"cumple": True, "valores_de_source_split_en_filas_test": {"test": 469}}
+    assert x["supuesto_1_origen_mmotu"] == {"cumple": True, "esperado": "validation", "valores_de_source_split_en_filas_test": {"validation": 469}, "filas_fuera_del_test_con_ese_origen": 0}
     assert x["supuesto_2_recuentos"]["observados"] == {"elegibles_clase_0": 367, "elegibles_clase_1": 15, "normales_excluidas": 87}
     assert x["supuesto_3_imagenes"]["imagenes_elegibles"] == 382 and x["supuesto_3_imagenes"]["imagenes_faltantes"] == 0
     assert not (banco.root / E.SALIDA_REL).exists()                                            # NO crea el bloqueo de evaluación única
@@ -59,7 +59,7 @@ def test_el_informe_no_contiene_datos_por_imagen(banco):
     texto = (correr(banco)["dir"] / "resumen_precomprobacion.json").read_text(encoding="utf-8")
     assert "T0_" not in texto and "T1_" not in texto and "TN_" not in texto and "original_class" not in texto
     assert set(json.loads(texto)["resultado"]) == {"manifiesto_presente", "sha256_bytes_archivo_manifiesto", "columnas_requeridas_presentes", "filas_con_experimental_split_test",
-                                                   "supuesto_1_source_split_test", "supuesto_2_recuentos", "supuesto_3_imagenes", "ids_o_nombres_repetidos_o_vacios",
+                                                   "supuesto_1_origen_mmotu", "supuesto_2_recuentos", "supuesto_3_imagenes", "supuesto_4_sin_solapamiento_con_desarrollo", "ids_o_nombres_repetidos_o_vacios",
                                                    "nombres_inseguros", "apto_para_ejecutar"}
 
 
@@ -79,8 +79,23 @@ def test_cada_supuesto_incumplido_se_informa_y_coincide_con_el_ejecutor(tmp_path
     def inseguro(f):
         f[1]["image_name"] = "../x.png"
 
-    casos = [("source", source, "supuesto_1_source_split_test"), ("recuentos", recuentos, "supuesto_2_recuentos"), ("categoria", categoria, "supuesto_2_recuentos"),
-             ("repetido", repetido, None), ("inseguro", inseguro, None)]
+    def source_test(f):
+        for x in f:
+            if x["experimental_split"] == "test":
+                x["source_split"] = "test"                                                        # el valor erróneo supuesto en la versión inicial
+
+    def desarrollo_validation(f):
+        f[-1]["source_split"] = "validation"
+
+    def solapa_manifiesto(f):
+        f[-1]["image_id"] = "T0_0000"
+
+    def solapa_particion(f):
+        f[0]["image_id"] = "DEV_0"
+
+    casos = [("source", source, "supuesto_1_origen_mmotu"), ("source_test", source_test, "supuesto_1_origen_mmotu"), ("dev_validation", desarrollo_validation, "supuesto_1_origen_mmotu"),
+             ("recuentos", recuentos, "supuesto_2_recuentos"), ("categoria", categoria, "supuesto_2_recuentos"), ("repetido", repetido, None), ("inseguro", inseguro, None),
+             ("solapa_manifiesto", solapa_manifiesto, "supuesto_4_sin_solapamiento_con_desarrollo"), ("solapa_particion", solapa_particion, "supuesto_4_sin_solapamiento_con_desarrollo")]
     for nombre, mut, clave in casos:
         filas = filas_manifiesto()
         mut(filas)
@@ -155,3 +170,19 @@ def test_cli_codigos_de_salida(banco):
     assert P.main(["--autorizacion", AUT, "--sha256-protocolo", "0" * 64], root=banco.root) == U.CODIGO_SALIDA_GUARDA
     escribir_manifiesto(banco.root, filas_manifiesto(n0=366))
     assert P.main([*comunes, "--sufijo", "_3"], root=banco.root) == 2                       # no apto
+
+
+def test_particion_de_desarrollo_ausente_hace_no_apto_el_supuesto_4(banco):
+    (banco.root / E.C.REL_PARTICION).unlink()
+    x = correr(banco)["resultado"]
+    assert x["supuesto_4_sin_solapamiento_con_desarrollo"]["particion_v2_presente"] is False and x["supuesto_4_sin_solapamiento_con_desarrollo"]["cumple"] is False
+    assert x["apto_para_ejecutar"] is False
+
+
+def test_el_caso_real_observado_por_la_autora_se_reproduce_sintetico_y_ahora_es_apto(banco):
+    """Caso D-063 (exit=2): 469 filas con source_split = validation y recuentos 367/15/87 correctos. Con la Enmienda 1 es apto."""
+    x = correr(banco)["resultado"]
+    assert x["filas_con_experimental_split_test"] == 469 and x["supuesto_1_origen_mmotu"]["valores_de_source_split_en_filas_test"] == {"validation": 469}
+    assert x["supuesto_4_sin_solapamiento_con_desarrollo"] == {"cumple": True, "solapamiento_con_resto_del_manifiesto": 0, "particion_v2_presente": True,
+                                                               "solapamiento_con_particion_v2": 0, "sha256_bytes_archivo_particion_v2": x["supuesto_4_sin_solapamiento_con_desarrollo"]["sha256_bytes_archivo_particion_v2"]}
+    assert x["apto_para_ejecutar"] is True

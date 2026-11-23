@@ -44,8 +44,21 @@
       "elegibles_clase_1": 15,
       "normales_excluidas": 87
     },
-    "recuentos_documentados_nota": "documentados históricamente; si difieren se detiene antes de inferir (enmienda y decisión de la autora)"
+    "recuentos_documentados_nota": "documentados históricamente; si difieren se detiene antes de inferir (enmienda y decisión de la autora)",
+    "origen_mmotu_de_las_filas_de_test": "validation",
+    "origen_mmotu_nota": "source_split es el subconjunto de procedencia en MMOTU (val_cls.txt = validation); experimental_split == test es la asignacion de evaluacion: las 469 filas de test proceden del subconjunto de validacion original de MMOTU y las 1000 de desarrollo del de entrenamiento original; ninguna otra fila puede proceder de validation",
+    "solapamiento_con_desarrollo": "ninguno por image_id ni image_name (resto del manifiesto y particion v2 de desarrollo); no se afirma independencia por paciente"
   },
+  "enmiendas": [
+    {
+      "id": "E1",
+      "fecha": "2026-11-23",
+      "razon": "la version inicial supuso source_split == test para las filas de test; source_split es el subconjunto de procedencia en MMOTU y vale validation (val_cls.txt) para las 469 filas de evaluacion (precomprobacion D-063, exit=2); se documenta ese origen y se añade la comprobacion de no solapamiento por image_id e image_name con el resto del manifiesto y con la particion v2 de desarrollo",
+      "impacto": "ninguno sobre el sistema congelado, el umbral, la estadistica ni los IOV; solo la compuerta de seleccion del test; nuevo SHA-256 del protocolo; la enmienda se decide por el codigo y la documentacion del manifiesto y por el resultado estructural agregado de la precomprobacion, sin predicciones ni metricas",
+      "sha256_protocolo_version_anterior": "0fe96b51bd23b501ba487f5efb591c612689bc1fe6d0868951b5c6fd903fb3df",
+      "trazabilidad": "D-064"
+    }
+  ],
   "estadistica": {
     "evaluacion_unica": true,
     "semilla_bootstrap": 20261123,

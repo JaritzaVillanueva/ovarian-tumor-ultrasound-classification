@@ -47,12 +47,12 @@ def filas_manifiesto(n0=367, n1=15, nn=87, extra=(("train", 12), ("validation", 
     filas = []
     for k in range(n0):
         c = NEG_CLASES[k % len(NEG_CLASES)]
-        filas.append({"image_id": f"T0_{k:04d}", "image_name": f"T0_{k:04d}.png", "source_split": "test", "original_class": c, "binary_label": 1 if c == 6 else 0, "binary_class": "x",
+        filas.append({"image_id": f"T0_{k:04d}", "image_name": f"T0_{k:04d}.png", "source_split": "validation", "original_class": c, "binary_label": 1 if c == 6 else 0, "binary_class": "x",
                       "experimental_split": "test"})
     for k in range(n1):
-        filas.append({"image_id": f"T1_{k:04d}", "image_name": f"T1_{k:04d}.png", "source_split": "test", "original_class": 7, "binary_label": 1, "binary_class": "x", "experimental_split": "test"})
+        filas.append({"image_id": f"T1_{k:04d}", "image_name": f"T1_{k:04d}.png", "source_split": "validation", "original_class": 7, "binary_label": 1, "binary_class": "x", "experimental_split": "test"})
     for k in range(nn):
-        filas.append({"image_id": f"TN_{k:04d}", "image_name": f"TN_{k:04d}.png", "source_split": "test", "original_class": 5, "binary_label": 0, "binary_class": "x", "experimental_split": "test"})
+        filas.append({"image_id": f"TN_{k:04d}", "image_name": f"TN_{k:04d}.png", "source_split": "validation", "original_class": 5, "binary_label": 0, "binary_class": "x", "experimental_split": "test"})
     for split, n in extra:
         for k in range(n):
             filas.append({"image_id": f"D_{split}_{k:03d}", "image_name": f"D_{split}_{k:03d}.png", "source_split": "train", "original_class": 7 if k % 5 == 0 else 1,
@@ -231,7 +231,8 @@ def test_compuerta_fallida_no_abre_el_test_ni_crea_salida(banco, sin_test, extra
 def test_protocolo_alterado_o_con_parametros_distintos_bloquea(banco, sin_test):
     cambios = [lambda p: p["estadistica"].update(n_bootstrap=2000), lambda p: p["estadistica"].update(semilla_bootstrap=20260101), lambda p: p["estadistica"].update(umbral_primario="0.5"),
                lambda p: p["estadistica"].update(analisis_por_numero_de_modelos=True), lambda p: p["estadistica"].update(ic_sensibilidad_especificidad="Wald"),
-               lambda p: p["datos"]["mapeo"].update(clase_1_lesion_maligna=[6, 7]), lambda p: p["datos"]["mapeo"].update(excluida_ovario_normal=[]),
+               lambda p: p["datos"]["mapeo"].update(clase_1_lesion_maligna=[6, 7]), lambda p: p["datos"]["mapeo"].update(excluida_ovario_normal=[]), lambda p: p["datos"].update(origen_mmotu_de_las_filas_de_test="test"),
+               lambda p: p["datos"].pop("solapamiento_con_desarrollo"),
                lambda p: p["datos"]["recuentos_documentados"].update(elegibles_clase_1=16), lambda p: p["iov_originales"]["R8.2"].update(texto="Se reporta AP."),
                lambda p: p["iov_originales"].pop("R8.4"), lambda p: p["sistema"].update(t_hat="0.1"), lambda p: p["sistema"].update(n_miembros=3),
                lambda p: p["historico"].pop("contraste_b2_vs_b0"), lambda p: p["historico"]["contraste_b2_vs_b0"].update(estado="ejecutado y cumplido"),
@@ -333,7 +334,7 @@ def test_categoria_desconocida_detiene_antes_de_inferir(tmp_path, monkeypatch):
 def test_fila_de_test_que_no_procede_de_test_detiene(tmp_path, monkeypatch):
     f = filas_manifiesto()
     f[3]["source_split"] = "train"
-    _aborta_antes_de_inferir(Banco(tmp_path, monkeypatch, f), "partición oficial")
+    _aborta_antes_de_inferir(Banco(tmp_path, monkeypatch, f), "no procede del subconjunto")
 
 
 @pytest.mark.parametrize("cambio,patron", [({"image_id": "T0_0000"}, "repetido"), ({"image_name": "../x.png"}, "no seguro"), ({"image_name": "a/b.png"}, "no seguro"), ({"original_class": "x"}, "no entero")])
@@ -571,3 +572,53 @@ def test_predictor_usa_las_piezas_de_g2_y_devuelve_la_probabilidad_maligna(tmp_p
     with torch.no_grad():
         ref = torch.softmax(modelo(esperado), dim=1)[:, 1].numpy().astype(np.float32)
     assert prob.dtype == np.float32 and prob.shape == (5,) and np.allclose(prob, ref, atol=1e-6)
+
+
+# ============================================================================ Enmienda 1: origen MMOTU (source_split) y solapamiento con desarrollo
+def test_source_split_de_las_filas_de_test_es_validation_no_test(tmp_path, monkeypatch):
+    f = filas_manifiesto()
+    assert {x["source_split"] for x in f if x["experimental_split"] == "test"} == {"validation"}
+    assert {x["source_split"] for x in f if x["experimental_split"] != "test"} == {"train"}
+    Banco(tmp_path, monkeypatch, f).ejecutar()                                                              # procede
+
+
+def test_el_valor_historico_equivocado_source_split_test_se_rechaza(tmp_path, monkeypatch):
+    f = filas_manifiesto()
+    for x in f:
+        if x["experimental_split"] == "test":
+            x["source_split"] = "test"
+    _aborta_antes_de_inferir(Banco(tmp_path, monkeypatch, f), "no procede del subconjunto")
+
+
+def test_fila_de_desarrollo_con_origen_validation_detiene(tmp_path, monkeypatch):
+    f = filas_manifiesto()
+    f[-1]["source_split"] = "validation"
+    _aborta_antes_de_inferir(Banco(tmp_path, monkeypatch, f), "fuera del test con procedencia")
+
+
+def test_solapamiento_de_id_o_nombre_con_el_resto_del_manifiesto_detiene(tmp_path, monkeypatch):
+    for campo, valor in (("image_id", "T0_0000"), ("image_name", "T0_0001.png")):
+        f = filas_manifiesto()
+        f[-1][campo] = valor
+        _aborta_antes_de_inferir(Banco(tmp_path / campo, monkeypatch, f), "solapamiento")
+
+
+def test_solapamiento_con_la_particion_de_desarrollo_detiene(tmp_path, monkeypatch):
+    for campo, valor in (("image_id", "DEV_0"), ("image_name", "DEV_1.png")):
+        f = filas_manifiesto()
+        f[0][campo] = valor
+        b = Banco(tmp_path / campo, monkeypatch, f)
+        if campo == "image_name":
+            (b.root / E.IMAGENES_DIR / "test" / "images" / "DEV_1.png").write_bytes(b"x")
+        _aborta_antes_de_inferir(b, "particion de desarrollo|partición de desarrollo")
+
+
+def test_particion_de_desarrollo_alterada_o_ausente_bloquea_antes_de_abrir_el_test(banco, sin_test):
+    p = banco.root / TC.C.REL_PARTICION
+    p.write_bytes(p.read_bytes() + b"DEV_9,DEV_9.png,2,g9,0\n")
+    with pytest.raises(GuardError, match="partición de desarrollo"):
+        banco.ejecutar()
+    p.unlink()
+    with pytest.raises(GuardError, match="falta la partición"):
+        banco.ejecutar()
+    assert sin_salida(banco)

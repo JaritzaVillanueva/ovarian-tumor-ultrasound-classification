@@ -60,7 +60,11 @@ DATOS = {
     "manifiesto": MANIFIESTO_TEST_REL, "imagenes_dir": IMAGENES_DIR, "subconjunto": "test",
     "mapeo": {"clase_0_lesion_no_maligna": [0, 1, 2, 3, 4, 6], "clase_1_lesion_maligna": [7], "excluida_ovario_normal": [5]},
     "recuentos_documentados": {"elegibles_clase_0": 367, "elegibles_clase_1": 15, "normales_excluidas": 87},
-    "recuentos_documentados_nota": "documentados históricamente; si difieren se detiene antes de inferir (enmienda y decisión de la autora)"}
+    "recuentos_documentados_nota": "documentados históricamente; si difieren se detiene antes de inferir (enmienda y decisión de la autora)",
+    "origen_mmotu_de_las_filas_de_test": "validation",
+    "origen_mmotu_nota": "source_split es el subconjunto de procedencia en MMOTU (val_cls.txt = validation); experimental_split == test es la asignacion de evaluacion: las 469 filas de test proceden del "
+                         "subconjunto de validacion original de MMOTU y las 1000 de desarrollo del de entrenamiento original; ninguna otra fila puede proceder de validation",
+    "solapamiento_con_desarrollo": "ninguno por image_id ni image_name (resto del manifiesto y particion v2 de desarrollo); no se afirma independencia por paciente"}
 ESTADISTICA = {
     "evaluacion_unica": True, "semilla_bootstrap": ES.SEMILLA_BOOTSTRAP, "n_bootstrap": ES.N_BOOTSTRAP, "nivel_ic": ES.NIVEL_IC,
     "ic_ap_roc_auc": "bootstrap percentil estratificado por imagen", "ic_sensibilidad_especificidad": "binomial exacto de Clopper-Pearson",
@@ -157,6 +161,7 @@ def preparar_contexto(root, *, autorizacion, sha256_protocolo, sha256_declaracio
     t_hat = SF.t_hat_exacto(config["sistema"]["umbral"]["t_hat"])
     _exigir(config["sistema"]["umbral"]["t_hat"] == SF.T_HAT == protocolo["estadistica"]["umbral_primario"], "t_hat del YAML congelado distinto del del protocolo (no se modifica el umbral)")
     miembros = C.validar_miembros(C.leer_tabla(root / C.MIEMBROS_REL), config)
+    dev_ids = leer_ids_desarrollo(root, config["archivos_de_procedencia"][C.REL_PARTICION])                 # partición de desarrollo (nunca test): ids y nombres para descartar solapamiento
     destino = exigir_salida_segura(root, root / SALIDA_REL, "results/r8_v2")
     _exigir(not destino.exists(), f"K5: {SALIDA_REL} ya existe: R8 se ejecuta una sola vez y no se sobrescribe (si hubo una ejecución previa, requiere una decisión documentada de la autora)")
     dev = device if device is not None else SF._dispositivo()
@@ -165,7 +170,7 @@ def preparar_contexto(root, *, autorizacion, sha256_protocolo, sha256_declaracio
     efectivo = entorno if entorno is not None else SF._versiones()
     advertencias = [f"{k}: declarado {config['entorno_registrado'].get(k)!r}, efectivo {efectivo.get(k)!r}" for k in C.ENTORNO_CLAVES if str(config["entorno_registrado"].get(k)) != str(efectivo.get(k))]
     return {"token": token, "protocolo": protocolo, "sha256_protocolo": sha256_protocolo, "sha256_declaracion": sha_decl, "verificacion_declaracion": verif_decl, "config": config, "config_g2": config_g2,
-            "t_hat": t_hat, "miembros": miembros, "modelos": modelos, "device": dev, "destino": destino, "inicio": inicio, "verificar": verificar, "entorno": efectivo, "advertencias_entorno": advertencias}
+            "t_hat": t_hat, "miembros": miembros, "dev": dev_ids, "modelos": modelos, "device": dev, "destino": destino, "inicio": inicio, "verificar": verificar, "entorno": efectivo, "advertencias_entorno": advertencias}
 
 
 # ============================================================================ datos del test (solo el ejecutor oficial; tras el bloqueo)
@@ -202,8 +207,28 @@ def leer_encabezado_manifiesto(root) -> list:
     return columnas
 
 
-def leer_manifiesto_prueba(root):
-    """Selecciona las imágenes ELEGIBLES del test (mapeo v2). Devuelve filas SIN etiquetas, las clases reservadas y recuentos. Detiene ante cualquier inconsistencia."""
+def leer_ids_desarrollo(root, sha256_esperado=None):
+    """`image_id` e `image_name` de la partición v2 de DESARROLLO (nunca test). Si se da `sha256_esperado`, el archivo debe coincidir (pin del YAML congelado)."""
+    ruta = Path(root) / C.REL_PARTICION
+    _exigir(ruta.is_file(), f"falta la partición de desarrollo {C.REL_PARTICION}")
+    datos = ruta.read_bytes()
+    sha = sha256_bytes(datos)
+    _exigir(sha256_esperado is None or sha == sha256_esperado, "la partición de desarrollo difiere del SHA-256 fijado en el YAML congelado")
+    lector = csv.DictReader(io.StringIO(datos.decode("utf-8"), newline=""))
+    _exigir({"image_id", "image_name"} <= set(lector.fieldnames or []), "la partición de desarrollo no tiene image_id e image_name")
+    ids, nombres = set(), set()
+    for r in lector:
+        ids.add((r["image_id"] or "").strip())
+        nombres.add((r["image_name"] or "").strip())
+    _exigir(bool(ids), "la partición de desarrollo está vacía")
+    return ids, nombres, sha
+
+
+def leer_manifiesto_prueba(root, dev):
+    """Selecciona las imágenes ELEGIBLES del test (mapeo v2). Devuelve filas SIN etiquetas, las clases reservadas y recuentos. Detiene ante cualquier inconsistencia.
+
+    `source_split` es el subconjunto de PROCEDENCIA en MMOTU (las filas de test proceden del subconjunto de validación original: «validation»); `experimental_split == "test"` es la
+    asignación de evaluación. `dev` = (ids, nombres) de la partición de desarrollo: no puede haber solapamiento por `image_id` ni `image_name`."""
     datos = (Path(root) / MANIFIESTO_TEST_REL).read_bytes()                                  # un único acceso: hash y análisis
     sha = sha256_bytes(datos)
     lector = csv.DictReader(io.StringIO(datos.decode("utf-8"), newline=""))
@@ -212,11 +237,16 @@ def leer_manifiesto_prueba(root):
     mapa = {int(c): 0 for c in DATOS["mapeo"]["clase_0_lesion_no_maligna"]}
     mapa.update({int(c): 1 for c in DATOS["mapeo"]["clase_1_lesion_maligna"]})
     excluidas = {int(c) for c in DATOS["mapeo"]["excluida_ovario_normal"]}
+    origen = DATOS["origen_mmotu_de_las_filas_de_test"]
     filas, clases, ids, nombres, n_norm = [], {}, set(), set(), 0
+    fuera_ids, fuera_nombres, n_origen_fuera = set(), set(), 0
     for bruta in lector:
         if (bruta["experimental_split"] or "").strip().lower() != DATOS["subconjunto"]:
+            fuera_ids.add((bruta["image_id"] or "").strip())
+            fuera_nombres.add((bruta["image_name"] or "").strip())
+            n_origen_fuera += (bruta["source_split"] or "").strip().lower() == origen
             continue
-        _exigir((bruta["source_split"] or "").strip().lower() == DATOS["subconjunto"], "una fila del subconjunto test no procede de la partición oficial de test")
+        _exigir((bruta["source_split"] or "").strip().lower() == origen, f"una fila de test no procede del subconjunto de MMOTU «{origen}» previsto")
         iid, nombre = (bruta["image_id"] or "").strip(), (bruta["image_name"] or "").strip()
         try:
             oc = int(str(bruta["original_class"]).strip())
@@ -232,11 +262,15 @@ def leer_manifiesto_prueba(root):
         _exigir(oc in mapa, f"categoría original desconocida en el test: {oc}")
         filas.append({"image_id": iid, "image_name": nombre, "image_path": f"{IMAGENES_DIR}/{DATOS['subconjunto']}/images/{nombre}"})
         clases[iid] = oc
+    _exigir(n_origen_fuera == 0, f"hay filas fuera del test con procedencia MMOTU «{origen}»: la partición de evaluación no es la prevista")
+    _exigir(not (ids & fuera_ids) and not (nombres & fuera_nombres), "solapamiento por image_id o image_name entre el test y el resto del manifiesto")
+    _exigir(not (ids & set(dev[0])) and not (nombres & set(dev[1])), "solapamiento por image_id o image_name entre el test y la partición de desarrollo")
     filas.sort(key=lambda f: f["image_id"])
     n1 = sum(1 for c in clases.values() if mapa[c] == 1)
     recuentos = {"elegibles_clase_0": len(filas) - n1, "elegibles_clase_1": n1, "normales_excluidas": n_norm}
     _exigir(recuentos == DATOS["recuentos_documentados"], f"los recuentos del test {recuentos} difieren de los documentados {DATOS['recuentos_documentados']}: se detiene antes de inferir")
-    return filas, Reservadas(clases, sha), {"sha256_bytes_archivo_manifiesto": sha, "recuentos": recuentos, "n_elegibles": len(filas)}
+    return filas, Reservadas(clases, sha), {"sha256_bytes_archivo_manifiesto": sha, "recuentos": recuentos, "n_elegibles": len(filas), "origen_mmotu_filas_test": origen,
+                                            "solapamiento_con_desarrollo": 0}
 
 
 def exigir_filas_sin_etiquetas(filas) -> None:
@@ -329,7 +363,7 @@ def ejecutar(root, *, predecir=None, **kw) -> dict:
 
 def _fases(root, ctx, destino, base, predecir) -> dict:
     miembros, config_g2, t_hat = ctx["miembros"], ctx["config_g2"], ctx["t_hat"]
-    filas, reservadas, info = leer_manifiesto_prueba(root)                               # 1) selección sin etiquetas visibles
+    filas, reservadas, info = leer_manifiesto_prueba(root, ctx["dev"])                               # 1) selección sin etiquetas visibles
     for f in filas:
         resolver_imagen_prueba(root, f)                                                  # todas las imágenes existen y están en test/images antes de inferir
     exigir_filas_sin_etiquetas(filas)
