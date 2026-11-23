@@ -1,0 +1,115 @@
+# Configuración `sistema_congelado_v1` (R8, mapeo v2): artefacto NUEVO de PREPARACIÓN del congelamiento formal del sistema final. NO declara el congelamiento: la declaración
+# formal es una decisión posterior y separada, que solo se toma tras verificar los commits y los artefactos (modo `verificar`). No sustituye ni edita `configs/r7_v2/sistema_final_v1.yaml`.
+#
+# Sistema: DenseNet121 + A, 15 checkpoints de G2 (los del manifiesto verificado), preprocesamiento original de G2, promedio aritmético simple, regla `p >= t_hat`.
+# `t_hat` = regla experimental previa a R8; NO es un umbral validado para quince modelos y no garantiza una sensibilidad del 90 %. Test cerrado; 180 normales fuera.
+# Sin circularidad: el protocolo no contiene su propio hash; este YAML registrará su commit y SHA-256 en un commit posterior (esquema de dos commits).
+# Partición provisional (phash_le8_v1, exploratoria, post hoc); conformidad académica del asesor: PENDIENTE.
+
+esquema: sistema_congelado_v1_config/1
+
+protocolo:
+  id: sistema_congelado_v1
+  ruta: src/r8_v2/protocolo_sistema_congelado_v1.md
+  estado: "preparado para congelamiento; el protocolo se versiona al registrarse commit y hash (commit posterior); la declaración formal es una decisión separada"
+  git_commit: null
+  sha256_contenido_blob: null
+  conformidad_academica_asesor: PENDIENTE
+  trazabilidad: "D-057"
+
+estudio:
+  tarea: "preparación del congelamiento del sistema final de clasificación binaria de lesión (imagen 2D) previo a R8, mapeo v2"
+  mapeo: v2
+  particion: phash_le8_v1
+  leyenda: "partición provisional (phash_le8_v1, exploratoria, post hoc); conformidad académica pendiente"
+
+referencia_g2:                      # solo lectura: partición, K1-K4, receta (entrada 224 con relleno, normalización), corridas A|densenet121
+  config: configs/r4_v2/g2_baseline_v1.yaml
+  sha256_contenido_blob: 6626f34e654db0ca119e2e1fab11bd12f68d3791481c55cc49c2e1e557fb17ff
+
+referencia_r6:                      # DEBE existir y elegir A|densenet121; su ausencia o una elegida distinta bloquea
+  salida: results/r7_v2/phash_le8_v1/seleccion_r6/seleccion_r6.json
+  elegida: {condicion: A, arquitectura: densenet121}
+
+sistema:                            # el código lo compara con sus constantes (anti-deriva); cualquier cambio exige una enmienda documentada previa al congelamiento
+  estado: "preparado para congelamiento; no declarado congelado (la declaración formal es una decisión posterior); no validado para el ensamble de quince"
+  congelado: false
+  arquitectura: densenet121
+  representacion: A
+  semillas: [42, 43, 44]
+  folds: [0, 1, 2, 3, 4]
+  n_miembros: 15
+  preprocesamiento: "el original de G2, sin modificaciones (get_val_transforms, DatasetLesiones, create_dataloader y predict de src/classification y src/r4_v2); sin augmentation"
+  agregacion: "promedio aritmetico simple de las 15 probabilidades de la clase maligna (softmax float32 por modelo; promedio en float64); sin ponderaciones ni seleccion de miembros"
+  regla: "p >= t_hat"
+  empates: "no se rompen"
+  umbral:
+    t_hat: "0.08456226376195748"    # cadena exacta: repr(float(cadena)) debe reproducirla
+    s_star: "0.90"
+    estatus: "regla experimental previa a R8; no es un umbral validado para quince modelos; no garantiza una sensibilidad del 90 %"
+    origen: "q_barra de tres modelos por imagen (umbral_sistema_v1); calculado en desarrollo"
+  alcance: "clasificacion binaria de lesion a nivel de imagen 2D; no detecta ovarios normales; sin uso clinico validado"
+
+miembros:                           # copia byte a byte del manifiesto de D-055; el SHA-256 debe ser el de `manifiesto_miembros.csv` (comprobado por el código)
+  archivo: configs/r8_v2/manifiesto_miembros_v1.csv
+  sha256_bytes_archivo: ed9d5beff26880ad7c1fc1e8f3cb77813cc54a3a2b57eaade294c9dc7ee886e2
+
+archivos_de_procedencia:            # SHA-256 de bytes, reportados y verificados por la autora en Falcon (HEAD 95d26b60de479e1de02dc1ddba0da20d2d2066cf, árbol rastreado limpio)
+  results/r7_v2/phash_le8_v1/sistema_final_v1/manifiesto/manifiesto_miembros.csv: ed9d5beff26880ad7c1fc1e8f3cb77813cc54a3a2b57eaade294c9dc7ee886e2
+  results/r7_v2/phash_le8_v1/sistema_final_v1/manifiesto/manifiesto_miembros.json: 771c5054df09710f2fd36c5aa936877761a5a5c6e2ca44a866cdc54f56b47d74
+  results/r7_v2/phash_le8_v1/sistema_final_v1/fidelidad/fidelidad_por_miembro.csv: da03880e803d20c021cdd8d1b1e413b100d956d8cd7043f597db74250086e388
+  results/r7_v2/phash_le8_v1/sistema_final_v1/fidelidad/resumen_fidelidad.json: 3d06c38c62233555abd2c2c311257a92e9e9e67150849962097877a244218938
+  results/r7_v2/phash_le8_v1/umbral_sistema_v1/umbral_primario.json: 1d0937b6c0a86b786d7151fe139ab127d465f39d129b883adc90dd86dde04777
+  results/r7_v2/phash_le8_v1/umbral_sistema_v1/resumen_umbral.json: 3740ced5124a69f3955a008708036656d769ead2c1ced4984e133f6362c97d98
+  results/r7_v2/phash_le8_v1/umbral_sistema_v1/trazabilidad.json: 2cce7ccfa36748b1bd4104779f16e5c8e3520c9b75a1e2dd615374ec67bfe284
+  configs/splits/v2_auto/cv_folds_phash_le8_v1.csv: b28badc4181fb0068f1e6ae47567ab69368bfb81bdd18542b128a8e48e5a145e
+
+entorno_registrado:                 # versiones efectivas reportadas por la autora en Falcon; una diferencia se registra como advertencia (no bloquea esta verificación)
+  python: "3.10.12"
+  torch: "2.5.1+cu121"
+  torchvision: "0.20.1+cu121"
+  numpy: "2.2.6"
+  gpu: "NVIDIA RTX 3080"
+  driver: "580.178.04"
+  commit_codigo_entrenamiento_g2: bc63f03     # los checkpoints se entrenaron con este commit; la fidelidad (diferencia máxima 0.0) se verificó con HEAD 95d26b6
+
+trazabilidad: [D-050, D-051, D-053, D-054, D-055, D-056, D-057]   # procedencia: umbral (D-050/D-051), delta de ensamble (D-053/D-054), manifiesto y fidelidad (D-055/D-056), preparación (D-057)
+
+salidas:
+  verificacion: results/r8_v2/phash_le8_v1/sistema_congelado_v1/verificacion
+
+integridad:                         # comprobación sencilla propia (estilo sistema_final; no es K6 de G2)
+  rutas_sin_cambios: [src/r8_v2, src/r7_v2, src/r5_v2, src/r4_v2, src/classification, src/segmentation, configs/r4_v2, configs/r5_v2, configs/r7_v2, configs/r8_v2]
+  archivos_con_huella:
+    - configs/r8_v2/sistema_congelado_v1.yaml
+    - configs/r8_v2/manifiesto_miembros_v1.csv
+    - src/r8_v2/protocolo_sistema_congelado_v1.md
+    - src/r8_v2/__init__.py
+    - src/r8_v2/congelamiento.py
+    - src/r7_v2/sistema_final.py
+    - src/r7_v2/umbral_sistema.py
+    - src/r7_v2/delta_ensamble.py
+    - configs/r4_v2/g2_baseline_v1.yaml
+    - configs/r4_v2/referencia_pesos_preentrenados_v1.json
+    - src/r4_v2/__init__.py
+    - src/r4_v2/common.py
+    - src/r4_v2/particion.py
+    - src/r4_v2/modos.py
+    - src/r4_v2/integridad.py
+    - src/r4_v2/entrenamiento.py
+    - src/r4_v2/dataset_lesiones.py
+    - src/r4_v2/pesos.py
+    - src/r4_v2/metricas.py
+    - src/r4_v2/bootstrap.py
+    - src/r4_v2/agregacion.py
+    - src/r4_v2/calibracion.py
+    - src/classification/__init__.py
+    - src/classification/models.py
+    - src/classification/transforms.py
+    - src/classification/dataloader.py
+    - src/classification/evaluate.py
+
+acceso_test:
+  estado: cerrado
+  nuevos_accesos: prohibidos
+  nota: "solo desarrollo; las 180 normales (categoría 5) quedan fuera; el bloqueo no borra los accesos históricos declarados en G5/R8"
