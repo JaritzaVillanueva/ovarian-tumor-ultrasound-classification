@@ -12,8 +12,8 @@ protocolo:
   id: g4_optimizacion_v1
   ruta: src/r7_v2/protocolo_g4_v1.md
   estado: "borrador; se congela al registrarse commit y hash del protocolo (commit posterior)"
-  git_commit: null
-  sha256_contenido_blob: null
+  git_commit: 812967fcf63fecbd17fc612777e65947d3bdc147
+  sha256_contenido_blob: 6e0eaef96791c9a244ebec889598cc04d24223722d7afb0ca6dd2f3d1e4c0cd5
   conformidad_academica_asesor: PENDIENTE
   trazabilidad: "pendiente de registro"
 
