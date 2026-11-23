@@ -1,0 +1,94 @@
+# Configuración `delta_ensamble_v1` (R7, D-051): contrastes PAREADOS del ensamble de tres semillas (q_barra) frente a cada semilla individual. Exploratorio, solo desarrollo.
+#
+# Estado: borrador para congelamiento por la autora. NO autoriza ejecutar sobre predicciones reales.
+# Sin circularidad: el protocolo no contiene su propio hash; este YAML registrará commit y SHA-256 del protocolo en un commit posterior (como umbral_sistema).
+# Entrada única: umbral_sistema_v1/q_barra_oof.csv (verificado por SHA-256) y group_id de la partición. Test cerrado; 180 normales fuera.
+# Partición provisional (phash_le8_v1, exploratoria, post hoc); conformidad académica del asesor: PENDIENTE.
+
+esquema: delta_ensamble_v1_config/1
+
+protocolo:
+  id: delta_ensamble_v1
+  ruta: src/r7_v2/protocolo_delta_ensamble_v1.md
+  estado: "borrador; se congela al registrarse commit y hash del protocolo (commit posterior)"
+  git_commit: null
+  sha256_contenido_blob: null
+  conformidad_academica_asesor: PENDIENTE
+  trazabilidad: "D-051"
+
+estudio:
+  tarea: "contrastes pareados de AP y ROC-AUC: ensamble de tres semillas (q_barra) frente a cada semilla individual, mapeo v2"
+  mapeo: v2
+  particion: phash_le8_v1
+  leyenda: "partición provisional (phash_le8_v1, exploratoria, post hoc); conformidad académica pendiente"
+
+referencia_g2:                      # solo lectura: partición, K1-K4 e índices b
+  config: configs/r4_v2/g2_baseline_v1.yaml
+  sha256_contenido_blob: 6626f34e654db0ca119e2e1fab11bd12f68d3791481c55cc49c2e1e557fb17ff
+  indices_b_dir: results/r4_v2/phash_le8_v1/g2_baseline_v1/reporte
+
+referencia_r6:                      # DEBE existir y elegir A|densenet121; su ausencia o una elegida distinta bloquea
+  salida: results/r7_v2/phash_le8_v1/seleccion_r6/seleccion_r6.json
+  elegida: {condicion: A, arquitectura: densenet121}
+
+entrada_dir: results/r7_v2/phash_le8_v1/umbral_sistema_v1
+
+procedimiento:                      # el código lo compara con sus constantes (anti-deriva); cualquier cambio exige enmienda previa al congelamiento
+  entrada: "umbral_sistema_v1/q_barra_oof.csv verificado por SHA-256 contra trazabilidad.json"
+  columnas: [image_id, fold, label_v2, p_s42, p_s43, p_s44, q_barra]
+  metrica_primaria: ap
+  metrica_secundaria: roc_auc
+  contrastes_individuales: {comparador: p_s, semillas: [42, 43, 44]}
+  resumen_descriptivo: "media de las metricas individuales calculada dentro de cada remuestreo; solo descriptivo"
+  bootstrap:
+    n_remuestreos: 10000
+    nivel_ic: 0.95
+    estratificado: true
+    no_estratificado: true
+    indices_b: "los de G2 (verificar_indices_g2)"
+  multiplicidad:
+    k_contrastes: 3
+    nivel_ajustado: "1 - 0.05/3"
+    percentiles: "alfa/6 y 1 - alfa/6"
+    rotulo: "ajuste por multiplicidad; no corrige el sesgo de selección exploratoria"
+  exploratorio: true
+  reabre_r6: false
+  cambia_arquitectura: false
+  evidencia_sobre_ensamble_de_quince: false
+
+salidas:
+  delta: results/r7_v2/phash_le8_v1/delta_ensamble_v1
+
+integridad:                         # comprobación sencilla propia (estilo umbral_sistema; no es K6 de G2)
+  rutas_sin_cambios: [src/r7_v2, src/r5_v2, src/r4_v2, src/classification, src/segmentation, configs/r4_v2, configs/r5_v2, configs/r7_v2]
+  archivos_con_huella:
+    - configs/r7_v2/delta_ensamble_v1.yaml
+    - src/r7_v2/protocolo_delta_ensamble_v1.md
+    - src/r7_v2/delta_ensamble.py
+    - src/r7_v2/umbral_sistema.py
+    - configs/r4_v2/g2_baseline_v1.yaml
+    - src/r7_v2/__init__.py
+    - src/r7_v2/g4_comun.py
+    - src/r7_v2/g4_presupuesto.py
+    - src/r7_v2/g4_agente.py
+    - src/r7_v2/g4_reporte.py
+    - src/r5_v2/__init__.py
+    - src/r5_v2/comun.py
+    - src/r5_v2/g3b_comun.py
+    - src/r5_v2/g3b_reporte_condiciones.py
+    - src/r4_v2/__init__.py
+    - src/r4_v2/common.py
+    - src/r4_v2/particion.py
+    - src/r4_v2/modos.py
+    - src/r4_v2/integridad.py
+    - src/r4_v2/entrenamiento.py
+    - src/r4_v2/pesos.py
+    - src/r4_v2/metricas.py
+    - src/r4_v2/bootstrap.py
+    - src/r4_v2/agregacion.py
+    - src/r4_v2/calibracion.py
+
+acceso_test:
+  estado: cerrado
+  nuevos_accesos: prohibidos
+  nota: "solo train/ y validation/ de desarrollo; las 180 normales (categoría 5) quedan fuera; el bloqueo no borra los accesos históricos declarados en G5/R8"
