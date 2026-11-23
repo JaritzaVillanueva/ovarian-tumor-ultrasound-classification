@@ -225,12 +225,25 @@ def test_planificadas_sin_duplicar_y_con_tope_por_fase(tmp_path):
 # ============================================================================ configuración, estrategias, orden fijo
 def test_configuracion_real_valida_y_es_invariante():
     config = C.cargar_config_g4(REPO / C.CONFIG_REL)
-    assert config["protocolo"]["git_commit"] is None and config["protocolo"]["sha256_contenido_blob"] is None and config["protocolo"]["conformidad_academica_asesor"] == "PENDIENTE"
+    import re
+    prot = config["protocolo"]
+    gc, sh = prot["git_commit"], prot["sha256_contenido_blob"]
+    assert prot["conformidad_academica_asesor"] == "PENDIENTE"
+    # D-049: estado legítimo ANTES del registro (ambos null) o DESPUÉS (commit de 40 hex y SHA-256 de 64 hex); nunca uno solo ni valores mal formados
+    assert (gc is None and sh is None) or (isinstance(gc, str) and re.fullmatch(r"[0-9a-f]{40}", gc) and isinstance(sh, str) and re.fullmatch(r"[0-9a-f]{64}", sh))
+    if gc is not None:              # tras el registro, el SHA-256 debe ser el del protocolo versionado en ese commit (o, sin Git, el del archivo del árbol)
+        r = subprocess.run(["git", "-C", str(REPO), "cat-file", "blob", f"{gc}:{C.PROTOCOLO_REL}"], capture_output=True)
+        contenido = r.stdout if r.returncode == 0 else (REPO / C.PROTOCOLO_REL).read_bytes().replace(b"\r\n", b"\n")
+        assert hashlib.sha256(contenido).hexdigest() == sh
     assert config["referencia_g2"]["sha256_contenido_blob"] == "6626f34e654db0ca119e2e1fab11bd12f68d3791481c55cc49c2e1e557fb17ff"
     assert config["acceso_test"]["estado"] == "cerrado" and config["presupuesto"]["tope_intentos"] == 75
     assert [e["id"] for e in C.estrategias_fase_a(config)] == ["S1_a050", "S2_g200", "S1_a025", "S2_g100", "S1_a075", "S2_g050"]
     texto = (REPO / C.CONFIG_REL).read_text(encoding="utf-8")
-    assert texto.count("git_commit: null") == 1 and texto.count("sha256_contenido_blob: null") == 1                 # una línea cada una para `sed`
+    if gc is None:                                                                                                    # antes del registro: una línea null cada una para `sed`
+        assert texto.count("git_commit: null") == 1 and texto.count("sha256_contenido_blob: null") == 1
+    else:                                                                                                             # tras el registro: ya no quedan null y cada valor figura una sola vez
+        assert "git_commit: null" not in texto and "sha256_contenido_blob: null" not in texto
+        assert texto.count(f"  git_commit: {gc}") == 1 and texto.count(f"  sha256_contenido_blob: {sh}") == 1
     cambios = [lambda c: c["estrategias"].reverse(), lambda c: c["estrategias"][0].update(alpha=0.6), lambda c: c["presupuesto"].update(tope_intentos=100),
                lambda c: c["presupuesto"]["planificadas"].update(C=30), lambda c: c["acceso_test"].update(estado="abierto"),
                lambda c: c["base"].update(arquitectura="resnet50"), lambda c: c["diseno"].update(raiz_resultados="results/r7_v2/test/x/"),
