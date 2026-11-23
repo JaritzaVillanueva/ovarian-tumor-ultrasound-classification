@@ -1,0 +1,210 @@
+{
+  "esquema": "declaracion_congelamiento_v1/1",
+  "declaracion": {
+    "decision": "D-060",
+    "fecha": "2026-11-23",
+    "estado": "sistema declarado congelado para R8 (decision de la autora)",
+    "autoriza": "la autora",
+    "conformidad_academica_asesor": "PENDIENTE",
+    "yaml_conserva_congelado_false_historico": true
+  },
+  "sistema": {
+    "arquitectura": "densenet121",
+    "representacion": "A",
+    "semillas": [
+      42,
+      43,
+      44
+    ],
+    "folds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "n_miembros": 15,
+    "preprocesamiento": "el original de G2, sin modificaciones (get_val_transforms, DatasetLesiones, create_dataloader y predict de src/classification y src/r4_v2); sin augmentation",
+    "agregacion": "promedio aritmetico simple de las 15 probabilidades de la clase maligna (softmax float32 por modelo; promedio en float64); sin ponderaciones ni seleccion de miembros",
+    "regla": "p >= t_hat",
+    "empates": "no se rompen",
+    "umbral": {
+      "t_hat": "0.08456226376195748",
+      "s_star": "0.90",
+      "estatus": "regla experimental previa a R8; no es un umbral validado para quince modelos; no garantiza una sensibilidad del 90 %",
+      "origen": "q_barra de tres modelos por imagen (umbral_sistema_v1); calculado en desarrollo"
+    },
+    "alcance": "clasificacion binaria de lesion a nivel de imagen 2D; no detecta ovarios normales; sin uso clinico validado"
+  },
+  "artefactos": {
+    "config": {
+      "ruta": "configs/r8_v2/sistema_congelado_v1.yaml",
+      "sha256_contenido": "cafc8bd8b32d80426b93cc32c1a0da5a3d1feab7b7b9609b2e82e59002a2f005"
+    },
+    "protocolo": {
+      "ruta": "src/r8_v2/protocolo_sistema_congelado_v1.md",
+      "git_commit": "009f1bbd711138d9094d89cc3bd90fcc7bc146d7",
+      "sha256_contenido": "b30727fd17252d6df68cf98d85953101cc1ad17611a012929bd23b85d019035c"
+    },
+    "miembros": {
+      "ruta": "configs/r8_v2/manifiesto_miembros_v1.csv",
+      "sha256_contenido": "ed9d5beff26880ad7c1fc1e8f3cb77813cc54a3a2b57eaade294c9dc7ee886e2"
+    }
+  },
+  "miembros": [
+    {
+      "id_corrida": "densenet121__s42__f0",
+      "semilla": 42,
+      "fold": 0,
+      "ruta_checkpoint": "results/r4_v2/phash_le8_v1/g2_baseline_v1/completa/densenet121__s42__f0/intento_01/checkpoint_mejor.pth",
+      "sha256_bytes_archivo_checkpoint": "5e57bcd77957b05f1b6a79af63d665e66dddf944bde79364310ed6f7f0f330e6"
+    },
+    {
+      "id_corrida": "densenet121__s42__f1",
+      "semilla": 42,
+      "fold": 1,
+      "ruta_checkpoint": "results/r4_v2/phash_le8_v1/g2_baseline_v1/completa/densenet121__s42__f1/intento_01/checkpoint_mejor.pth",
+      "sha256_bytes_archivo_checkpoint": "bb93538117e1177362802679149c4b4e637557fb188ad3d36ea3fe39c02bf664"
+    },
+    {
+      "id_corrida": "densenet121__s42__f2",
+      "semilla": 42,
+      "fold": 2,
+      "ruta_checkpoint": "results/r4_v2/phash_le8_v1/g2_baseline_v1/completa/densenet121__s42__f2/intento_01/checkpoint_mejor.pth",
+      "sha256_bytes_archivo_checkpoint": "f876c407cdc1fe1e7f1ecfe76fc443a6150bef2be0d8eea50af4d6496c54a35a"
+    },
+    {
+      "id_corrida": "densenet121__s42__f3",
+      "semilla": 42,
+      "fold": 3,
+      "ruta_checkpoint": "results/r4_v2/phash_le8_v1/g2_baseline_v1/completa/densenet121__s42__f3/intento_01/checkpoint_mejor.pth",
+      "sha256_bytes_archivo_checkpoint": "b1670e5e8e49dd32f38aeae77df23b04c21838060b6afe84b38a2d0f854219d5"
+    },
+    {
+      "id_corrida": "densenet121__s42__f4",
+      "semilla": 42,
+      "fold": 4,
+      "ruta_checkpoint": "results/r4_v2/phash_le8_v1/g2_baseline_v1/completa/densenet121__s42__f4/intento_01/checkpoint_mejor.pth",
+      "sha256_bytes_archivo_checkpoint": "a7364341c0af7b996876d1910a44b6906601c84c83bc71da83a5b6eb5fd2b51c"
+    },
+    {
+      "id_corrida": "densenet121__s43__f0",
+      "semilla": 43,
+      "fold": 0,
+      "ruta_checkpoint": "results/r4_v2/phash_le8_v1/g2_baseline_v1/completa/densenet121__s43__f0/intento_01/checkpoint_mejor.pth",
+      "sha256_bytes_archivo_checkpoint": "a9dfa04d54ef9e3d806edc6d378d5fc9334b080b4bb5bce851165cdda32d496c"
+    },
+    {
+      "id_corrida": "densenet121__s43__f1",
+      "semilla": 43,
+      "fold": 1,
+      "ruta_checkpoint": "results/r4_v2/phash_le8_v1/g2_baseline_v1/completa/densenet121__s43__f1/intento_01/checkpoint_mejor.pth",
+      "sha256_bytes_archivo_checkpoint": "465b963d9dedf411a678cf606f81449e5a903ee1442306c21109a88a1976ce80"
+    },
+    {
+      "id_corrida": "densenet121__s43__f2",
+      "semilla": 43,
+      "fold": 2,
+      "ruta_checkpoint": "results/r4_v2/phash_le8_v1/g2_baseline_v1/completa/densenet121__s43__f2/intento_01/checkpoint_mejor.pth",
+      "sha256_bytes_archivo_checkpoint": "c99bbdd6129bd811dea4f21d6e0b4bc8af818bce0c7556254166c39ed0293244"
+    },
+    {
+      "id_corrida": "densenet121__s43__f3",
+      "semilla": 43,
+      "fold": 3,
+      "ruta_checkpoint": "results/r4_v2/phash_le8_v1/g2_baseline_v1/completa/densenet121__s43__f3/intento_01/checkpoint_mejor.pth",
+      "sha256_bytes_archivo_checkpoint": "40aaa2023000abc5b8022e95e3eaa9432ab2fdd8aab58b7ea63da8e2bc75a07d"
+    },
+    {
+      "id_corrida": "densenet121__s43__f4",
+      "semilla": 43,
+      "fold": 4,
+      "ruta_checkpoint": "results/r4_v2/phash_le8_v1/g2_baseline_v1/completa/densenet121__s43__f4/intento_01/checkpoint_mejor.pth",
+      "sha256_bytes_archivo_checkpoint": "b0261d72e6c672007d83c157d4efb44d967f0402dc3608228c7e1916df1e8370"
+    },
+    {
+      "id_corrida": "densenet121__s44__f0",
+      "semilla": 44,
+      "fold": 0,
+      "ruta_checkpoint": "results/r4_v2/phash_le8_v1/g2_baseline_v1/completa/densenet121__s44__f0/intento_01/checkpoint_mejor.pth",
+      "sha256_bytes_archivo_checkpoint": "89cd35052d4efa7441b0c6b6799ecc452a7219e85d72362601cdb0b2a8fca2ff"
+    },
+    {
+      "id_corrida": "densenet121__s44__f1",
+      "semilla": 44,
+      "fold": 1,
+      "ruta_checkpoint": "results/r4_v2/phash_le8_v1/g2_baseline_v1/completa/densenet121__s44__f1/intento_01/checkpoint_mejor.pth",
+      "sha256_bytes_archivo_checkpoint": "f6868c64c8e15773ce8f9a08e064f8e9f2b704064778029071604ffee1c692c3"
+    },
+    {
+      "id_corrida": "densenet121__s44__f2",
+      "semilla": 44,
+      "fold": 2,
+      "ruta_checkpoint": "results/r4_v2/phash_le8_v1/g2_baseline_v1/completa/densenet121__s44__f2/intento_01/checkpoint_mejor.pth",
+      "sha256_bytes_archivo_checkpoint": "66ffe1e1b8ef90f4a6e2197b9d6b89a094a597a3325331dba88b16e62d4b34c5"
+    },
+    {
+      "id_corrida": "densenet121__s44__f3",
+      "semilla": 44,
+      "fold": 3,
+      "ruta_checkpoint": "results/r4_v2/phash_le8_v1/g2_baseline_v1/completa/densenet121__s44__f3/intento_01/checkpoint_mejor.pth",
+      "sha256_bytes_archivo_checkpoint": "e0f7f215526d6212cfb1d0250ba5114e8bc0760bb62b2c1b9e0bcc962d9bf64e"
+    },
+    {
+      "id_corrida": "densenet121__s44__f4",
+      "semilla": 44,
+      "fold": 4,
+      "ruta_checkpoint": "results/r4_v2/phash_le8_v1/g2_baseline_v1/completa/densenet121__s44__f4/intento_01/checkpoint_mejor.pth",
+      "sha256_bytes_archivo_checkpoint": "afd0cdbcd892eb9ec61ea021e4e3335fa149a3e078d066f26b50c6952be3ce54"
+    }
+  ],
+  "codigo_inferencia": {
+    "src/classification/transforms.py": "b5a7d3b3d210cbfac28b3b634c23b4c66868cffb2b88b3d944bde9b32bac270c",
+    "src/classification/dataloader.py": "f5f3520d055a71948b16bdda5e7a3515fed3819fd8fa438a931e775bdc8f735c",
+    "src/classification/models.py": "012ff2572e510cda4b2af28b174fdaa704d1d2bbf2fefbe5d58d9749ab74d5cd",
+    "src/classification/evaluate.py": "aa49dab3aa1fe0c41f4ff7c99915dedeefbd7208cd3d6e593cb7eed8deed0b48",
+    "src/r4_v2/dataset_lesiones.py": "ff514feb56a2d41314518c0a13ec7a0254aa9aa2054a1c2ddb4ffe1238614aec",
+    "src/r4_v2/entrenamiento.py": "d19f3fb11a17b9ba03afb4d854396505083d7733af21bd326e32b9479b9a84e0",
+    "src/r7_v2/sistema_final.py": "5d8806c853ca39bec1e98b90139c0d2e788ac5224d25f174befaeb032a6be35e"
+  },
+  "verificacion": {
+    "decision": "D-058",
+    "ruta": "results/r8_v2/phash_le8_v1/sistema_congelado_v1/verificacion/D-058/resumen_verificacion.json",
+    "sha256_bytes_archivo": "cd82122e6e661e0948526dda3fd9fe9e98cb4f5693afb00780f7b99bfe18683e",
+    "git_commit_head": "bb176c4a415826569d1bb0fb4eecb7eb83dc32f0",
+    "exit": 0
+  },
+  "entorno_verificacion": {
+    "python": "3.10.12",
+    "torch": "2.5.1+cu121",
+    "torchvision": "0.20.1+cu121",
+    "numpy": "2.2.6",
+    "gpu": "NVIDIA RTX 3080",
+    "driver": "580.178.04",
+    "commit_codigo_entrenamiento_g2": "bc63f03"
+  },
+  "limitaciones": [
+    "t_hat = 0.08456226376195748 se calibró en desarrollo con el OOF de TRES modelos por imagen (S* = 0.90, objetivo exploratorio) y NO está validado para el ensamble de quince: es una regla experimental previa a R8; no garantiza una sensibilidad del 90 %",
+    "el sistema de quince no tiene OOF de desarrollo (12 de los 15 modelos vieron cada imagen); la fidelidad por miembro (diferencia máxima 0.0) verifica integridad y equivalencia de preprocesamiento, no desempeño",
+    "partición provisional phash_le8_v1 (exploratoria, post hoc; sin independencia por paciente demostrada); conformidad académica del asesor: PENDIENTE",
+    "clasificación binaria de lesión a nivel de imagen 2D; no detecta ovarios normales; un único subtipo maligno en el dataset; sin uso clínico validado",
+    "acceso histórico previo al test documentado; no se afirma independencia absoluta del test histórico; el congelamiento no abre el test"
+  ],
+  "exigencias_para_el_ejecutor_r8": [
+    "recibir el SHA-256 de esta declaración por una vía externa a ella y compararlo con el del archivo (LF normalizado)",
+    "llamar a `exigir_declaracion` con comprobación de checkpoints y del reporte real; detenerse ante cualquier discrepancia",
+    "usar exactamente los 15 miembros, el preprocesamiento, el promedio simple y la regla `p >= t_hat` declarados; no seleccionar, sustituir ni reordenar miembros",
+    "no recalibrar ni ajustar nada con el test; una sola ejecución; autorización específica de la autora como ejecutora oficial"
+  ],
+  "trazabilidad": [
+    "D-050",
+    "D-051",
+    "D-053",
+    "D-054",
+    "D-055",
+    "D-056",
+    "D-057",
+    "D-058",
+    "D-060"
+  ]
+}
