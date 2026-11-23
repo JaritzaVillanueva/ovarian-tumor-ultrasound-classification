@@ -1,0 +1,99 @@
+# Configuración `umbral_sistema_v1` (R7): calibración exploratoria del umbral del sistema provisional DenseNet121 + A y análisis DESCRIPTIVO por categoría original.
+#
+# Estado: borrador para congelamiento por la autora (D-048). NO autoriza ejecutar sobre predicciones reales. El umbral numérico NO se congela en este hito.
+# Sin circularidad: el protocolo no contiene su propio hash; este YAML registrará commit y SHA-256 del protocolo en un commit posterior (como G3a/G3b/G4).
+# Solo entradas: las 15 corridas A|densenet121 de G2 (solo lectura) y la partición. Test cerrado; 180 normales fuera.
+# Partición provisional (phash_le8_v1, exploratoria, post hoc); conformidad académica del asesor: PENDIENTE.
+
+esquema: umbral_sistema_v1_config/1
+
+protocolo:
+  id: umbral_sistema_v1
+  ruta: src/r7_v2/protocolo_umbral_v1.md
+  estado: "borrador; se congela al registrarse commit y hash del protocolo (commit posterior)"
+  git_commit: null
+  sha256_contenido_blob: null
+  conformidad_academica_asesor: PENDIENTE
+  trazabilidad: "D-048"
+
+estudio:
+  tarea: "calibración exploratoria del umbral (S* = 0.90) sobre q_barra y análisis descriptivo por categoría original, mapeo v2"
+  mapeo: v2
+  particion: phash_le8_v1
+  leyenda: "partición provisional (phash_le8_v1, exploratoria, post hoc); conformidad académica pendiente"
+
+referencia_g2:                      # solo lectura: partición, K1-K4, receta y corridas A|densenet121
+  config: configs/r4_v2/g2_baseline_v1.yaml
+  sha256_contenido_blob: 6626f34e654db0ca119e2e1fab11bd12f68d3791481c55cc49c2e1e557fb17ff
+  indices_b_dir: results/r4_v2/phash_le8_v1/g2_baseline_v1/reporte
+
+referencia_r6:                      # DEBE existir y elegir A|densenet121; su ausencia o una elegida distinta bloquea
+  salida: results/r7_v2/phash_le8_v1/seleccion_r6/seleccion_r6.json
+  elegida: {condicion: A, arquitectura: densenet121}
+
+procedimiento:                      # el código lo compara con sus constantes (anti-deriva); cualquier cambio exige enmienda previa al congelamiento
+  s_star_primario: "0.90"
+  s_star_descriptivos: ["0.85", "0.95"]
+  regla_positiva: "p >= umbral"
+  empates: "no se rompen; se reportan n_pos_empatadas y n_neg_empatadas"
+  k: "ceil(S* * n_pos) en aritmetica entera"
+  sistema_provisional:
+    arquitectura: densenet121
+    representacion: A
+    semillas: [42, 43, 44]
+    folds: [0, 1, 2, 3, 4]
+    n_checkpoints: 15
+    agregacion: "promedio aritmetico simple de probabilidades"
+  fuente_de_calibracion: "q_barra: promedio de las 3 predicciones OOF por imagen (ensamble de 3 modelos del mismo fold)"
+  m_agregaciones: [1, 2, 3]
+  bootstrap:
+    n_remuestreos: 10000
+    nivel_ic: 0.95
+    percentiles: [2.5, 50, 97.5]
+    indices_b: "los de G2 (verificar_indices_g2)"
+  umbral_de_comparacion: 0.5
+  criterio_numerico_de_discrepancia: null
+  umbral_congelado: false
+  n_minimo_auc_por_categoria: 10
+  categorias_permitidas: [0, 1, 2, 3, 4, 6, 7]
+  categoria_6_reevaluada_como_positiva: false
+  r7_3_declarado_cumplido: false
+  control_sensibilidad_media_0_5_g2: 0.447368
+
+salidas:
+  umbral: results/r7_v2/phash_le8_v1/umbral_sistema_v1
+  categorias: results/r7_v2/phash_le8_v1/analisis_categorias_v1
+
+integridad:                         # comprobación sencilla propia (estilo G3a/G4; no es K6 de G2)
+  rutas_sin_cambios: [src/r7_v2, src/r5_v2, src/r4_v2, src/classification, src/segmentation, configs/r4_v2, configs/r5_v2, configs/r7_v2]
+  archivos_con_huella:
+    - configs/r7_v2/umbral_sistema_v1.yaml
+    - src/r7_v2/protocolo_umbral_v1.md
+    - src/r7_v2/umbral_sistema.py
+    - src/r7_v2/analisis_categorias.py
+    - configs/r4_v2/g2_baseline_v1.yaml
+    - src/r7_v2/__init__.py
+    - src/r7_v2/g4_comun.py
+    - src/r7_v2/g4_presupuesto.py
+    - src/r7_v2/g4_agente.py
+    - src/r7_v2/g4_reporte.py
+    - src/r5_v2/__init__.py
+    - src/r5_v2/comun.py
+    - src/r5_v2/g3b_comun.py
+    - src/r5_v2/g3b_reporte_condiciones.py
+    - src/r4_v2/__init__.py
+    - src/r4_v2/common.py
+    - src/r4_v2/particion.py
+    - src/r4_v2/modos.py
+    - src/r4_v2/integridad.py
+    - src/r4_v2/entrenamiento.py
+    - src/r4_v2/pesos.py
+    - src/r4_v2/metricas.py
+    - src/r4_v2/bootstrap.py
+    - src/r4_v2/agregacion.py
+    - src/r4_v2/calibracion.py
+
+acceso_test:
+  estado: cerrado
+  nuevos_accesos: prohibidos
+  nota: "solo train/ y validation/ de desarrollo; las 180 normales (categoría 5) quedan fuera; el bloqueo no borra los accesos históricos declarados en G5/R8"
