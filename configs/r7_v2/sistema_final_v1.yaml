@@ -11,8 +11,8 @@ protocolo:
   id: sistema_final_v1
   ruta: src/r7_v2/protocolo_sistema_final_v1.md
   estado: "borrador; se congela al registrarse commit y hash del protocolo (commit posterior)"
-  git_commit: null
-  sha256_contenido_blob: null
+  git_commit: 84ed7e26887074a8ab356d2184c7686819d49988
+  sha256_contenido_blob: 67fbfe55bf1da3a72e8fc947466036301a65087cfb0cc106ce2053052ce42df7
   conformidad_academica_asesor: PENDIENTE
   trazabilidad: "D-052"
 
