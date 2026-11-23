@@ -11,8 +11,8 @@ protocolo:
   id: delta_ensamble_v1
   ruta: src/r7_v2/protocolo_delta_ensamble_v1.md
   estado: "borrador; se congela al registrarse commit y hash del protocolo (commit posterior)"
-  git_commit: null
-  sha256_contenido_blob: null
+  git_commit: 03d87a584dff3a7ef6a02cce653c5d26d04f40ea
+  sha256_contenido_blob: 8e5335d30c3ac6585593d71b137b1a1b9ffa9f1ff12ca7efba125690b0ae82f5
   conformidad_academica_asesor: PENDIENTE
   trazabilidad: "D-051"
 
