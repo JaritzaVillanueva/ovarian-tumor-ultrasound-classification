@@ -1,0 +1,107 @@
+# Configuración `sistema_final_v1` (R7, D-052): sistema final PROVISIONAL (candidato; NO congelado formalmente; no validado): DenseNet121 + A, 15 checkpoints de G2,
+# promedio aritmético simple y regla `p >= t_hat`. Herramientas: manifiesto de miembros y fidelidad por miembro en su propio pliegue. SIN modo de inferencia.
+#
+# Estado: borrador para congelamiento por la autora. NO autoriza ejecutar sobre checkpoints reales. Test cerrado; 180 normales fuera.
+# Sin circularidad: el protocolo no contiene su propio hash; este YAML registrará commit y SHA-256 del protocolo en un commit posterior (como umbral_sistema).
+# Partición provisional (phash_le8_v1, exploratoria, post hoc); conformidad académica del asesor: PENDIENTE.
+
+esquema: sistema_final_v1_config/1
+
+protocolo:
+  id: sistema_final_v1
+  ruta: src/r7_v2/protocolo_sistema_final_v1.md
+  estado: "borrador; se congela al registrarse commit y hash del protocolo (commit posterior)"
+  git_commit: null
+  sha256_contenido_blob: null
+  conformidad_academica_asesor: PENDIENTE
+  trazabilidad: "D-052"
+
+estudio:
+  tarea: "sistema final provisional de clasificación binaria de lesión (imagen 2D): manifiesto de 15 miembros y fidelidad por miembro, mapeo v2"
+  mapeo: v2
+  particion: phash_le8_v1
+  leyenda: "partición provisional (phash_le8_v1, exploratoria, post hoc); conformidad académica pendiente"
+
+referencia_g2:                      # solo lectura: partición, K1-K4, receta (entrada 224 con relleno, normalización), corridas A|densenet121
+  config: configs/r4_v2/g2_baseline_v1.yaml
+  sha256_contenido_blob: 6626f34e654db0ca119e2e1fab11bd12f68d3791481c55cc49c2e1e557fb17ff
+
+referencia_r6:                      # DEBE existir y elegir A|densenet121; su ausencia o una elegida distinta bloquea
+  salida: results/r7_v2/phash_le8_v1/seleccion_r6/seleccion_r6.json
+  elegida: {condicion: A, arquitectura: densenet121}
+
+sistema:                            # el código lo compara con sus constantes (anti-deriva); cualquier cambio exige enmienda previa al congelamiento
+  estado: "candidato; NO congelado formalmente; calibrado con OOF de tres modelos por imagen; no validado para el ensamble de quince"
+  congelado: false
+  arquitectura: densenet121
+  representacion: A
+  semillas: [42, 43, 44]
+  folds: [0, 1, 2, 3, 4]
+  n_miembros: 15
+  agregacion: "promedio aritmetico simple de las 15 probabilidades de la clase maligna (softmax float32 por modelo; promedio en float64); sin ponderaciones ni seleccion de miembros"
+  regla: "p >= t_hat"
+  empates: "no se rompen"
+  umbral_candidato:
+    t_hat: "0.08456226376195748"    # cadena exacta: repr(float(cadena)) debe reproducirla
+    s_star: "0.90"
+    s_star_estatus: "objetivo exploratorio, no garantia"
+    origen: "q_barra de tres modelos por imagen (umbral_sistema_v1); calculado en desarrollo; NO congelado formalmente; no es el umbral de R8"
+  incertidumbre_umbral_referencia:  # bootstrap, 10 000 remuestreos válidos; solo informativa, no es validación
+    n_remuestreos_validos: 10000
+    p2_5: 0.022556618166466553
+    mediana: 0.08456226376195748
+    p97_5: 0.20131495470801988
+    nota: "solo informativa, no validacion"
+  alcance: "clasificacion binaria de lesion a nivel de imagen 2D; no detecta ovarios normales; sin uso clinico validado"
+
+entorno_esperado:                   # SOLO registro (no bloquea): valores históricos del entorno de Falcon; verificar las versiones efectivas
+  python: "3.10.12"
+  torch: "2.5.1+cu121"
+  gpu: "RTX 3080"
+  nota: "historico; el manifiesto registra las versiones efectivas"
+
+salidas:
+  manifiesto: results/r7_v2/phash_le8_v1/sistema_final_v1/manifiesto
+  fidelidad: results/r7_v2/phash_le8_v1/sistema_final_v1/fidelidad
+
+integridad:                         # comprobación sencilla propia (estilo umbral_sistema; no es K6 de G2)
+  rutas_sin_cambios: [src/r7_v2, src/r5_v2, src/r4_v2, src/classification, src/segmentation, configs/r4_v2, configs/r5_v2, configs/r7_v2]
+  archivos_con_huella:
+    - configs/r7_v2/sistema_final_v1.yaml
+    - src/r7_v2/protocolo_sistema_final_v1.md
+    - src/r7_v2/sistema_final.py
+    - src/r7_v2/delta_ensamble.py
+    - src/r7_v2/umbral_sistema.py
+    - configs/r4_v2/g2_baseline_v1.yaml
+    - configs/r4_v2/referencia_pesos_preentrenados_v1.json
+    - src/r7_v2/__init__.py
+    - src/r7_v2/g4_comun.py
+    - src/r7_v2/g4_presupuesto.py
+    - src/r7_v2/g4_agente.py
+    - src/r7_v2/g4_reporte.py
+    - src/r5_v2/__init__.py
+    - src/r5_v2/comun.py
+    - src/r5_v2/g3b_comun.py
+    - src/r5_v2/g3b_reporte_condiciones.py
+    - src/r4_v2/__init__.py
+    - src/r4_v2/common.py
+    - src/r4_v2/particion.py
+    - src/r4_v2/modos.py
+    - src/r4_v2/integridad.py
+    - src/r4_v2/entrenamiento.py
+    - src/r4_v2/dataset_lesiones.py
+    - src/r4_v2/pesos.py
+    - src/r4_v2/metricas.py
+    - src/r4_v2/bootstrap.py
+    - src/r4_v2/agregacion.py
+    - src/r4_v2/calibracion.py
+    - src/classification/__init__.py
+    - src/classification/models.py
+    - src/classification/transforms.py
+    - src/classification/dataloader.py
+    - src/classification/evaluate.py
+
+acceso_test:
+  estado: cerrado
+  nuevos_accesos: prohibidos
+  nota: "solo train/ y validation/ de desarrollo; las 180 normales (categoría 5) quedan fuera; el bloqueo no borra los accesos históricos declarados en G5/R8"
